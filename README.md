@@ -27,7 +27,7 @@ Attualmente sto lavorando e facendo pratica con:
 - **OS:** Ubuntu / Linux/ Bash
 - **VCS:** Git & GitHub
 - **Scripting & CLI:** Bash, Vim/Nano/Joe
-- *(Aggiungi altre tecnologie man mano che le impari: Docker,Podman,Vagrant, Jenkins, AWS, Terraform, Ansible...)*
+- *( Aggiungerò man mano altro: Docker,Podman,Vagrant, Jenkins, AWS, Terraform, Ansible...)*
 
 ---
 *Nota: Questa repository è un cantiere aperto ("Work in Progress"). I file e le strutture verranno aggiornati costantemente parallelamente all'avanzamento dell'Academy.*
