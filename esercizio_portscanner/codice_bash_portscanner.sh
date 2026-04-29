@@ -22,14 +22,14 @@ START_PORT=$2
 END_PORT=$3
 
 # Regex per validare IP (semplice)
-if [[! $TARGET_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+if [[ ! $TARGET_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
 	echo "Errore: IP non valido."
 	exit 1
 fi
 
 
 # Controllo che le porte siano numeri
-if ! [[ "$START_PORT" =~ ^[0-9]+$ ]] ||  ! [[ "$END_PORT" =~ ^ [0-9]+$ ]] ; then
+if ! [[ "$START_PORT" =~ ^[0-9]+$ ]] ||  ! [[ "$END_PORT" =~ ^[0-9]+$ ]] ; then
 	echo "Errore: Le porte devono essere numeri."
 	 exit 1
 fi
@@ -60,11 +60,12 @@ for ((port=START_PORT; port<=END_PORT; port++)); do
 	# nc -wl: timeout di 1 secondo
 	# Reindirizziamo output e errori a /dev/null per pulizia
 	nc -z -w 1 "$TARGET IP" "$port" > /dev/null 2>&1
-	
-	# Se l'ultimo comando (nc) ha avuto successo, l'exit status ($?) è 0 
+
+	# Se l'ultimo comando (nc) ha avuto successo, l'exit status ($?) è 0
 	if [ $? -eq 0 ]; then
 		echo "Porta $port: APERTA"
 	fi
 done
 echo "---------------------------------"
 echo "Scansione completa"
+
