@@ -17,7 +17,7 @@ if [ "$#" -ne 3 ]; then
 	usage
 fi
 
-TARGET IP=$1
+TARGET_IP=$1
 START_PORT=$2
 END_PORT=$3
 
