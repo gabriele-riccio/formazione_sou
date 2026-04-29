@@ -39,7 +39,7 @@ END_PORT=$3
 
 # Regex per validare IP (semplice)
 if [[ ! $TARGET_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-	echo "Errore: IP non valido.
+	echo "Errore: IP non valido."
 	exit 1
 fi
 
