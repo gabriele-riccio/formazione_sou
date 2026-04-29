@@ -34,25 +34,11 @@ if ! [[ "$START_PORT" =~ ^[0-9]+$ ]] ||  ! [[ "$END_PORT" =~ ^[0-9]+$ ]] ; then
 	 exit 1
 fi
 
-START_PORT=$2
-END_PORT=$3
-
-# Regex per validare IP (semplice)
-if [[ ! $TARGET_IP =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
-	echo "Errore: IP non valido."
-	exit 1
-fi
-
-# Controllo che le porte siano numeri
-if ! [[ "$START _PORT" =~ ^[0-9]+$ ]] || ! [[ "$END_ PORT" =~ ^[0-9]+$ ]]; then
-	echo "Errore: Le porte devono essere numeri."
-	exit 1
-fi
 #---Inizio Scansione---
 
 echo "---------------------------------"
-echo "Inizio scansione su $TARGET IP"
-echo "Range: $START PORT - $END PORT"
+echo "Inizio scansione su $TARGET_IP"
+echo "Range: $START_PORT - $END_PORT"
 echo "---------------------------------"
 # Loop sulle porte
 for ((port=START_PORT; port<=END_PORT; port++)); do
