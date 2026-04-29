@@ -42,10 +42,10 @@ echo "Range: $START_PORT - $END_PORT"
 echo "---------------------------------"
 # Loop sulle porte
 for ((port=START_PORT; port<=END_PORT; port++)); do
-	# nc -z: modalità zero-I/0 (scansione)
 	# nc -wl: timeout di 1 secondo
+	#con /dev/null Capisce che non c'è nulla da inviare e chiude la connessione immediatamente
 	# Reindirizziamo output e errori a /dev/null per pulizia
-	nc -z -w 1 "$TARGET IP" "$port" > /dev/null 2>&1
+	nc -w 1 "$TARGET_IP" "$port" < /dev/null > /dev/null 2>&1
 
 	# Se l'ultimo comando (nc) ha avuto successo, l'exit status ($?) è 0
 	if [ $? -eq 0 ]; then
@@ -54,4 +54,3 @@ for ((port=START_PORT; port<=END_PORT; port++)); do
 done
 echo "---------------------------------"
 echo "Scansione completa"
-
