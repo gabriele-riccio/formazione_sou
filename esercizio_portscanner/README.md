@@ -60,17 +60,18 @@ Porta 22: APERTA
 Per verificare il funzionamento dello scanner su più porte, ho installato **nginx** sulla VM target, in modo da mettere in ascolto anche la porta 80 (HTTP). Questo ha permesso di testare la scansione su un range più ampio:
 
 ```bash
-./portscanner.sh 192.168.50.11 20 500
+./portscanner.sh 192.168.50.11 20 100
 ```
 
 Output ottenuto:
 ```
 --------------------------------------
 Inizio scansione su 192.168.50.11
-Range: 20 - 500
+Range: 20 - 100
 --------------------------------------
 Porta 22: APERTA
 Porta 80: APERTA
+Porta 443: APERTA
 --------------------------------------
 Scansione completa
 ```
@@ -81,6 +82,12 @@ vagrant ssh target
 sudo apt update && sudo apt install -y nginx
 sudo systemctl start nginx
 ```
+Per attivare la porta 80 sulla VM target è stato sufficiente:
+```bash
+sudo nc -lk -p 433 &
+#Vale per ogni porta
+```
+
 
 ---
 
