@@ -1,4 +1,4 @@
-# gestione_processi.sh
+# ESERCIZIO PROCESSI ERRORE
 
 Script Bash didattico per la gestione di processi simulati, con cicli iterativi, gestione degli errori, contatori e logging.
 
@@ -103,10 +103,4 @@ cat processi.log
 
 ---
 
-## Note
-
-- Le virgolette nei file Bash devono essere sempre **dritte** `"` — mai tipografiche `"` `"`, che causano errori di sintassi.
-- `local` dentro una funzione limita la visibilità della variabile a quella funzione.
-- `tee -a` scrive su schermo e in append sul file di log contemporaneamente.
-- In Bash non ci sono spazi attorno a `=` nelle assegnazioni: `var="valore"` ✅ — `var = "valore"` ❌
 
