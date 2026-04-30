@@ -14,7 +14,7 @@ Dimostrare i concetti fondamentali della programmazione Bash attraverso uno scri
 
 ```
 esercizio_processi/
-├── gestione_processi.sh   # script principale
+├── file_gestione_errori_completo  # script principale
 ├── processi.log           # generato a runtime
 └── README.md
 ```
