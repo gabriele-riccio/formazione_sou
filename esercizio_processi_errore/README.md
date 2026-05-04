@@ -1,4 +1,4 @@
-# ESERCIZIO PROCESSI ERRORE
+# ESERCIZIO PROCESSI
 
 Script Bash didattico per la gestione di processi simulati, con cicli iterativi, gestione degli errori, contatori ed errore forzato.
 
