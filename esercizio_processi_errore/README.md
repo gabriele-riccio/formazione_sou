@@ -87,6 +87,9 @@ Totale  : 5
 Successi: 4
 Errori  : 1
 -------------------------------------
+[INFO] - Script terminato con 1 errore/i.
+[INFO] - Per risolvere controlla il ciclo for per rimuovere l'errore forzato della simulazione.
+
 ```
 
 ---
