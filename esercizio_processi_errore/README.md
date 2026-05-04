@@ -140,7 +140,7 @@ Errori  : 1
 | v3 | Gestione errori e status code |
 | v4 | Contatori + report finale |
 | v5 | Errore forzato al processo 3 |
-| v6 | Funzione `log_message` e file di log |
+| v6 | Funzione `log_message`|
 | v7 | Parte completa con funzioni finali  |
 
 ---
