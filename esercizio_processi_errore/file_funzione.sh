@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #================================================================================
-#Nome file= file_gestione_processi.sh
+#Nome file= file_gestione_errori_funzioni.sh
 #Descrizione esercizio= Gestione dei processi,cicli,errori e contatori in Bash
 #================================================================================
 #in questa parte voglio procedere dopo l'inserimento dei contatori, uno che conta i successi e uno che conta gli errori e un report finale, provo a creare un errore che cat non riesce a leggere anche perchè l'ho eliminato prima con rm dopo aver forzato l'errore. Ora voglio aggiungere anche una funzione log_message che trasforma gli echo nel ciclo in log_message di "LIVELLO" "testo" rendendo il codice molto più pulito.
@@ -51,7 +51,7 @@ for((i=1; i<=NUM_PROCESSI; i++))do
         fi
         # Errore forzato su un processo, esempio 3
         if [ $i -eq 3 ]; then
-                log_message "Warning--Errore forzato sul processo 3.."
+                log_message "Warn--Errore forzato sul processo 3.."
                 #elimino con rm il processo appena creato.
                 rm "processo_3.txt"
 
@@ -75,6 +75,31 @@ echo "Totale  : $NUM_PROCESSI"
 echo "Successi: $count_success"
 echo "Errori  : $count_error"
 echo "-------------------------------------"
+
+# Dai i permessi di esecuzione
+#chmod +x file_gestione_errori_funzioni.sh
+
+# Esegui lo script
+#./file_gestione_errori_funzioni.sh
+
+# Come Output avrò:
+[INFO] - Processo 1  in esecuzione...
+[SUCCES] - Processo 1: Successo!
+[INFO] - Processo 2  in esecuzione...
+[SUCCES] - Processo 2: Successo!
+[INFO] - Processo 3  in esecuzione...
+[SUCCES] - Processo 3: Successo!
+[Warn--Errore forzato sul processo 3..] - 
+ERROR - Status code diverso da 0 su processo 3!
+[INFO] - Processo 4  in esecuzione...
+[SUCCES] - Processo 4: Successo!
+[INFO] - Processo 5  in esecuzione...
+[SUCCES] - Processo 5: Successo!
+-------------------------------------
+Totale  : 5
+Successi: 4
+Errori  : 1
+-------------------------------------
 
 
 
