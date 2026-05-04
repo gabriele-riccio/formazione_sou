@@ -19,3 +19,10 @@ for((i=1; i<=NUM_PROCESSI; i++))do
         echo "Processo $i: file creato."
 done
 
+# Dai i permessi di esecuzione
+#chmod +x gestione_processi.sh
+
+# Esegui lo script
+#./file_gestione_errori_completo.sh
+
+# Come Output avrò:
