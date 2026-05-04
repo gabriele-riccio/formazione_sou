@@ -17,3 +17,17 @@ for((i=1; i<=NUM_PROCESSI; i++))do
 
 done
 
+# Dai i permessi di esecuzione
+#chmod +x gestione_processi.sh
+
+# Esegui lo script
+#./file_gestione_errori_completo.sh
+
+# Come Output avrò:
+#Processo 1  in esecuzione...
+#Processo 2  in esecuzione...
+#Processo 3  in esecuzione...
+#Processo 4  in esecuzione...
+#Processo 5  in esecuzione...
+
+
