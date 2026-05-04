@@ -100,3 +100,34 @@ else
 
 fi
 
+
+
+# Dai i permessi di esecuzione
+chmod +x gestione_processi.sh
+
+# Esegui lo script
+./file_gestione_errori_completo.sh
+
+# Come Output avrò:
+[INFO] - Processo 1  in esecuzione...
+[SUCCES] - Processo 1: Successo!
+[INFO] - Processo 2  in esecuzione...
+[SUCCES] - Processo 2: Successo!
+[INFO] - Processo 3  in esecuzione...
+[SUCCES] - Processo 3: Successo!
+[Warning--Errore forzato sul processo 3..] - 
+ERROR - Status code diverso da 0 su processo 3!
+[INFO] - Processo 4  in esecuzione...
+[SUCCES] - Processo 4: Successo!
+[INFO] - Processo 5  in esecuzione...
+[SUCCES] - Processo 5: Successo!
+-------------------------------------
+Totale  : 5
+Successi: 4
+Errori  : 1
+-------------------------------------
+[INFO] - Script terminato con 1 errore/i.
+[INFO] - Per risolvere controlla il ciclo for per rimuovere l'errore forzato della simulazione.
+
+
+
