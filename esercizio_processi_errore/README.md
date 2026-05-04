@@ -6,7 +6,15 @@ Script Bash didattico per la gestione di processi simulati, con cicli iterativi,
 
 ## Obiettivo
 
-Dimostrare i concetti fondamentali della programmazione Bash attraverso uno script che simula l'esecuzione di N processi, traccia successi ed errori, e gestisce la pulizia dell'ambiente in modo automatico.
+L'esercizio aveva come scopo la realizzazione di uno script Bash ,che gestisse processi ed eventuali errori, coprendo i seguenti requisiti:
+— Definizione di variabili
+— Ciclo for
+— Gestione degli errori e degli status code
+— Contatori di successi ed errori
+— Simulazione di un errore forzato con status code diverso da zero
+— Codice pulito e leggibile attraverso le funzioni di supporto
+
+Ho realizzato uno script Bash che simula l'esecuzione di N processi(5), traccia successi ed errori degli stessi e gestisce la pulizia dell'ambiente in modo automatico.
 
 ---
 
