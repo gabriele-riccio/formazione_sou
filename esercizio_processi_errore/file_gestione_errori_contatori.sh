@@ -46,3 +46,26 @@ echo "Successi: $count_success"
 echo "Errori  : $count_error"
 echo "-------------------------------------"
 
+# Dai i permessi di esecuzione
+#chmod +x file_gestione_processi.sh
+
+# Esegui lo script
+#./file_gestione_processi.sh
+
+# Come Output avrò:
+Processo 1  in esecuzione...
+Processo 1: successo!
+Processo 2  in esecuzione...
+Processo 2: successo!
+Processo 3  in esecuzione...
+Processo 3: successo!
+Processo 4  in esecuzione...
+Processo 4: successo!
+Processo 5  in esecuzione...
+Processo 5: successo!
+-------------------------------------
+Totale  : 5
+Successi: 5
+Errori  : 0
+-------------------------------------
+
