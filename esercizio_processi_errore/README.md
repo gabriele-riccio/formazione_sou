@@ -14,8 +14,13 @@ Dimostrare i concetti fondamentali della programmazione Bash attraverso uno scri
 
 ```
 esercizio_processi/
-├── file_gestione_errori_completo  # script principale
-├── processi.log           # generato a runtime
+├──file_parte_solo_variabili.sh
+├──file_parte_simualazione_processo.sh
+├──file_gestione_errore.sh
+├──file_gestione_errori_contatori.sh
+├──file_gestione_errori_conerrori.sh
+├──file_funzione.sh
+├──file_gestione_errori_completo.sh  # script principale           
 └── README.md
 ```
 
@@ -56,7 +61,7 @@ log_message "SUCCESS" "Processo 1 completato."
 `cleanup` rimuove i file temporanei ed è agganciata all'evento `EXIT` tramite `trap`, quindi viene eseguita sempre, anche in caso di interruzione con `Ctrl+C`.
 
 ### 3. Ciclo
-Per ogni processo viene creato un file temporaneo. Se la creazione va a buon fine, `count_success` viene incrementato; in caso contrario, `count_error`.
+Per ogni processo viene creato un file temporaneo. Se la creazione va a buon fine, `count_success` viene incrementato; in caso contrario, `count_error` verrà incrementato.
 
 ### 4. Errore forzato al processo 3
 Al terzo giro il file appena creato viene eliminato e si tenta di leggerlo — il comando fallisce, restituisce un status code diverso da 0, e lo script:
@@ -77,6 +82,7 @@ Errori  : 1
 ```
 
 ---
+
 
 ## Esecuzione
 
