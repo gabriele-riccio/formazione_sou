@@ -1,6 +1,6 @@
 # ESERCIZIO PROCESSI ERRORE
 
-Script Bash didattico per la gestione di processi simulati, con cicli iterativi, gestione degli errori, contatori e logging.
+Script Bash didattico per la gestione di processi simulati, con cicli iterativi, gestione degli errori, contatori ed errore forzato.
 
 ---
 
@@ -63,7 +63,11 @@ Al terzo giro il file appena creato viene eliminato e si tenta di leggerlo — i
 - decrementa `count_success` (il successo precedente era falso)
 - incrementa `count_error`
 
-### 5. Report finale
+### 5. Funzioni finali
+`cleanup()` rimuove i file temporanei
+`trap cleanup() exit` garantisce che cleanup venga sempre eseguita(ache quando faccio Ctrl C)
+
+### 6. Report finale
 ```
 -------------------------------------
 Totale  : 5
@@ -81,10 +85,31 @@ Errori  : 1
 chmod +x gestione_processi.sh
 
 # Esegui lo script
-./gestione_processi.sh
+./file_gestione_errori_completo.sh
 
-# Controlla il log generato
-cat processi.log
+# Come Output avrò:
+[INFO] - Processo 1  in esecuzione...
+[SUCCES] - Processo 1: Successo!
+[INFO] - Processo 2  in esecuzione...
+[SUCCES] - Processo 2: Successo!
+[INFO] - Processo 3  in esecuzione...
+[SUCCES] - Processo 3: Successo!
+[Warning--Errore forzato sul processo 3..] - 
+ERROR - Status code diverso da 0 su processo 3!
+[INFO] - Processo 4  in esecuzione...
+[SUCCES] - Processo 4: Successo!
+[INFO] - Processo 5  in esecuzione...
+[SUCCES] - Processo 5: Successo!
+-------------------------------------
+Totale  : 5
+Successi: 4
+Errori  : 1
+-------------------------------------
+[INFO] - Script terminato con 1 errore/i.
+[INFO] - Per risolvere controlla il ciclo for per rimuovere l'errore forzato della simulazione.
+
+
+
 ```
 
 ---
@@ -99,7 +124,7 @@ cat processi.log
 | v4 | Contatori + report finale |
 | v5 | Errore forzato al processo 3 |
 | v6 | Funzione `log_message` e file di log |
-| v7 | `cleanup` + `trap EXIT` + `exit 0/1` ✅ |
+| v7 | Parte completa con funzioni finali  |
 
 ---
 
