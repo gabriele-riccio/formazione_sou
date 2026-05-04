@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#================================================================================
+#Nome file= file_gestione_processi.sh
+#Descrizione esercizio= Gestione dei processi,cicli,errori e contatori in Bash
+#================================================================================
+#in questa parte voglio procedere alla gestione degli errori con status code, mettendo echo nell'if, se restituisce 0 è successo,altrimenti errore.
+
+#Andranno tutti a buon per ora.
+
+#1)Prima cosa definisco delle variabili:le metto in maiuscolo proprio perchè devono essere costanti.
+
+NUM_PROCESSI=5
+
+#è ilnumero di volte che il ciclo for deve girare, per il momento ne lascio 5 poi vedrò se aumentare
+
+#Ciclo for, dove effettuo una simulazione del processo, per ogni iterazione creo un file, vedendo ulteriormente se c'è l'errore.
+for((i=1; i<=NUM_PROCESSI; i++))do
+        echo "Processo $i  in esecuzione..."
+        # Simulazione processo: creiamo un file per ogni iterazione
+        if echo "dati processo $i" > "processo_$i.txt";then
+                # $? == 0 : comando riuscito
+                echo "Processo $i: file creato."
+        else
+                # $? != 0 : comando fallito
+                echo "Processo $i: errore!"
+        fi
+
+done
+
+
