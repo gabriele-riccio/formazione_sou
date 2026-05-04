@@ -18,10 +18,10 @@ for((i=1; i<=NUM_PROCESSI; i++))do
 done
 
 # Dai i permessi di esecuzione
-#chmod +x gestione_processi.sh
+#chmod +x file_parte_solo_variabili.sh
 
 # Esegui lo script
-#./file_gestione_errori_completo.sh
+#./file_parte_solo_variabili.sh
 
 # Come Output avrò:
 #Processo 1  in esecuzione...
