@@ -20,9 +20,20 @@ for((i=1; i<=NUM_PROCESSI; i++))do
 done
 
 # Dai i permessi di esecuzione
-#chmod +x gestione_processi.sh
+#chmod +x file_parte_simulazione_processo.sh
 
 # Esegui lo script
-#./file_gestione_errori_completo.sh
+#./file_parte_simulazione_processo.sh
 
 # Come Output avrò:
+#Processo 1  in esecuzione...
+#Processo 1: file creato.
+#Processo 2  in esecuzione...
+#Processo 2: file creato.
+#Processo 3  in esecuzione...
+#Processo 3: file creato.
+#Processo 4  in esecuzione...
+#Processo 4: file creato.
+#Processo 5  in esecuzione...
+#Processo 5: file creato.
+
