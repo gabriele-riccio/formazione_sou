@@ -1,4 +1,4 @@
-#!/bin/bash
+
 #--Esercizio 3- File nella directory corrente con "snap" nel nome.
 # Determinare il numero di file della directory corrente nel cui nome compare la stringa 'snap'.
 #prima cosa mi metto nella directory corrente con ls
