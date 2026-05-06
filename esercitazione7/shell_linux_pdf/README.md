@@ -581,7 +581,7 @@ ls -tu /bin | head -10 > ultimi10_accesso.txt
 Creare un file contenente i nomi dei primi 7 e degli ultimi 6 file (in ordine alfabetico) della directory `/etc`.
 
 ```bash
-{ ls /etc | head -7; ls /etc | tail -6; } > primi7_ultimi6_etc.txt
+{ ls /etc | head -7; ls /etc | tail -6; } > primi7_ultimi6.txt
 ```
 
 **Spiegazione:** `{ }` raggruppa i due comandi; `head -7` prende i primi 7, `tail -6` prende gli ultimi 6; tutto viene salvato insieme nel file.
