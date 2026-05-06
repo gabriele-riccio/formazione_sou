@@ -552,15 +552,15 @@ ls /etc | head -7 > primi7_etc.txt
 
 ---
 
-### Esercizio 3 — File nella directory corrente con "string" nel nome
+### Esercizio 3 — File nella directory corrente con "snap" nel nome
 
-Determinare il numero di file della directory corrente nel cui nome compare la stringa `string`.
+Determinare il numero di file della directory corrente nel cui nome compare la stringa `snap`.
 
 ```bash
-ls | grep "string" | wc -l
+ls | grep "snap" | wc -l
 ```
 
-**Spiegazione:** `ls` elenca i file correnti; `grep "string"` filtra solo quelli che contengono "string"; `wc -l` conta quanti sono.
+**Spiegazione:** `ls` elenca i file correnti; `grep "snap"` filtra solo quelli che contengono "snap"; `wc -l` conta quanti sono.
 
 ---
 
