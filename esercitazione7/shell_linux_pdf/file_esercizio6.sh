@@ -1,4 +1,4 @@
-#!/bin/bash
+
 #--Esercizio 5--Creare un file con una lista di 8 file in /usr/sbin ordinati per momento dell'ultima modifica.
 
 #Creare un file con una lista di 8 comandi di  usr/sbin ordinati per momento dell'ultima modifica.
