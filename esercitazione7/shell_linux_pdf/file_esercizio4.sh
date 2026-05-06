@@ -1,3 +1,4 @@
+#!/bin/bash
 #--Esercizio 4--10 comandi di /bin ordinati per ultimo accesso
 
 #Creare un file con una lista di 10 comandi di /bin ordinati per momento dell'ultimo accesso.
