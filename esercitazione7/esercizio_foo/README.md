@@ -1,8 +1,8 @@
-# Esercizio — Gestione File, Permessi e Gruppi in Linux
+# Esercizitazione 7 -- Esercizio sul cambio di gruppo dopo la creazione di un file log
 
 ## Descrizione
 
-Esercizio pratico su una VM Linux che copre la creazione di file, la gestione dei permessi con `chmod` e la gestione di gruppi con `groupadd` e `chown`. Si lavora direttamente da terminale come utente con privilegi `sudo`.
+Esercizio pratico su una VM Linux Ubuntu che copre la creazione di file, la gestione dei permessi con `chmod` e la gestione di gruppi con `groupadd` e `chown`. Si lavora direttamente da terminale come utente con privilegi `sudo`.
 
 ---
 
@@ -29,7 +29,7 @@ ls -l foo.log
 ```
 Output atteso:
 ```
--rw-r--r-- 1 tuoutente tuogruppo 0 May  6 10:00 foo.log
+-rw-rw-r-- 1 gabriele-riccio gabriele-riccio 0 May  6 10:00 foo.log
 ```
 
 ---
@@ -71,15 +71,15 @@ ls -l foo.log
 ```
 Output atteso:
 ```
--rwx------ 1 tuoutente tuogruppo 0 May  6 10:00 foo.log
+-rwxrw-r -- 1 tuoutente tuogruppo 0 May  6 10:00 foo.log
 ```
 
-La stringa `-rwx------` si legge così:
+La stringa `-rwxrw-r` si legge così:
 
 ```
-- rwx --- ---
-│  │    │   └── altri: nessun permesso
-│  │    └─────── gruppo: nessun permesso
+- rwx rwx r
+│  │    │   └── altri: lettura
+│  │    └─────── gruppo: lettura + scrittura + esecuzione
 │  └──────────── proprietario: lettura + scrittura + esecuzione
 └─────────────── tipo file (- = file normale, d = directory)
 ```
@@ -95,18 +95,6 @@ sudo groupadd foobar
 **Cos'è `groupadd`?**  
 Il comando `groupadd` crea un nuovo gruppo nel sistema. Richiede privilegi di amministratore (`sudo`) perché modifica i file di sistema `/etc/group` e `/etc/gshadow`. → `man groupadd`
 
-**Verifica:**
-```bash
-cat /etc/group | grep foobar
-```
-Output atteso:
-```
-foobar:x:1001:
-```
-
-I campi separati da `:` sono: nome gruppo, password (x = in shadow), GID (Group ID), elenco membri.
-
----
 
 ## Step 4 — Cambiare il gruppo proprietario di `foo.log` in `foobar`
 
@@ -124,11 +112,6 @@ chown utente file           # cambia solo il proprietario
 chown :gruppo file          # cambia solo il gruppo
 ```
 
-**Alternativa con `chgrp`:**
-```bash
-sudo chgrp foobar foo.log
-```
-`chgrp` (change group) è dedicato esclusivamente al cambio del gruppo. → `man chgrp`
 
 **Verifica finale:**
 ```bash
@@ -136,7 +119,7 @@ ls -l foo.log
 ```
 Output atteso:
 ```
--rwx------ 1 tuoutente foobar 0 May  6 10:00 foo.log
+-rwxrw-r -- 1 gabriele-riccio foobar 0 May  6 10:00 foo.log
 ```
 
 ---
@@ -170,18 +153,6 @@ ls -l foo.log
 | `chmod` | Modifica i permessi di un file | No (se proprietario) |
 | `groupadd` | Crea un nuovo gruppo | Sì |
 | `chown` | Cambia proprietario e/o gruppo | Sì |
-| `chgrp` | Cambia solo il gruppo | Sì |
 | `ls -l` | Mostra permessi e proprietà del file | No |
 
 ---
-
-## Riferimenti
-
-- `man touch`
-- `man chmod`
-- `man groupadd`
-- `man chown`
-- `man chgrp`
-- `man ls`
-- [ABS Guide - File and Archiving Commands](https://tldp.org/LDP/abs/html/filearchiv.html)
-- [Linux File Permissions Explained](https://linuxize.com/post/understanding-linux-file-permissions/)
