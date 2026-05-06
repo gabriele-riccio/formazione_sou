@@ -3,14 +3,15 @@
 #Creare un file contenente i nomi dei primi 7 file della directory /etc.
 #prima cosa vedo cosa c'è nella directory /etc
 ls /etc
-#output: ModemManager     ...         ...
+#output: 
+         ModemManager     ...         ...
          NetworkManager   ...         ...
          Packagekit
          UPower
          X11
          adduser.conf
          alsa
-	 ...
+	     ...
          ...
 #Lista di file al suo interno in ordine alfabetico, grande non enorme come prima.
 
@@ -20,7 +21,8 @@ ls /etc |  head -7 > primi7.txt
 #output: nulla, ha salvato primi7.txt
 #per vedere se ha funzionato basterà usare cat con primi7.txt
 cat primi7.txt
-#output: ModemManager
+#output: 
+     ModemManager
 	 NetworkManager
 	 Packagekit
 	 UPower
