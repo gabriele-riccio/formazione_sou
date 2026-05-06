@@ -1,3 +1,4 @@
+#!/bin/bash
 #--Esercizio 2--Primi 7 file di /etc in un file
 
 #Creare un file contenente i nomi dei primi 7 file della directory /etc.
