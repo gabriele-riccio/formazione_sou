@@ -2,7 +2,8 @@
 # Determinare il numero di file della directory corrente nel cui nome compare la stringa 'snap'.
 #prima cosa mi metto nella directory corrente con ls
 ls 
-#output: ''$|004' Documenti  Modelli Pubblici  Scrivania  encoding_vs_ecryption foo.log     script2  snap     
+#output:
+         ''$|004' Documenti  Modelli Pubblici  Scrivania  encoding_vs_ecryption foo.log     script2  snap     
          DEADJOE  Immagini   Musica  Scaricati Video      file_frutta.csv       primi7.txt  scripts  text.txt
          
 #Voglio stampare il numero di file in cui compare 'snap', uso ls con la pipe | con grep per filtrare solo quelli che contengono snap e mi stamperà solo snap, se uso un'altra pipe | con wc -l mi conta il numero di righe che contengono snap
