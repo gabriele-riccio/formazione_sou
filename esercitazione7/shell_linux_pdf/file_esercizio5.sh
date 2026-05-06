@@ -8,7 +8,7 @@
 ls /etc
 
 #output:
-	 ModemManager     ...         ...
+	     ModemManager     ...         ...
          NetworkManager   ...         ...
          Packagekit
          UPower
@@ -25,12 +25,12 @@ ls /etc
 
 
 
-	 ...              ...          ...	 wpa_supplicant
-						 xattr.conf
-	 ...		  ...  	       ...	 xdg
-	 ... 		  ...          ...       xemacs21
-         ...		  ...          ...       xml
-                                                 zsh_command_not_found
+	     ...               ...          ...	   wpa_supplicant
+						 					   xattr.conf
+	     ...		       ...  	    ...	   xdg
+	     ... 		       ...          ...    xemacs21
+         ...		       ...          ...    xml
+                                               zsh_command_not_found
 
 
 	
@@ -53,10 +53,10 @@ cat primi7_ultimi6.txt
          X11
          adduser.conf
          alsa
-	 wpa_supplicant
-	 xattr.conf
-	 xdg
- 	 xemacs21
-	 xml
-	 zsh_command_not_found
+	     wpa_supplicant
+	     xattr.conf
+	     xdg
+ 	     xemacs21
+	     xml
+	     zsh_command_not_found
 
