@@ -569,7 +569,7 @@ ls | grep "snap" | wc -l
 Creare un file con una lista di 10 comandi di `/bin` ordinati per momento dell'ultimo accesso.
 
 ```bash
-ls -tu /bin | head -10 > top10_accesso.txt
+ls -tu /bin | head -10 > ultimi10_accesso.txt
 ```
 
 **Spiegazione:** `ls -t` ordina per tempo, `-u` usa il tempo di ultimo **accesso** invece della modifica; `head -10` prende i 10 più recenti.
