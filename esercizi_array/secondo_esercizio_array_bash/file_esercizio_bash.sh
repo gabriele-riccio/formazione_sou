@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#per prima cosa per poter usare gli array associativi, scarico la versione 5.3.9 di Bash dato che si può usare solo in versioni di BASH >=4.
 #Esercizio bonus:creare un array di stringhe in 2 modi: il primo l'ho già svolto ora voglio farlo con un ciclo for per ordinarle in ordine alfabetico, togliere i duplicati e mettere le stringhe tutte in maiuscolo o minuscolo)
 
 #Seconda versione dell'esercizio, dove voglio ordinare in ordine alfabetico, rimuovere duplicati e convertire in uppercase una lista usando cicli for e array associativi (della versione >=4 di bash).
@@ -69,9 +70,9 @@ n=${#unique[@]}
 #l'alto.
 for (( i=0; i<n-1; i++ )); do
   for (( j=0; j<n-1-i; j++)); do
-    if [[ "${#unique[$j]}" > "${#unique[$((j+1))]}" ]]; then
+    if [[ "${unique[$j]}" > "${unique[$((j+1))]}" ]]; then
       tmp="${unique[$j]}"
-      unique[$j]="${#unique[$((j+1))]}"
+      unique[$j]="${unique[$((j+1))]}"
       unique[$((j+1))]="$tmp"
     fi
   done
