@@ -1,4 +1,4 @@
-#!/bin/bash
+
 #--Esercizio 5--Primi 7 ed ultimi 6  comandi di /etc ordinati in un file
 
 #Creare un file contenente i nomi dei primi 7 e degli ultimi 6 file (in ordine alfabetico) della directory /etc.

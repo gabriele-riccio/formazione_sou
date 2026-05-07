@@ -1,4 +1,4 @@
-#!/bin/bash
+
 #--Esercizio1--File in /bin che iniziano con "c"
 
 #Determinare il numero di file nella directory /bin la cui prima lettera è c.
