@@ -33,7 +33,7 @@ for i in INPUT:
 #posso fare 2 versioni
 
 # ── Versione compatta (una riga)
-result_oneliner = sorted(set(s.lower() for s in INPUT))
+result_oneliner = sorted(set(s.upper() for s in INPUT))
 print("\n--Versione compatta--")
 print(result_oneliner)
 #uso direttamente il ciclo for.
