@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-#Esercizio bonus:creare un array di stringhe in 2 modi: il primo l'ho già svolto ora voglio farlo con un ciclo for per ordinarle in ordine alfabetico, togliere i duplicati e mettere le stringhe tutte in maiuscolo o minuscolo)
 
+#per prima cosa per poter usare gli array associativi, scarico la versione 5.3.9 di Bash dato che si può usare solo in versioni di BASH >=4.
+#Esercizio bonus:creare un array di stringhe in 2 modi: il primo l'ho già svolto ora voglio farlo con un ciclo for per ordinarle in ordine alfabetico, togliere i duplicati e mettere le stringhe tutte in m#aiuscolo o minuscolo)
 #Seconda versione dell'esercizio, dove voglio ordinare in ordine alfabetico, rimuovere duplicati e convertire in uppercase una lista usando cicli for e array associativi (della versione >=4 di bash).
 
 INPUT=("juvenTUs" "MILAN" "napoli" "genoA" "milAN" "inter" "ROMA" "LAZIO" "bologna" "inter" "atalanta" "Como" "Genoa")
@@ -45,7 +46,7 @@ for item in "${upper_list[@]}"; do
 done
 
 #for item in "${upper_list[@]}"; do  ad ogni ciclo passa in rassegna tutte le stringhe dell array iniziale, prendendo ogni elemento a ciclo e lo salva nella variabile item
-#if [[ -z "${seen[$item]}" ]]; then controlla in ogni ciclo se quell'elemento dell'array esiste già nell array associativo seen, lo marca come visto e se non c'è gia lo aggiunge all'array associativo unique, altrimenti lo elimina 
+#if [[ -z "${seen[$item]}" ]]; then controlla in ogni ciclo se quell'elemento dell'array esiste già nell array associativo seen, lo marca come visto e se non c'è gia lo aggiunge all'array associativo uniq#ue, altrimenti lo elimina 
 #con -z che controlla se la stringa è vuota.
 
 #stampa
@@ -65,8 +66,7 @@ n=${#unique[@]}
 #e incrementa a ogni iterazione. l'altro invece lo faccio fino a j<n-1-i per non far controllare l'ultimo e il primo elemento con niente o di nuovo con alcuni che ho già controllato.
 #if [[ "${unique[$j]}" > "${unique[$((j+1))]}" ]]; then confronta due elementi adiacenti, mentre > [[ ]] confronta l'ordine alfabetico di due stringhe adiacenti, vedendo la prima lettera.
 #la parte dopo l'if, se è True l'if(ho ad esempio come primo secondo elemento un elemento che inizia per una lettera che viene prima rispetto al primo), salvo il primo elemento nella variabile
-#temporanea 'tmp', rinomino la prima variabile con la seconda e la reinserisco nella tmp, in modo da spostare verso il fondo quelle con la prima lettera più 'GRANDE' e verso l'inizio quelle con la prima lettera verso
-#l'alto.
+#temporanea 'tmp', rinomino la prima variabile con la seconda e la reinserisco nella tmp, in modo da spostare verso il fondo quelle con la prima lettera più 'GRANDE' e verso l'inizio quelle con la prima l#ettera verso l'alto.
 for (( i=0; i<n-1; i++ )); do
   for (( j=0; j<n-1-i; j++)); do
     if [[ "${unique[$j]}" > "${unique[$((j+1))]}" ]]; then
@@ -96,6 +96,9 @@ printf '%s\n' "${unique[@]}"
 
 
 
+<<<<<<< HEAD
 #!/bin/bash
 #Esercizio bonus:creare un array di stringhe in 2 modi: il primo l'ho già svolto ora voglio farlo con un ciclo for per ordinarle in ordine alfabetico , togliere i duplicati e per decidere di mettere le stringhe tutte in maiuscolo o minuscolo).
+=======
+>>>>>>> 03581e6b49f0b6ef006b891c3626697d38a2f640
 
