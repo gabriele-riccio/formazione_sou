@@ -1,65 +1,89 @@
-# Esercizio bonus array --Analisi delle tre soluzioni – Ordinamento, deduplicazione e conversione case
+# Esercizio Bonus Array
+## Ordinamento, Deduplicazione e Conversione Case — Analisi delle Tre Soluzioni
 
-## Descrizione
+---
 
-Il problema da risolvere
+## Traccia
 
 Dato un array di stringhe con duplicati e maiuscole/minuscole miste:
 
-Convertire tutto in uppercase (o lowercase)
-Rimuovere i duplicati
-Ordinare alfabeticamente
+1. **Convertire** tutto in uppercase (o lowercase)
+2. **Rimuovere** i duplicati
+3. **Ordinare** alfabeticamente
+
+```bash
+array_seriea=("juvenTUs" "MILAN" "napoli" "Milan" "JUVENTUS" "napoli" ...)
+```
+
 ---
 
-## Versione 1 – Pipe Unix(file_esercizio_pipe.txt)
-```
-array_seriea=("juvenTUs" "MILAN" "napoli" ...)
-```
+##  Versione 1 — Pipe Unix
+
+> File: `file_esercizio_pipe.txt`
+
+### Implementazione
+
+```bash
 seriea=($(printf "%s\n" "${array_seriea[@]}" \
   | tr '[:lower:]' '[:upper:]' \
   | sort \
   | uniq))
-
 ```
-Ho costruito una catena di pipe dove ogni comando riceve l'output del precedente:
-printf → tr → sort → uniq
 
-```
-printf "%s\n" → stampa ogni elemento su una riga separata
-tr '[:lower:]' '[:upper:]' → converte tutto in maiuscolo carattere per carattere
-sort → ordina alfabeticamente
-uniq → rimuove le righe consecutive duplicate (funziona correttamente solo dopo sort)
+### Come funziona
 
-**Costo in tempo**
-FaseComandoComplessitàStampaprintfO(n)Conversione casetrO(n·m) – scorre ogni carattere di ogni stringaOrdinamentosortO(n log n) – algoritmo interno efficienteDeduplicazioneuniqO(n) – una sola passata lineareTotaleO(n·m + n log n)
+Una catena di pipe dove ogni comando riceve l'output del precedente: `printf → tr → sort → uniq`
 
-**Costo in spazio**
+| Comando | Ruolo |
+|---|---|
+| `printf "%s\n"` | Stampa ogni elemento su una riga separata |
+| `tr '[:lower:]' '[:upper:]'` | Converte in maiuscolo carattere per carattere |
+| `sort` | Ordina alfabeticamente |
+| `uniq` | Rimuove righe consecutive duplicate (funziona solo dopo `sort`) |
 
+### Complessità tempo
 
-O(n·m) per i dati che scorrono attraverso la pipe
-Ogni processo nella pipe ha un buffer in memoria
-In totale vengono creati 4 processi separati che comunicano tramite pipe
+| Fase | Comando | Complessità |
+|---|---|---|
+| Stampa | `printf` | O(n) |
+| Conversione case | `tr` | O(n·m) |
+| Ordinamento | `sort` | O(n log n) |
+| Deduplicazione | `uniq` | O(n) |
+| **Totale** | | **O(n·m + n log n)** |
 
-**Pregi e difetti**
-✅ Soluzione più concisa (una sola riga logica) e idiomatica Unix
-✅ Molto leggibile per chi conosce i comandi Unix
-⚠️ Overhead di avviare più processi separati
-⚠️ L'uso di $(...) per catturare l'output in un array può avere comportamenti inattesi con stringhe contenenti spazi
+**Spazio:** O(n·m) — i dati scorrono attraverso 4 processi separati in pipeline, ognuno con il proprio buffer.
 
-## Versione 2 – Script Bash con cicli e array associativi (file_esercizio_bash.sh)
+### Pro e Contro
 
-Ho diviso il problema in tre fasi esplicite:
-**Fase 1 – Uppercase con ciclo for**
+| Pregi | Difetti |
+|---|---|
+| Soluzione concisa e idiomatica Unix | Overhead di avviare 4 processi separati |
+| Leggibile per chi conosce i comandi Unix | `$()` può avere comportamenti inattesi con stringhe che contengono spazi |
 
+---
+
+##  Versione 2 — Script Bash con Cicli e Array Associativi
+
+> File: `file_esercizio_bash.sh`
+
+### Implementazione
+
+Il problema è diviso in tre fasi esplicite:
+
+**Fase 1 — Uppercase con ciclo `for`**
+
+```bash
 declare -a upper_list
 for item in "${INPUT[@]}"; do
   upper_list+=( "${item^^}" )
 done
+```
 
-${item^^} è la sintassi Bash ≥4 per convertire in maiuscolo. Ho dovuto scaricare la versione 5.3.9 di BASH.
+> `${item^^}` è la sintassi Bash ≥ 4 per la conversione in maiuscolo. Ho scaricato la versione 5.3.9 di Bash.
 
-**Fase 2 – Deduplicazione con array associativo**
+**Fase 2 — Deduplicazione con array associativo**
 
+```bash
 declare -A seen
 declare -a unique
 
@@ -69,12 +93,13 @@ for item in "${upper_list[@]}"; do
     unique+=( "$item" )
   fi
 done
+```
 
-Uso un array associativo (dizionario) come "memoria": se la chiave non esiste ancora in seen, l'elemento è nuovo e va aggiunto a unique. 
-Questo è esattamente come funziona un set in Python.
+> L'array associativo `seen` funziona come un **set Python**: se la chiave non esiste ancora, l'elemento è nuovo e viene aggiunto a `unique`.
 
-**Fase 3 – Bubble Sort**
+**Fase 3 — Bubble Sort**
 
+```bash
 for (( i=0; i<n-1; i++ )); do
   for (( j=0; j<n-1-i; j++ )); do
     if [[ "${unique[$j]}" > "${unique[$((j+1))]}" ]]; then
@@ -84,81 +109,107 @@ for (( i=0; i<n-1; i++ )); do
     fi
   done
 done
+```
 
-Implemento manualmente il Bubble Sort: due cicli annidati confrontano elementi adiacenti e li scambiano se sono nell'ordine sbagliato. Ad ogni passata del ciclo esterno, l'elemento "più grande" alfabeticamente va verso la fine dell'array.
+> Due cicli annidati confrontano elementi adiacenti e li scambiano se fuori ordine.
+> Ad ogni passata esterna, l'elemento "più grande" alfabeticamente scivola verso la fine.
 
-**Costo in tempo**
-FaseMetodoComplessitàUppercaseCiclo for + ${item^^}O(n·m)DeduplicazioneArray associativo (hash map)O(n·m) – hashing di ogni stringaOrdinamentoBubble SortO(k²) nel caso peggioreTotaleO(n·m + k²)
+### Complessità
 
-⚠️ Il punto debole è il Bubble Sort: con k elementi unici, nel caso peggiore fa k² confronti. È l'algoritmo di ordinamento più lento tra quelli comuni. Su liste piccole non si nota, ma su grandi dataset è molto più lento del sort della versione 1 (che usa algoritmi O(n log n)).
+| Fase | Metodo | Complessità |
+|---|---|---|
+| Uppercase | Ciclo `for` + `${item^^}` | O(n·m) |
+| Deduplicazione | Array associativo (hash map) | O(n·m) |
+| Ordinamento | **Bubble Sort** | O(k²) nel caso peggiore |
+| **Totale** | | **O(n·m + k²)** |
 
-**Costo in spazio**
+> N.B Il Bubble Sort è il punto debole: con `k` elementi unici, nel caso peggiore esegue `k²` confronti. Su grandi dataset è significativamente più lento del `sort` Unix (O(n log n)).
 
-upper_list → O(n·m) – copia dell'array in uppercase
-seen → O(k·m) – array associativo con k elementi unici
-unique → O(k·m) – array finale deduplicato
-Totale: O(n·m) – usi più array in memoria contemporaneamente
+**Spazio:** O(n·m) — `upper_list`, `seen` e `unique` sono tutti in memoria contemporaneamente.
 
-**Pregi e difetti**
-✅ Didatticamente molto chiaro: ogni fase è esplicita e commentata
-✅ Nessun processo esterno: tutto avviene dentro bash
-✅ La deduplicazione con array associativo è efficiente (O(1) per ogni lookup)
-⚠️ Il Bubble Sort è O(k²): molto più lento di sort per liste grandi
-⚠️ Più verboso della versione con pipe
+### Pro e Contro
 
+| Pregi |  Difetti |
+|---|---|
+| Didatticamente chiaro: ogni fase è esplicita | Bubble Sort è O(k²): lento su liste grandi |
+| Nessun processo esterno | Più verboso della versione pipe |
+| Deduplicazione con array associativo efficiente O(1) per lookup | Richiede Bash ≥ 4 (o ≥ 5 per `${item^^}`) |
 
+---
 
-## Versione 3 – Python (file_esercizio_python.sh)
-# Versione compatta
+## Versione 3 — Python
+
+> File: `file_esercizio_python.py`
+
+### Implementazione
+
+```python
+# Versione compatta (one-liner)
 result_oneliner = sorted(set(s.lower() for s in INPUT))
 
 # Versione esplicita
-lowered = [s.lower() for s in INPUT]   # fase 1
-unique = set(lowered)                   # fase 2
-result = sorted(unique)                 # fase 3
+uppered = [s.upper() for s in INPUT]   # fase 1: case conversion
+unique  = set(uppered)                  # fase 2: deduplicazione
+result  = sorted(unique)                # fase 3: ordinamento
+```
 
-**Fase 1 - Uppercase:** list comprehension che applica .lower() a ogni stringa.
-**Fase 2 – Deduplicazione con set():** il set di Python è internamente una hash table. Quando inserisci un elemento, calcola il suo hash e lo posiziona nella tabella: se l'hash esiste già, l'elemento è duplicato e viene ignorato silenziosamente.
-**Fase 3 – Ordinamento con sorted():** usa Timsort, un algoritmo ibrido tra MergeSort e InsertionSort, ottimizzato per dati reali parzialmente ordinati.
+### Come funziona
 
-**Costo in tempo**
-FaseMetodoComplessitàLowercaseList comprehension + .lower()O(n·m)Deduplicazioneset() – hash tableO(n·m) – hashing di ogni stringaOrdinamentosorted() – TimsortO(k log k) garantitoTotaleO(n·m + k log k)
-Dove:
+| Fase | Metodo | Dettaglio |
+|---|---|---|
+| **Uppercase** | List comprehension + `.upper()` | Applicata elemento per elemento |
+| **Deduplicazione** | `set()` — hash table interna | Elementi duplicati ignorati silenziosamente in O(1) |
+| **Ordinamento** | `sorted()` — **Timsort** | Algoritmo ibrido MergeSort + InsertionSort, ottimizzato per dati reali |
 
-n = numero totale di elementi (con duplicati)
-k = numero di elementi unici (k ≤ n)
-m = lunghezza media delle stringhe
+### Complessità tempo
 
-**Costo in spazio**
+| Fase | Metodo | Complessità |
+|---|---|---|
+| Uppercas | List comprehension + `.upper()` | O(n·m) |
+| Deduplicazione | `set()` — hash table | O(n·m) |
+| Ordinamento | `sorted()` — Timsort | O(k log k) garantito |
+| **Totale** | | **O(n·m + k log k)** |
 
-uppered → O(n·m)
-unique (set) → O(k·m)
-result → O(k·m)
-Totale: O(n·m)
+**Spazio:** O(n·m) — `lowered`, `unique` (set) e `result` sono tutti referenziati in memoria.
 
-**Pregi e difetti**
-✅ Soluzione più efficiente in termini di tempo grazie a Timsort
-✅ Sintassi molto pulita e leggibile
-✅ set() gestisce la deduplicazione in modo nativo e ottimizzato
-✅ Hai verificato correttezza con assert
-⚠️ Richiede Python (non sempre disponibile in ambienti server minimali)
+### Pro e Contro
 
-## Confronto finale tra le tre versioni
-| Aspetto | Pipe Unix | Bash + Cicli | Python |
+| Pregi |  Difetti |
 |---|---|
-| Tempo – case conversion | O(n·m) |  O(n·m)   |   O(n·m)     |
-|Tempo – deduplicazione | O(n log n)*  | O(n log n)*   |    O(n·m)     |
-| Tempo – ordinamento | O(n log n) |   O(k²) ⚠️   |    O(k log k)    |
-|Spazio | O(n·m) |  O(n·m)    |    O(n·m)    |
-| Processi creati| 4 |   1   |    1    |
-| Leggibilità | Alta (per chi conosce Unix) |  Alta(didattica)    |    Altissima    |
-| Soluzione migliore per | Scripting rapido |  Apprendimento    |  Performance      |
+| Soluzione più efficiente grazie a Timsort | Richiede Python (non sempre disponibile in ambienti minimali) |
+| Sintassi pulita e leggibile | — |
+| `set()` gestisce la deduplicazione in modo nativo | — |
+| Correttezza verificabile con `assert` | — |
 
-*sort | uniq nella pipe usa internamente un algoritmo O(n log n) e la deduplicazione avviene in O(n) dopo l'ordinamento.
+---
 
-## Conclusione
-Tutte e tre le versioni hanno lo stesso costo in spazio (O(n·m)), ma differiscono nel tempo:
+##  Confronto Finale
 
-La versione **Pipe** e **Python** hanno entrambe complessità temporale O(n·m + n log n), che è ottimale
-La versione **Bash** è l'unica penalizzata dal Bubble Sort O(k²), che la rende significativamente più lenta su dataset grandi
+| Aspetto |  Pipe Unix |  Bash + Cicli |  Python |
+|---|:---:|:---:|:---:|
+| Tempo — case conversion | O(n·m) | O(n·m) | O(n·m) |
+| Tempo — deduplicazione | O(n)* | O(n·m) | O(n·m) |
+| Tempo — ordinamento | O(n log n) | **O(k²)** | O(k log k) |
+| Spazio totale | O(n·m) | O(n·m) | O(n·m) |
+| Processi creati | 4 | 1 | 1 |
+| Leggibilità | Alta (Unix) | Alta (didattica) | Altissima |
+| **Ideale per** | Scripting rapido | Apprendimento | Performance |
+
+> \* `sort | uniq` usa internamente O(n log n) per l'ordinamento; la deduplicazione successiva con `uniq` è O(n).
+
+---
+
+##  Conclusione
+
+Tutte e tre le versioni hanno lo stesso **costo in spazio O(n·m)**, ma differiscono nel tempo:
+
+- **Pipe Unix** e **Python** raggiungono entrambe O(n·m + n log n) — complessità ottimale per questo problema.
+- **Bash** è l'unica versione penalizzata dal **Bubble Sort O(k²)**, che la rende significativamente più lenta su dataset grandi.
+
+```
+n = numero totale di elementi (inclusi i duplicati)
+k = numero di elementi unici  (k ≤ n)
+m = lunghezza media delle stringhe
+```
+
 
