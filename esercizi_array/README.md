@@ -1,5 +1,5 @@
 # Esercizio Bonus Array
-## Ordinamento, Deduplicazione e Conversione Case — Analisi delle Tre Soluzioni
+## Ordinamento, Deduplicazione e Conversione — Analisi delle Tre Soluzioni
 
 ---
 
