@@ -1,0 +1,15 @@
+#!/bin/bash
+#Esercizio bonus:creare un array di stringhe in 2 modi: il primo con la pipe| e comandi(nel nostro caso sort, unique, tr '[:lower:]' '[:upper:]', per ordinarle in ordine alfabetico , togliere i duplicati e per decidere di mettere le stringhe tutte in maiuscolo o minuscolo)
+
+#prima cosa creo un array di squadre di serie a
+
+array_seriea=("juvenTUs" "MILAN" "napoli" "genoA" "milAN" "inter" "ROMA" "LAZIO" "bologna" "inter" "atalanta" "Como" "Genoa")
+
+#ora li ordino direttamente nella stessa riga: uso printf "%s\n" "${array_seriea[@]}" per stampare tutto il contenuto dell'array con la @ dato che se non la mettessi mi stamperebbe solo alcuni elementi(es da 0 a N-1), poi uso i comandi con la pipe per:
+tr '[:lower:]' '[:upper:]' per trasformare tutti i caratteri in piccolo in maiuscolo, sort per ordinare in ordine alfabetico e uniq per eliminare i duplicati.
+
+seriea=($(printf "%s\n" "${array_seriea[@]}" | tr '[:lower:]' '[:upper:]' | sort | uniq ))
+#ora lo stampo usando ${seriaa[@]} per stamparlo tutto.
+echo ${seriaa[@]} 
+#output: ATALANTA BOLOGNA COMO GENOA INTER JUVENTUS LAZIO MILAN NAPOLI ROMA
+
