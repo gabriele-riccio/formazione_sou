@@ -194,6 +194,127 @@ du -sh /home/utente     # spazio occupato da una cartella
 
 I permessi dei file sono memorizzati nell'**inode** e sono strettamente legati al filesystem. Un filesystem FAT32, ad esempio, **non supporta i permessi Unix** — ecco perché una chiavetta FAT non può avere file con `chmod`.
 
+### Struttura dei permessi
+
+Ogni file ha tre categorie di utenti e tre tipi di permesso:
+
+```
+-  rwx  rwx  rwx
+^   ^    ^    ^
+|   |    |    └── altri (others)
+|   |    └─────── gruppo (group)
+|   └──────────── proprietario (user/owner)
+└──────────────── tipo di file (- file, d directory, l link)
+```
+
+| Permesso | Su file          | Su directory                        |
+|----------|------------------|-------------------------------------|
+| `r` (4)  | Leggere          | Listare il contenuto (`ls`)         |
+| `w` (2)  | Scrivere/modificare | Creare/eliminare file dentro    |
+| `x` (1)  | Eseguire         | Entrare nella directory (`cd`)      |
+
+---
+
+### `chmod` — Cambiare i permessi
+
+`chmod` modifica i permessi di un file o directory. Si può usare in modalità **simbolica** o **ottale**.
+
+**Modalità simbolica:**
+
+```bash
+chmod u+x file.sh          # aggiunge esecuzione al proprietario
+chmod g-w file.txt         # rimuove scrittura al gruppo
+chmod o=r file.txt         # imposta solo lettura per gli altri
+chmod a+x script.sh        # aggiunge esecuzione a tutti (a = all)
+chmod u+x,g-w file.txt     # più modifiche insieme
+```
+
+| Simbolo | Categoria         |
+|---------|-------------------|
+| `u`     | user (proprietario)|
+| `g`     | group (gruppo)    |
+| `o`     | others (altri)    |
+| `a`     | all (tutti e tre) |
+
+| Operatore | Significato               |
+|-----------|---------------------------|
+| `+`       | Aggiunge il permesso      |
+| `-`       | Rimuove il permesso       |
+| `=`       | Imposta esattamente       |
+
+**Modalità ottale:**
+
+Ogni permesso corrisponde a un valore numerico: `r=4`, `w=2`, `x=1`. Si sommano per ogni categoria:
+
+```bash
+chmod 755 file.sh    # rwxr-xr-x  (proprietario: tutto; gruppo e altri: r+x)
+chmod 644 file.txt   # rw-r--r--  (proprietario: r+w; gruppo e altri: solo r)
+chmod 600 secret.txt # rw-------  (solo il proprietario può leggere/scrivere)
+chmod 777 script.sh  # rwxrwxrwx  (tutti i permessi a tutti — da evitare)
+```
+
+| Valore ottale | Permessi  | Significato            |
+|---------------|-----------|------------------------|
+| `7`           | `rwx`     | lettura + scrittura + esecuzione |
+| `6`           | `rw-`     | lettura + scrittura    |
+| `5`           | `r-x`     | lettura + esecuzione   |
+| `4`           | `r--`     | solo lettura           |
+| `0`           | `---`     | nessun permesso        |
+
+**Applicazione ricorsiva:**
+
+```bash
+chmod -R 755 /var/www/html    # applica ricorsivamente a tutta la directory
+```
+
+---
+
+### `chown` — Cambiare il proprietario
+
+`chown` cambia il proprietario (e opzionalmente il gruppo) di un file. Richiede i privilegi di root.
+
+```bash
+chown mario file.txt              # cambia solo il proprietario
+chown mario:developers file.txt   # cambia proprietario e gruppo
+chown :developers file.txt        # cambia solo il gruppo
+chown -R mario:mario /home/mario  # applicazione ricorsiva
+```
+
+**Sintassi:**
+
+```
+chown [opzioni] utente[:gruppo] file
+```
+
+---
+
+### `chgrp` — Cambiare il gruppo
+
+`chgrp` cambia solo il gruppo di appartenenza di un file. È equivalente a `chown :gruppo file`.
+
+```bash
+chgrp developers file.txt         # cambia il gruppo
+chgrp -R webteam /var/www/html    # applicazione ricorsiva
+```
+
+---
+
+### Riepilogo dei comandi sui permessi
+
+```bash
+ls -l file.txt          # visualizza permessi correnti
+stat file.txt           # metadati completi inclusi permessi
+
+chmod 644 file.txt      # imposta rw-r--r--
+chmod u+x script.sh     # rende eseguibile per il proprietario
+
+chown mario file.txt            # cambia proprietario
+chown mario:gruppo file.txt     # cambia proprietario e gruppo
+chgrp gruppo file.txt           # cambia solo il gruppo
+```
+
+> **Ricorda:** solo il proprietario del file o root possono usare `chmod`. Solo root può usare `chown` per trasferire la proprietà ad altri utenti. Un utente normale può usare `chgrp` solo verso gruppi di cui fa parte.
+
 ---
 
 ## Riepilogo visivo
@@ -224,7 +345,7 @@ DISCO
 
 # Esercizi — Filesystem (con soluzioni)
 
-*Lezione 15 — Sistemi Operativi, Università di Modena e Reggio Emilia*
+*Lezione 15 — Sistemi Operativi*
 
 ---
 
@@ -483,4 +604,4 @@ I risultati mostrano le definizioni con pattern `__NR_nome` (es. `__NR_read`, `_
 
 ---
 
-*"I think the major good idea in UNIX was its clean and simple interface: open, close, read and write." — Ken Thompson*
+
