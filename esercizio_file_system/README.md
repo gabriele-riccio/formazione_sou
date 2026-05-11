@@ -1,4 +1,4 @@
-# I Filesystem in Linux — Teoria ed Esercizi
+# Filesystem  — Teoria ed Esercizi
 
 ---
 
