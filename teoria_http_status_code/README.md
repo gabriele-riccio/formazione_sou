@@ -24,8 +24,8 @@ E' basato sul modello client-server, invia richieste HTTP e riceve risposte dai 
     identificativo o i dati di sessione ad ogni richiesta(come con l'utilizzo dei **Json Web Tokens(JWT)** nell'Header Authorization).
      
 - **Struttura della Comunicazione** :
-    **Richiesta (Request)** : Contiene un metodo (come GET, POST, PUT, DELETE) che specifica l'azione da compiere.
-    **Risposta (Response)** : Include un codice di stato (es. 200 OK, 404 Not Found) e la risorsa richiesta.
+    - **Richiesta (Request)** : Contiene un metodo (come GET, POST, PUT, DELETE) che specifica l'azione da compiere.
+    - **Risposta (Response)** : Include un codice di stato (es. 200 OK, 404 Not Found) e la risorsa richiesta.
 - **Differenza con HTTPS** : HTTP trasmette dati in chiaro, mentre HTTPS (HTTP Secure) utilizza il protocollo TLS/SSL per cifrare la
     comunicazione, lavorando solitamente sulla porta 443.
 - **Versatilità** : HTTP non trasferisce solo testo ipertestuale (HTML), ma può inviare svariati tipi di file, rendendolo generico e
