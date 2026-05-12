@@ -32,7 +32,7 @@ E' basato sul modello client-server, invia richieste HTTP e riceve risposte dai 
     standardizzato.
 
 
-–--
+---
 
 ## Cosa sono gli Status Code HTTP?
 I codici stato HTTP – noti anche come Status Code HTTP – sono una combinazione di valori numerici che vanno da **100 a 500** per indicare le varie condizioni di una risposta del web server.
