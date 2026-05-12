@@ -70,7 +70,7 @@ Vediamone alcuni:
 - **103 Early Hints** :  Il server restituisce alcune intestazioni di risposta prima che venga inviata la risposta HTTP finale.
 
 ---
-
+---
 ## 2XX – Successo (Success)
 
 I codici di status che rientrano nella categoria 2XX ci comunicano un messaggio molto importante:
@@ -91,6 +91,8 @@ La richiesta è stata stata riconosciuta dal server, è stata accettata ed è in
 - **208 Already Reported** : Questo codice indica che gli elementi esistenti sono stati già enumerati in una parte precedente della        risposta e non verranno enumerati di nuovo.
 - **226 IM Used** :  Il server ha soddisfatto la richiesta e la risposta è una rappresentazione di una o più manipolazioni di istanze.
 
+---
+---
 
 ## 3xx – Reindirizzamento (Redirection)
 
@@ -124,6 +126,8 @@ Se i primi gruppi di HTTP Status Code indicano un sostanziale funzionamento del 
     Il codice è simile al codice HTTP **302**, l’unica differenza è che non consente ai browser di modificare il tipo
     di richiesta HTTP.
 
+---
+---
 
 ## 4xx – Errore del client (Client Error)
 
@@ -144,12 +148,15 @@ Il problema potrebbe essere un errore di sintassi nella richiesta, URL inesisten
     per accedere alle risorse. Le cause tipiche di questo errore sono le regole restrittive del server del sito web, i permessi
     insufficienti dei file  delle cartelle del sito web,etc.
 
-
+---
+---
 ## Differenza tra 401 e 403:
 La differenza principale tra **401 e 403** risiede nell'autenticazione: 401 Unauthorized significa che **il server non sa chi sei** (richiede login/credenziali valide), mentre 403 Forbidden **significa che il server ti ha riconosciuto, ma non hai i permessi necessari per accedere alla risorsa**. 
 
 In breve: 401 = **non autenticato**, 403 = **autenticato ma non autorizzato**.
 
+---
+---
 
 - **404 Not Found** : Questo è l’errore più frequente che gli utenti vedono online, significa che il server non riesce a trovare la
     risorsa richiesta.
@@ -190,6 +197,8 @@ In breve: 401 = **non autenticato**, 403 = **autenticato ma non autorizzato**.
 - **429 Too many requests** : Il server risponde con questo codice quando l’utente ha inviato troppe richieste nel tempo
     indicato e ha superato il limite di velocità.
 
+---
+---
 
 ## 5xx – Errore del Server
 
@@ -220,7 +229,7 @@ Una buona parte di questi problemi possono essere bypassati scegliendo un hostin
 - **511 Network Authentication Required** : Questa risposta viene inviata quando è necessario autenticarsi in modo che la
     rete possa inviare la richiesta a un server.
     Più comunemente, si verifica quando si tenta di utilizzare una rete Wi-Fi e devi accettare i suoi Termini di accordo.
-
+---
 
 
 
