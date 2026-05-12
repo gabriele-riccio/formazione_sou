@@ -29,16 +29,13 @@ La risposta contiene due parti: **corpo e intestazioni**.
 
 **I codici di stato HTTP** sono composti da 3 cifre. La prima cifra rappresenta la categoria della risposta, mentre le ultime due cifre definiscono la risposta specifica.
 
----
+
 BROWSER(CLIENT) ---> { RICHIESTA HTTP [GET,PUT,POST]} ---> SERVER
 
-BROWSER(CLIENT) <--- { RISPOSTA HTTP [GET,PUT,POST] } <--- SERVER
+BROWSER(CLIENT) <--- { RISPOSTA HTTP [Intestazioni e corpo],STATUS CODE(200,300,400,500)  } <--- SERVEr
 
 
-                <--- { STATUS CODE(200,300,400,500) } <---
 
-
----
 
 ## Perché conoscere la lista dei codici?
 Bisogna conoscere bene i diversi HTTP Status Code perché in questo modo possono intervenire in modo sistematico e strutturato.
