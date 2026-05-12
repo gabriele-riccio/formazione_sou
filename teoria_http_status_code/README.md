@@ -8,6 +8,31 @@ Essi sono dei codici che definiscono l'esito positivo o negativo della richiesta
 E' importante conoscere gli HTTP status code per capire se l'operazione è andata a buon fine o se ci sono degli errori.
 
 ---
+## Protocollo HTTP:
+Prima di parlare degli HTTP status code è importante conoscere cosa è il protocollo HTTP e come funziona.
+
+Il protocollo HTTP (**HyperText Transfer Protocol**) è la base del trasferimento dati sul **World Wide Web**, utilizzato dai browser per richiedere e caricare pagine web da un server.
+E' basato sul modello client-server, invia richieste HTTP e riceve risposte dai server web operando solitamente sulla porta TCP 80, mentre la versione sicura(e non più sicura come abbiamo detto ai colloqui  :joy: ) **HTTPS** utilizza la crittografia.
+
+## Dettagli chiave del protocollo HTTP:
+- **Funzionamento Client-Server** : Il client (es. il browser) invia una richiesta per una risorsa, e il server web risponde inviando
+    il contenuto richiesto (HTML, immagini, video).
+- **Stateless (Senza Stato)** : Come abbiamo detto questa mattina HTTP non mantiene traccia delle richieste precedenti; ogni
+    transazione è indipendente, il che significa che il server non memorizza informazioni sulle chiamate passate.
+    Per ottenere un comportamento **statefull** (con stato/memoria) pur mantenendo HTTP intrinsecamente **stateless** (senza stato),
+    si utilizzano i **cookie tradizionali** oppure è necessario che sia il client (browser) a inviare esplicitamente un
+    identificativo o i dati di sessione ad ogni richiesta(come con l'utilizzo dei **Json Web Tokens(JWT)** nell'Header Authorization).
+     
+- **Struttura della Comunicazione** :
+    **Richiesta (Request)** : Contiene un metodo (come GET, POST, PUT, DELETE) che specifica l'azione da compiere.
+    **Risposta (Response)** : Include un codice di stato (es. 200 OK, 404 Not Found) e la risorsa richiesta.
+- **Differenza con HTTPS** : HTTP trasmette dati in chiaro, mentre HTTPS (HTTP Secure) utilizza il protocollo TLS/SSL per cifrare la
+    comunicazione, lavorando solitamente sulla porta 443.
+- **Versatilità** : HTTP non trasferisce solo testo ipertestuale (HTML), ma può inviare svariati tipi di file, rendendolo generico e
+    standardizzato.
+
+
+–--
 
 ## Cosa sono gli Status Code HTTP?
 I codici stato HTTP – noti anche come Status Code HTTP – sono una combinazione di valori numerici che vanno da **100 a 500** per indicare le varie condizioni di una risposta del web server.
