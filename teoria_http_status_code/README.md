@@ -32,7 +32,7 @@ La risposta contiene due parti: **corpo e intestazioni**.
 
 BROWSER(CLIENT) ---> { RICHIESTA HTTP [GET,PUT,POST]} ---> SERVER
 
-BROWSER(CLIENT) <--- { RISPOSTA HTTP [Intestazioni e corpo], STATUS CODE(200,300,400,500)  } <--- SERVEr
+BROWSER(CLIENT) <--- { RISPOSTA HTTP [Intestazioni e corpo]; STATUS CODE(200,300,400,500)  } <--- SERVER
 
 
 
