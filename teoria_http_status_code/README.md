@@ -183,7 +183,7 @@ In breve: 401 = **non autenticato**, 403 = **autenticato ma non autorizzato**.
 
 - **404 Not Found** : Questo è l’errore più frequente che gli utenti vedono online, significa che il server non riesce a trovare la
     risorsa richiesta.
-    Di solito, la causa è che l’URL a cui stai tentando di accedere non esiste.
+    Di solito, la causa è che l’URL a cui si sta tentando di accedere non esiste.
 - **405 Method Not Allowed** : Il server comprende il metodo richiesto, ma la risorsa di destinazione non lo supporta.
 - **406 Not Acceptable** : La risorsa richiesta ha generato contenuti che non soddisfano i criteri dello user-agent che lo ha
     richiesto.
