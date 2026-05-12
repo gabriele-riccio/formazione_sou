@@ -47,7 +47,7 @@ Ad esempio, di fronte a un **errore 404** si possono prendere determinate precau
 
 
 ## La lista dei diversi HTTP Status Code
-Per gestire questi codici di status sono state organizzate le diverse alternative con un sistema basato su alcuni numeri che si articolano *in 5 gruppi*, **da 1XX a 5XX**.
+Per gestire questi codici di status sono state organizzate le diverse alternative con un sistema basato su alcuni numeri che si articolano **in 5 gruppi da 1XX a 5XX**.
 
 
 Ecco gli status-code più importanti da conoscere:
