@@ -33,6 +33,9 @@ La risposta contiene due parti: **corpo e intestazioni**.
 BROWSER(CLIENT) ---> { RICHIESTA HTTP [GET,PUT,POST]} ---> SERVER
 
 BROWSER(CLIENT) <--- { RISPOSTA HTTP [GET,PUT,POST] } <--- SERVER
+
+
+
                 <--- { STATUS CODE(200,300,400,500) } <---
 
 ---
