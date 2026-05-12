@@ -38,6 +38,7 @@ BROWSER(CLIENT) <--- { RISPOSTA HTTP [GET,PUT,POST] } <--- SERVER
 
                 <--- { STATUS CODE(200,300,400,500) } <---
 
+
 ---
 
 ## Perché conoscere la lista dei codici?
