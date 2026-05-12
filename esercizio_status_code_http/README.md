@@ -63,11 +63,11 @@ Questa famiglia di codici di stato HTTP indica che la richiesta effettuata dal c
 
 Vediamone alcuni:
 
--**100 Continue** : Il server, una volta ricevute la richiesta iniziale e le intestazioni dal client, dice al client che può
+- **100 Continue** : Il server, una volta ricevute la richiesta iniziale e le intestazioni dal client, dice al client che può
    continuare e procedere con l’invio del corpo della richiesta.
--**101 Switching Protocols** : Il client richiedente (browser) ha chiesto al server di modificare i protocolli e il server ha             soddisfatto la richiesta.
--**102 Processing (WebDAV)** : Questa è una risposta principalmente associata alle richieste che potrebbero richiedere più tempo per      essere completate. Indica che il server ha ricevuto la richiesta e la sta elaborando.
--**103 Early Hints** :  Il server restituisce alcune intestazioni di risposta prima che venga inviata la risposta HTTP finale.
+- **101 Switching Protocols** : Il client richiedente (browser) ha chiesto al server di modificare i protocolli e il server ha             soddisfatto la richiesta.
+- **102 Processing (WebDAV)** : Questa è una risposta principalmente associata alle richieste che potrebbero richiedere più tempo per      essere completate. Indica che il server ha ricevuto la richiesta e la sta elaborando.
+- **103 Early Hints** :  Il server restituisce alcune intestazioni di risposta prima che venga inviata la risposta HTTP finale.
 
 ---
 
@@ -76,20 +76,20 @@ Vediamone alcuni:
 I codici di status che rientrano nella categoria 2XX ci comunicano un messaggio molto importante:
 La richiesta è stata stata riconosciuta dal server, è stata accettata ed è in fase di elaborazione.
 
--**200 OK** : E' la  risposta per una richiesta HTTP riuscita, il risultato dipenderà dal tipo di richiesta
--**201 Created** : la richiesta è stata completata ed il server ha creato una nuova risorsa.
--**202 Accepted** : Il server ha accettato la richiesta ma non ha ancora terminato l’elaborazione.
-   La richiesta potrebbe essere soddisfatta o rifiutata, ma il risultato è ancora indeterminato.
--**203 Non-Authoritative Information** : Di solito appare quando viene utilizzato un servizio proxy.
-   Il server proxy ha ricevuto un codice di stato **200 “OK”** dal server di origine e restituisce una versione modificata
-   della risposta dell’origine.
--**204 No Content** : Il server ha soddisfatto la richiesta ma non c’è alcun contenuto da restituire.
--**205 Reset Conten** :  Il server ha soddisfatto la richiesta e non restituirà alcun contenuto ma chiederà al client (browser) di        reimpostare la vista del documento.
--**206 Partial Content** : Il server restituisce solo una parte delle risorse richieste perché il browser utilizza “intestazioni di       intervallo”.
-   Queste intestazioni consentono ai browser di riprendere i download o dividere i download in più flussi simultanei.
--**207 Multi-Status** : Abbiamo lo stato di più operazioni: Il server restituisce un messaggio contenente un array di codici di           risposta per tutte le sotto richieste.
--**208 Already Reported** : Questo codice indica che gli elementi esistenti sono stati già enumerati in una parte precedente della        risposta e non verranno enumerati di nuovo.
--**226 IM Used** :  Il server ha soddisfatto la richiesta e la risposta è una rappresentazione di una o più manipolazioni di istanze.
+- **200 OK** : E' la  risposta per una richiesta HTTP riuscita, il risultato dipenderà dal tipo di richiesta
+- **201 Created** : la richiesta è stata completata ed il server ha creato una nuova risorsa.
+- **202 Accepted** : Il server ha accettato la richiesta ma non ha ancora terminato l’elaborazione.
+    La richiesta potrebbe essere soddisfatta o rifiutata, ma il risultato è ancora indeterminato.
+- **203 Non-Authoritative Information** : Di solito appare quando viene utilizzato un servizio proxy.
+    Il server proxy ha ricevuto un codice di stato **200 “OK”** dal server di origine e restituisce una versione modificata
+    della risposta dell’origine.
+- **204 No Content** : Il server ha soddisfatto la richiesta ma non c’è alcun contenuto da restituire.
+- **205 Reset Conten** :  Il server ha soddisfatto la richiesta e non restituirà alcun contenuto ma chiederà al client (browser) di        reimpostare la vista del documento.
+- **206 Partial Content** : Il server restituisce solo una parte delle risorse richieste perché il browser utilizza “intestazioni di       intervallo”.
+    Queste intestazioni consentono ai browser di riprendere i download o dividere i download in più flussi simultanei.
+- **207 Multi-Status** : Abbiamo lo stato di più operazioni: Il server restituisce un messaggio contenente un array di codici di           risposta per tutte le sotto richieste.
+- **208 Already Reported** : Questo codice indica che gli elementi esistenti sono stati già enumerati in una parte precedente della        risposta e non verranno enumerati di nuovo.
+- **226 IM Used** :  Il server ha soddisfatto la richiesta e la risposta è una rappresentazione di una o più manipolazioni di istanze.
 
 
 ## 3xx – Reindirizzamento (Redirection)
