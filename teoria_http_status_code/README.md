@@ -35,7 +35,7 @@ BROWSER(CLIENT) ---> { RICHIESTA HTTP [GET,PUT,POST]} ---> SERVER
 BROWSER(CLIENT) <--- { RISPOSTA HTTP [Intestazioni e corpo]; STATUS CODE(200,300,400,500)  } <--- SERVER
 
 
-
+---
 
 ## Perché conoscere la lista dei codici?
 Bisogna conoscere bene i diversi HTTP Status Code perché in questo modo possono intervenire in modo sistematico e strutturato.
@@ -70,7 +70,7 @@ Vediamone alcuni:
 - **103 Early Hints** :  Il server restituisce alcune intestazioni di risposta prima che venga inviata la risposta HTTP finale.
 
 ---
----
+
 ## 2XX – Successo (Success)
 
 I codici di status che rientrano nella categoria 2XX ci comunicano un messaggio molto importante:
@@ -91,7 +91,7 @@ La richiesta è stata stata riconosciuta dal server, è stata accettata ed è in
 - **208 Already Reported** : Questo codice indica che gli elementi esistenti sono stati già enumerati in una parte precedente della        risposta e non verranno enumerati di nuovo.
 - **226 IM Used** :  Il server ha soddisfatto la richiesta e la risposta è una rappresentazione di una o più manipolazioni di istanze.
 
----
+
 ---
 
 ## 3xx – Reindirizzamento (Redirection)
@@ -127,7 +127,6 @@ Se i primi gruppi di HTTP Status Code indicano un sostanziale funzionamento del 
     di richiesta HTTP.
 
 ---
----
 
 ## 4xx – Errore del client (Client Error)
 
@@ -149,13 +148,12 @@ Il problema potrebbe essere un errore di sintassi nella richiesta, URL inesisten
     insufficienti dei file  delle cartelle del sito web,etc.
 
 ---
----
+
 ## Differenza tra 401 e 403:
 La differenza principale tra **401 e 403** risiede nell'autenticazione: 401 Unauthorized significa che **il server non sa chi sei** (richiede login/credenziali valide), mentre 403 Forbidden **significa che il server ti ha riconosciuto, ma non hai i permessi necessari per accedere alla risorsa**. 
 
 In breve: 401 = **non autenticato**, 403 = **autenticato ma non autorizzato**.
 
----
 ---
 
 - **404 Not Found** : Questo è l’errore più frequente che gli utenti vedono online, significa che il server non riesce a trovare la
@@ -197,7 +195,6 @@ In breve: 401 = **non autenticato**, 403 = **autenticato ma non autorizzato**.
 - **429 Too many requests** : Il server risponde con questo codice quando l’utente ha inviato troppe richieste nel tempo
     indicato e ha superato il limite di velocità.
 
----
 ---
 
 ## 5xx – Errore del Server
