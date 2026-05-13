@@ -69,7 +69,7 @@ pausa
 # =============================================================================
 # 201 OK — POST con corpo JSON
 # Iniziamo: Ora vediamo il codice 201--> voglio simularlo con il metodo post con corpo json(in questo caso i contenuto visualizzato è in json inoltre Se il primo blocco serviva a mostrare come richiedere semplicemente una pagina (GET), questo serve a mostrare come inviare dei dati a un server(Post).
-# Poi richiamo la funzione sep mettendogli il titolo della parte di esercizio cioè testare lo status code 200 OK dopo il metodo post.
+# Poi richiamo la funzione sep mettendogli il titolo della parte di esercizio cioè testare lo status code 201 dopo il metodo post.
 #Poi cè un echo che stampa solo delle spiegazioni cioè che il server ha ricevuto la richiesta e risponde con successo con l'eco dei dati.
 #Poi uno spazio
 #poi il cuore dello script:
@@ -111,15 +111,9 @@ pausa
 #Richiamo sempre la funzione sep per stampare il titolo
 #Ci sono sempre delle stampe di spiegazione
 #in questo caso uso curl -s -I per mostrare solo gli header HTTP senza il body.
-#
 # =============================================================================
-<<<<<<< HEAD:teoria_http_status_code/esercizi_http_status_code/file_2XX_esercizio.sh
 
 sep "204 NO CONTENT — Vedere gli header della risposta"
-=======
-sep "204 OK — Vedere gli header della risposta"
->>>>>>> 585f506db6d05560f07397de045e4eff4f7efbef:teoria_http_status_code/esercizi_http_status_code/file.sh
-
 echo -e "  Con -I (o --head) curl mostra SOLO gli header HTTP, senza il body."
 echo ""
 echo -e "  ${GREEN}curl -s -I $BASE/status/204${RESET}"
