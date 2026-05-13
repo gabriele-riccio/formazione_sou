@@ -157,85 +157,10 @@ echo ""
 #chmod +x file_2XX_esercizio.sh
 #poi lo eseguo con:
 #./file_2XX_esercizio.sh
-#output :
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  200 OK — GET semplice
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-#  Mandiamo dati al server con il metodo GET.
-#  Il server ha ricevuto la richiesta e risponde con successo.
-
-# curl -s -w '
-#  → Status: %{http_code}
-# ' https://httpbin.org/get
-
-# {
-#  "args": {}, 
-#  "headers": {
-#    "Accept": "*/*", 
-#    "Host": "httpbin.org", 
-#    "User-Agent": "curl/8.7.1", 
-#    "X-Amzn-Trace-Id": "Root=1-6a0425d4-1eec371242f01a962bd4ca68"
-#  }, 
-#  "origin": "188.12.196.154", 
-#  "url": "https://httpbin.org/get"
-# }
-
-#  → Status: 200
-
-#  >>> Premi INVIO per continuare...
+#output : Nel README
 
 
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-#  201 OK — POST con corpo JSON
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
- # Mandiamo dati al server con il metodo POST.
- # Il server li riceve, li elabora e risponde 201 con l'eco dei dati.
-
-  #curl -s -X POST -H 'Content-Type: application/json' \e[0m
-   #    -d '{"nome":"Mario","ruolo":"admin"}' \e[0m
-   #    -w '
- # → Status: %{http_code}
-# ' https://httpbin.org/status/201
 
 
-# → Status: 201
-
-#  >>> Premi INVIO per continuare...
-
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- # 204 NO CONTENT — Vedere gli header della risposta
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-#  Con -I (o --head) curl mostra SOLO gli header HTTP, senza il body.
-
-#  curl -s -I https://httpbin.org/status/204
-
-# HTTP/2 204 
-#date: Wed, 13 May 2026 07:18:53 GMT
-#server: gunicorn/19.9.0
-#access-control-allow-origin: *
-#access-control-allow-credentials: true
-
-
- # >>> Premi INVIO per continuare...
-
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
- # RIEPILOGO — 2xx
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-# 200 OK          → richiesta riuscita, body presente
-# 201 Created     → risorsa creata (tipico delle POST su API REST)
-# 204 No Content  → successo ma nessun body da restituire
-
-#  Verifica rapida dei tre:
-
-#    GET /status/200  →  200
-#    GET /status/201  →  201
-#    GET /status/204  →  204
-
-#  Fine simulazione 2xx.
 
