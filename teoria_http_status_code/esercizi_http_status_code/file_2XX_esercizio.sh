@@ -4,7 +4,7 @@
 #Faccio prima l'esempio con gli status code 2XX.
 
 #Ho usato come url di base "https://httpbin.org", un'indirizzo chiamato endpoint per testare le richieste HTTP.
-#Gli invio una richiesta tramite il comando curl ed il server risponde con un testo in formato JSON per controllare gli HEADER#per leggerne la risposta.
+#Gli invio una richiesta tramite il comando curl ed il server risponde con un testo in formato JSON per controllare gli HEADER per leggerne la risposta.
 
 BASE="https://httpbin.org"
 
