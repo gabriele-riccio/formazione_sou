@@ -136,8 +136,6 @@ echo -e "  ${GREEN}200 OK${RESET}          → richiesta riuscita, body presente
 echo -e "  ${GREEN}201 Created${RESET}     → risorsa creata (tipico delle POST su API REST)"
 echo -e "  ${GREEN}204 No Content${RESET}  → successo ma nessun body da restituire"
 echo ""
-echo -e "  Verifica rapida dei tre:"
-echo ""
 
 
 
