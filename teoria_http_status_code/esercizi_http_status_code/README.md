@@ -230,16 +230,16 @@ Sono gli errori lato client
 
 - **Confronto diretto A/B/C/D**
   Quattro scenari sulla stessa progressione:
-  - richiesta rotta
+  - richiesta errata
   - nessuna identità
   - identità rifiutata
   - accesso concesso.
 
 - **Schema mentale:**
   ```
-  richiesta malformata(URL errato o insesistente?         → 404
+  richiesta malformata (URL errato o insesistente)         → 404
   chi sei? (credenziali errate)       → 401
-  so chi sei, non puoi entrare(nessuna autorizzazione) → 403
+  so chi sei, non puoi entrare (nessuna autorizzazione) → 403
   ```
 
 #### La funzione `mostra_basic_auth()`
