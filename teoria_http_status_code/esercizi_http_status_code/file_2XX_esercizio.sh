@@ -151,6 +151,11 @@ echo ""
 echo -e "${BOLD}  Fine simulazione 2xx.${RESET}"
 echo ""
 
+
+#prima di eseguirlo lo rendo eseguibile con:
+#chmod +x file_2XX_esercizio.sh
+#poi lo eseguo con:
+#./file_2XX_esercizio.sh
 #output :
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 #  200 OK — GET semplice
