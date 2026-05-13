@@ -93,21 +93,28 @@ pausa
 
 # =============================================================================
 # PASSO 2 — 401 Unauthorized (nessuna credenziale)
+#A differenza di prima la risorsa esiste ma non sei autenticato per accedere.
+# il server espone l'endpoint /basic-auth/admin/secret123 ma risponde 200
+#solo se immetti le credenziali giuste altrimenti 401.
 
+#mi salvo la variabile route che contiene l'endpoint con quello fornito dal
+#server $BASE/basic-auth/admin/secret123.
+#In poche parole sto facendo la richiesta senza autorizzazione.
+#
 # =============================================================================
 sep "401 Unauthorized — nessuna credenziale"
 
 echo -e "  Il server NON SA CHI SEI."
 echo -e "  Hai chiamato una route protetta senza mandare nessun header."
 echo ""
-echo -e "  httpbin espone: ${BOLD}/basic-auth/admin/secret123${RESET}"
+echo -e "  il server espone: ${BOLD}/basic-auth/admin/secret123${RESET}"
 echo -e "  → risponde 200 solo se mandi le credenziali giuste"
 echo -e "  → risponde 401 se non mandi niente"
 echo ""
 
 ROUTE="$BASE/basic-auth/admin/secret123"
 
-echo -e "  ${BOLD}--- Richiesta senza header Authorization ---${RESET}"
+echo -e "  ${BOLD} Richiesta senza header Authorization ${RESET}"
 echo ""
 echo -e "  ${GREEN}curl -s -v '$ROUTE' 2>&1 | grep -E 'HTTP|WWW'${RESET}"
 echo ""
