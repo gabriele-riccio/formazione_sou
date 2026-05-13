@@ -3,7 +3,8 @@ Ho svolto questo esercizio simulando delle richieste del browser e come avvengon
 
 Ogni script fa richieste reali con `curl` e mostra cosa risponde il server, passo per passo.
 Solo per l'ultima parte,dove ho testato come risponderebbe un server a delle richieste se ci fosse un problema 
-lato server(5XX), ho inserito un server a parte chiamato server_500.py attraverso il framework flask.
+lato server(5XX), ho inserito un server a parte chiamato server_500.py usando
+python e il framework flask.
 
 ---
 
