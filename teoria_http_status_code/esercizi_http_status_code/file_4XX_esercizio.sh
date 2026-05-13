@@ -1,4 +1,4 @@
-#!/usr/bin/env/ bash
+#!/usr/bin/env bash
 # =============================================================================
 # simulazione_400.sh
 # Dimostra 401 e 403 — nessun server locale, solo curl su httpbin.org
