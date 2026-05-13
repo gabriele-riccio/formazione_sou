@@ -113,7 +113,7 @@ pausa
 #in questo caso uso curl -s -I per mostrare solo gli header HTTP senza il body.
 #
 # =============================================================================
-sep "200 OK — Vedere gli header della risposta"
+sep "204 OK — Vedere gli header della risposta"
 
 echo -e "  Con -I (o --head) curl mostra SOLO gli header HTTP, senza il body."
 echo ""
