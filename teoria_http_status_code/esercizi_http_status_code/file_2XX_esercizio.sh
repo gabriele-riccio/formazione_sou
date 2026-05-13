@@ -113,8 +113,12 @@ pausa
 #in questo caso uso curl -s -I per mostrare solo gli header HTTP senza il body.
 #
 # =============================================================================
+<<<<<<< HEAD:teoria_http_status_code/esercizi_http_status_code/file_2XX_esercizio.sh
 
 sep "204 NO CONTENT — Vedere gli header della risposta"
+=======
+sep "204 OK — Vedere gli header della risposta"
+>>>>>>> 585f506db6d05560f07397de045e4eff4f7efbef:teoria_http_status_code/esercizi_http_status_code/file.sh
 
 echo -e "  Con -I (o --head) curl mostra SOLO gli header HTTP, senza il body."
 echo ""
