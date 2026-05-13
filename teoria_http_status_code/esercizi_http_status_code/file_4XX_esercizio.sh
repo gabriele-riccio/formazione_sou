@@ -1,6 +1,7 @@
 #!/usr/bin/env/ bash
 # =========================================================================================================================
 # file_4XX_esercizio.sh
+
 #ESERCIZIO BONUS: Simulare le risposte dei server web con gli HTTP status code dopo le richieste.
 # Vedo in particolare le differenze tra 401 e 403 oltre che il classico 404, tutto con curl utilizzando httpbin.org
 # Prima cosa mi scrivo l'url di base "https://httpbin.org", un'indirizzo chiamato endpoint per testare le richieste HTTP.
@@ -63,7 +64,9 @@ mostra_basic_auth() {
 
 # =============================================================================
 # PASSO 1 — 404 Not Found
-
+#se invio una richiesta (sbagliando l'url ad esempio e quell'url non esiste)
+# allora il server mi risponde con error 404, la risorsa non esiste.
+# questa parte di script è molto basilare con il curl classico spiegato sopra.
 # =============================================================================
 clear
 sep "404 Not Found — la risorsa non esiste"
@@ -73,26 +76,24 @@ echo -e "  non esiste su quel percorso."
 echo ""
 echo -e "  L'errore è sempre del CLIENT — hai richiesto qualcosa che non c'è."
 echo ""
-echo -e "  Caso reale:"
-echo -e "    • URL digitato male "
-echo ""
  
 # --- Caso reale URL digitato male---
-echo -e "  ${BOLD}--- Caso reale URL digitato male ---${RESET}"
+echo -e "  ${BOLD} Caso reale: URL digitato male ${RESET}"
 echo ""
-echo -e "  Chiamiamo /questa-route-non-esiste — httpbin non la conosce."
+echo -e "  Chiamiamo urlsbagliato e  httpbin non la conosce."
 echo ""
 echo -e "  ${GREEN}curl -s -o /dev/null -w '  → Status: %{http_code}\\n' \\${RESET}"
-echo -e "  ${GREEN}     $BASE/questa-route-non-esiste${RESET}"
+echo -e "  ${GREEN}     $BASE/urlsbagliato${RESET}"
 echo ""
 curl -s -o /dev/null -w "  → Status: %{http_code}\n" \
-  "$BASE/questa-route-non-esiste"
+  "$BASE/urlsbagliato"
 echo ""
  
 pausa
 
 # =============================================================================
 # PASSO 2 — 401 Unauthorized (nessuna credenziale)
+
 # =============================================================================
 sep "401 Unauthorized — nessuna credenziale"
 
