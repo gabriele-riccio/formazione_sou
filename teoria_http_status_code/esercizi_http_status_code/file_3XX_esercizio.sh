@@ -162,3 +162,10 @@ done
 echo ""
 echo -e "${BOLD}  Fine simulazione 3xx.${RESET}"
 echo ""
+
+#prima di eseguire lo script lo rendo eseguibile:
+#chmod +x file_3XX_esercizio.sh
+#poi lo eseguo:
+#./file.3XX_esercizio.sh
+
+#output: Si trova nel README
