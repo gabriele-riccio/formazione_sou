@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 #!/usr/bin/env bash
 
+=======
+##!/usr/bin/env bash
+>>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
 # ===================================================================================================================
 # file_3XX_esercizio.sh
 
@@ -110,7 +114,10 @@ pausa
 #Poi è essenzialmente come prima con il redirect senza seguire direttamente verso l'url e la stampa
 #dello status 302.
 # =========================================================================================================
+<<<<<<< HEAD
 
+=======
+>>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
 sep "302 Found (redirect temporaneo)"
 
 echo -e "  La risorsa è TEMPORANEAMENTE a un altro indirizzo."
@@ -146,7 +153,10 @@ pausa
 #ma tutto insieme.
 
 # =============================================================================
+<<<<<<< HEAD
 
+=======
+>>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
 sep "RIEPILOGO"
 
 echo -e "  ${BLUE}301 Moved Permanently${RESET}  → nuovo URL definitivo, browser lo memorizza"
@@ -166,3 +176,10 @@ done
 echo ""
 echo -e "${BOLD}  Fine simulazione 3xx.${RESET}"
 echo ""
+
+#prima di eseguire lo script lo rendo eseguibile:
+#chmod +x file_3XX_esercizio.sh
+#poi lo eseguo:
+#./file.3XX_esercizio.sh
+
+#output: Si trova nel README
