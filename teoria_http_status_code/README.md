@@ -12,7 +12,7 @@ E' importante conoscere gli HTTP status code per capire se l'operazione è andat
 Prima di parlare degli HTTP status code è importante conoscere cosa è il protocollo HTTP e come funziona.
 
 Il protocollo HTTP (**HyperText Transfer Protocol**) è la base del trasferimento dati sul **World Wide Web**, utilizzato dai browser per richiedere e caricare pagine web da un server.
-E' basato sul modello client-server, invia richieste HTTP e riceve risposte dai server web operando solitamente sulla porta TCP 80, mentre la versione sicura(e non più sicura come abbiamo detto ai colloqui  :joy: ) **HTTPS** utilizza la crittografia.
+E' basato sul modello client-server, invia richieste HTTP e riceve risposte dai server web operando solitamente sulla porta TCP 80, mentre la versione sicura **HTTPS** utilizza la crittografia.
 
 ## Dettagli chiave del protocollo HTTP:
 - **Funzionamento Client-Server** : Il client (es. il browser) invia una richiesta per una risorsa, e il server web risponde inviando
