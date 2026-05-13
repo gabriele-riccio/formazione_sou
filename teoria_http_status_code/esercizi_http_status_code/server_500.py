@@ -1,7 +1,7 @@
 """
 server_500.py
-Server Flask minimale — espone solo le route che crashano.
-Usato esclusivamente da simulazione_500.sh
+Server Flask minimale.
+Usato per esercizio bonus per il file file_5XX_esercizio.sh
 """
 
 from flask import Flask, jsonify
