@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-#!/usr/bin/env bash
 
-=======
-##!/usr/bin/env bash
->>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
+#!/usr/bin/env bash
 # ===================================================================================================================
 # file_3XX_esercizio.sh
 
@@ -114,10 +110,7 @@ pausa
 #Poi è essenzialmente come prima con il redirect senza seguire direttamente verso l'url e la stampa
 #dello status 302.
 # =========================================================================================================
-<<<<<<< HEAD
 
-=======
->>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
 sep "302 Found (redirect temporaneo)"
 
 echo -e "  La risorsa è TEMPORANEAMENTE a un altro indirizzo."
@@ -144,19 +137,8 @@ pausa
 # permanente e temporaneo con i messaggi di 301 e 302.
 #funzione sep() per il titolo, in blu mi stampo i 2 status code e con
 # la scrittura normale la spiegazioni di quello che fanno.
-
-#Poi faccio un ciclo for per prendere i 2 codici e per ognuno costruisco gli indirizzi
-#per entrambi, sfruttando l'url di endpoint iniziale e con get gli passa la destinazione
-#finale.
-#Poi c'è curl che come prima stampa a video solo lo status code per ognuno.
-#Se prima facevo tutti i comandi man mano con il ciclo for faccio la stessa cosa 
-#ma tutto insieme.
-
 # =============================================================================
-<<<<<<< HEAD
 
-=======
->>>>>>> 36850bf59e1ccd62da80ee1615c8e99ea4bd762f
 sep "RIEPILOGO"
 
 echo -e "  ${BLUE}301 Moved Permanently${RESET}  → nuovo URL definitivo, browser lo memorizza"
@@ -167,13 +149,6 @@ echo -e "  - 301 → SEO passa al nuovo URL, vecchio link diventa irrilevante"
 echo -e "  - 302 → SEO resta sul vecchio URL, utile per manutenzioni temporanee"
 echo ""
 
-for code in 301 302 ; do
-  url="$BASE/redirect-to?url=$BASE/get&status_code=$code"
-  status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-  echo -e "    status_code=$code  →  ${BLUE}$status${RESET}"
-done
-
-echo ""
 echo -e "${BOLD}  Fine simulazione 3xx.${RESET}"
 echo ""
 

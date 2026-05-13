@@ -129,12 +129,6 @@ pausa
 # sempre specificando il verde con delle frasi come prima: in questo caso vorrei
 #come risposta anche altre di 2XX come 201 che crea la risorsa(usando il secondo script con il metodo POST dato che inviamo noi i dati) e
 #204 che visualizza soltanto con GET senza restituire il body.
-# Metto infine un ciclo for che se prima facevo tutti i comandi man mano con esso faccio la stessa cosa 
-# ma tutto insieme.
-#Cioè controlla l'indirizzo "$BASE/status/$code" per 200,201 e 204, non controlla tutto della pagina ma solo
-# quello che ci interessa ovvero la risposta del 200,201 etc mandando il resto in dev/null e salvando il tutto nella variabile status
-# e la stampa dando come risposta l'indirizzo che ha testato e il risultato
-#poi alla fine ho stampato  la fine della simulazione.
 # =============================================================================
 sep "RIEPILOGO — 2xx"
 
@@ -144,13 +138,7 @@ echo -e "  ${GREEN}204 No Content${RESET}  → successo ma nessun body da restit
 echo ""
 echo -e "  Verifica rapida dei tre:"
 echo ""
-for code in 200 201 204; do
-  status=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/status/$code")
-  echo -e "    GET /status/$code  →  ${GREEN}$status${RESET}"
-done
-echo ""
-echo -e "${BOLD}  Fine simulazione 2xx.${RESET}"
-echo ""
+
 
 
 #prima di eseguirlo lo rendo eseguibile con:

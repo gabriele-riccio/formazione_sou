@@ -1,11 +1,35 @@
-#!/usr/bin/env bash
-# =============================================================================
-# simulazione_400.sh
-# Dimostra 401 e 403 — nessun server locale, solo curl su httpbin.org
-#
-# httpbin.org/basic-auth/USER/PASS  → 401 se non autenticato, 200 se OK
-# httpbin.org/status/403            → 403 diretto
-# =============================================================================
+#!/usr/bin/env/ bash
+# =========================================================================================================================
+# file_4XX_esercizio.sh
+
+#ESERCIZIO BONUS: Simulare le risposte dei server web con gli HTTP status code dopo le richieste.
+# Vedo in particolare le differenze tra 401 e 403 oltre che il classico 404, tutto con curl utilizzando httpbin.org
+# Prima cosa mi scrivo l'url di base "https://httpbin.org", un'indirizzo chiamato endpoint per testare le richieste HTTP.
+# dichiaro le variabili errore in questo caso uso anche il giallo oltre che il verde per dichiarare gli errori commessi 
+#dall'utente.
+#Come gli altri due script mi dichiaro le funzioni sep() per le spaziature e pausa per mettere in pausa l'andamento dello
+#script.
+
+
+#Ora mi genero una funzione che mi mostra quello che succede dietro le quinte quando inserisci un nome utente 
+#e una password in un sito web che usa l'autenticazione di base (Basic Authentication).
+ 
+#Dato che quando facciamo una richiesta a una route protetta, HTTP Basic Auth 
+#richiede che le credenziali siano in questo formato preciso nell'header:
+
+#Authorization: Basic aGFja2VyOnRlbnRhdGl2bw==
+
+#Non è altro che hacker:tentativo codificato in Base64, non è cifrato serve solo a rendere utente:password 
+#trasportabile in un header HTTP senza che il : (che ha significato speciale nel protocollo) crei problemi.
+
+#nella funzione mostra_basic_auth() ho local creds="$1"
+#Prende il primo argomento passato alla funzione e lo salva in una variabile locale.
+# b64=$(echo -n "$creds" | base64) è la parte centrale della funzione;
+#echo -n "hacker:tentativo" — stampa la stringa senza newline finale 
+#(il -n è fondamentale: se ci fosse il newline, verrebbe codificato dentro il base64 e l'header sarebbe sbagliato)
+# mentre base64 — prende quella stringa e la codifica in Base64.
+#Con gli echo ho scritto semplicemente quello che fa man mano in modo che lo possiamo vedere a schermo durante l'output.
+# ==========================================================================================================================
 
 BASE="https://httpbin.org"
 
@@ -24,7 +48,8 @@ pausa() {
   read -r
 }
 
-# Costruisce e mostra l'header Authorization Basic
+# Costruisco e mostra l'header Authorization Basic:
+
 mostra_basic_auth() {
   local creds="$1"   # formato "utente:password"
   local b64
@@ -38,46 +63,104 @@ mostra_basic_auth() {
 }
 
 # =============================================================================
-# PASSO 1 — 401 Unauthorized (nessuna credenziale)
+# PASSO 1 — 404 Not Found
+#se invio una richiesta (sbagliando l'url ad esempio e quell'url non esiste)
+# allora il server mi risponde con error 404, la risorsa non esiste.
+# questa parte di script è molto basilare con il curl classico spiegato sopra.
 # =============================================================================
 clear
+sep "404 Not Found — la risorsa non esiste"
+ 
+echo -e "  Il server HA CAPITO la richiesta, ma la risorsa cercata"
+echo -e "  non esiste su quel percorso."
+echo ""
+echo -e "  L'errore è sempre del CLIENT — hai richiesto qualcosa che non c'è."
+echo ""
+ 
+# --- Caso reale URL digitato male---
+echo -e "  ${BOLD} Caso reale: URL digitato male ${RESET}"
+echo ""
+echo -e "  Chiamiamo /urlsbagliato e  httpbin non la conosce."
+echo ""
+echo -e "  ${GREEN}curl -s -o /dev/null -w '  → Status: %{http_code}\\n' \\${RESET}"
+echo -e "  ${GREEN}     $BASE/urlsbagliato${RESET}"
+echo ""
+curl -s -o /dev/null -w "  → Status: %{http_code}\n" \
+  "$BASE/urlsbagliato"
+echo ""
+ 
+pausa
+
+# =============================================================================
+# PASSO 2 — 401 Unauthorized (nessuna credenziale)
+#A differenza di prima la risorsa esiste ma non sei autenticato per accedere.
+# il server espone l'endpoint /basic-auth/admin/secret123 ma risponde 200
+#solo se immetti le credenziali giuste altrimenti 401.
+
+#mi salvo la variabile route che contiene l'endpoint con quello fornito dal
+#server $BASE/basic-auth/admin/secret123.
+#In poche parole sto facendo la richiesta senza autorizzazione.
+#come prima faccio il curl:
+# curl -s     → silent: non mostra la barra di avanzamento
+# curl -v     → verbose: scrive tutto 
+# 2>&1        → unisce stderr a stdout così grep può filtrare entrambi
+# grep filtra → teniamo solo "< HTTP" (status line) e "< WWW" (header WWW-Authenticate)
+# =============================================================================
 sep "401 Unauthorized — nessuna credenziale"
 
 echo -e "  Il server NON SA CHI SEI."
 echo -e "  Hai chiamato una route protetta senza mandare nessun header."
 echo ""
-echo -e "  httpbin espone: ${BOLD}/basic-auth/admin/secret123${RESET}"
+echo -e "  il server espone: ${BOLD}/basic-auth/admin/secret123${RESET}"
 echo -e "  → risponde 200 solo se mandi le credenziali giuste"
 echo -e "  → risponde 401 se non mandi niente"
 echo ""
 
 ROUTE="$BASE/basic-auth/admin/secret123"
 
-echo -e "  --- Richiesta senza header Authorization ---"
+echo -e "  ${BOLD} Richiesta senza header Authorization ${RESET}"
 echo ""
 echo -e "  ${GREEN}curl -s -v '$ROUTE' 2>&1 | grep -E 'HTTP|WWW'${RESET}"
 echo ""
+
+# curl -s     → silent: non mostra la barra di avanzamento
+# curl -v     → verbose: scrive gli header su stderr (righe che iniziano con < e >)
+# 2>&1        → unisce stderr a stdout così grep può filtrare entrambi
+# grep filtra → teniamo solo "< HTTP" (status line) e "< WWW" (header WWW-Authenticate)
 curl -s -v "$ROUTE" 2>&1 | grep -E "^< HTTP|^< WWW"
 echo ""
 curl -s -o /dev/null -w "  → Status: %{http_code}\n" "$ROUTE"
 echo ""
-echo -e "  L'header ${BOLD}WWW-Authenticate${RESET} dice al client come autenticarsi."
+echo -e "  L'header ${BOLD}WWW-Authenticate${RESET} dice al client il tipo di auth"
+echo -e "  che il server si aspetta (Basic, Bearer, Digest, ecc.)."
 
 pausa
 
+
+
 # =============================================================================
-# PASSO 2 — 403 Forbidden (sappiamo chi sei, ma non puoi entrare)
+# PASSO 3 — 403 Forbidden (credenziali presenti ma sbagliate/insufficienti)
+#In questo caso le credenziali non bastano perchè c'è bisogno di un permesso.
+
+#Nota: httpbin risponde 401 anche con credenziali sbagliate perché non
+#distingue i due casi. 
+#Un server reale risponde 403 quando capisce che l'utente esiste ma
+#non ha i permessi necessari."
+# Ho provato a forzare un errore generando delle credenziali errate, in modo che 
+# mi genera un errore anche se dovessi mettere le credenziali giuste.
 # =============================================================================
 sep "403 Forbidden — autenticato ma senza permessi"
 
-echo -e "  Il server SA CHI SEI, ma non ti fa passare."
-echo -e "  Hai mandato credenziali: sono state lette, ma non bastano."
+echo -e "  Il server SA CHI SEI, ma non ti fa passare, non hai l'autorizzazione."
 echo ""
-echo -e "  Caso reale: sei loggato ma provi ad aprire /admin senza essere root."
+echo -e "  Caso reale: sei loggato ma provi ad aprire /admin senza avere il permesso."
 echo ""
 
-echo -e "  --- Credenziali sbagliate (il server ti riconosce come non-autorizzato) ---"
+echo -e "  ${BOLD}--- Costruzione dell'header con credenziali sbagliate ---${RESET}"
 echo ""
+
+# mostra_basic_auth scrive i log didattici su stderr → li vedi a schermo
+# e restituisce solo il Base64 su stdout → b64_errate è pulito
 b64_errate=$(mostra_basic_auth "hacker:tentativo")
 
 echo -e "  ${GREEN}curl -s -o /dev/null -w '  → Status: %{http_code}\\n' \\${RESET}"
@@ -88,84 +171,69 @@ curl -s -o /dev/null -w "  → Status: %{http_code}\n" \
   "$ROUTE"
 echo ""
 
-echo -e "  (httpbin restituisce 401 anche qui perché le creds non matchano,"
-echo -e "   ma il tuo server reale può scegliere di rispondere 403 se preferisce"
-echo -e "   comunicare 'capito chi sei, rifiutato' anziché 'non so chi sei')"
-echo ""
-
 pausa
 
 # =============================================================================
-# PASSO 3 — Confronto diretto 401 vs 403
+# PASSO 4 — Confronto diretto 404 vs 401 vs 403
 # =============================================================================
-sep "401 vs 403 — confronto diretto"
-
-echo -e "  Tre scenari sulla stessa route protetta:"
+sep "404 vs 401 vs 403 — confronto diretto"
+ 
+echo -e "  Quattro scenari che mostrano le tre famiglie di errore:"
 echo ""
-
-# Scenario A — nessun header
-echo -e "  ${BOLD}[A] Nessun header → 401 (chi sei?)${RESET}"
+ 
+# Scenario 1 — Url inesistente o sbagliato → 404
+echo -e "  ${BOLD}[1] Url inesistente o sbagliato → 404${RESET}"
+echo -e "      La richiesta è ben formata, ma la risorsa non esiste sul server."
+curl -s -o /dev/null -w "  → Status: %{http_code}\n" \
+  "$BASE/urlsbagliato"
+echo ""
+ 
+# Scenario 2 — nessun header o credenziali errate → 401
+echo -e "  ${BOLD}[2] Nessun header Authorization → 401${RESET}"
+echo -e "      La richiesta è ben formata, ma manca completamente l'identità."
 curl -s -o /dev/null -w "  → Status: %{http_code}\n" "$ROUTE"
 echo ""
-
-# Scenario B — credenziali sbagliate → httpbin risponde 401
-# per simulare 403 usiamo /status/403
-echo -e "  ${BOLD}[B] Credenziali presenti ma server rifiuta → 403 (non puoi entrare)${RESET}"
+ 
+# Scenario 3 — giuste credenziali ma senza permessi → 403 
+#(simulato con /status/403 dato che uscirebbe 
+#comunque 401 non li riconosce tramite curl).
+echo -e "  ${BOLD}[3] Credenziali presenti ma rifiutate → 403${RESET}"
+echo -e "      L'identità è presente ma non ha i permessi per accedere."
 curl -s -o /dev/null -w "  → Status: %{http_code}\n" "$BASE/status/403"
 echo ""
-
-# Scenario C — credenziali corrette
-echo -e "  ${BOLD}[C] Credenziali corrette (admin:secret123) → 200 (benvenuto)${RESET}"
+ 
+# Scenario 4 — credenziali corrette e url corretto → 200
+echo -e "  ${BOLD}[4] Url corretto e credenziali corrette (admin:secret123) → 200${RESET}"
 b64_ok=$(echo -n "admin:secret123" | base64)
 curl -s -w "  → Status: %{http_code}\n" \
   -H "Authorization: Basic $b64_ok" \
-  "$ROUTE" | python3 -m json.tool 2>/dev/null
+  "$ROUTE" 
 echo ""
-
+ 
 pausa
 
 # =============================================================================
-# PASSO 4 — Altri 4xx comuni
+# RIEPILOGO FINALE
 # =============================================================================
-sep "Altri codici 4xx comuni"
-
-echo -e "  I 4xx indicano sempre un errore dal lato CLIENT (non del server)."
+sep "RIEPILOGO — 404 vs 401 vs 403"
+ 
+echo -e "  ${YELLOW}404 Not Found${RESET}"
+echo -e "    → La risorsa richiesta non esiste (path sbagliato, ID inesistente)"
+echo -e "    → Il server ha capito la richiesta, ma non trova nulla da restituire"
+echo -e "    → Azione: verifica l'URL, l'ID o se la risorsa è stata eliminata"
 echo ""
-
-declare -A DESCR=(
-  [400]="Bad Request        — richiesta malformata (JSON sbagliato, parametri mancanti)"
-  [401]="Unauthorized       — non autenticato"
-  [403]="Forbidden          — autenticato ma senza permessi"
-  [404]="Not Found          — la route/risorsa non esiste"
-  [405]="Method Not Allowed — metodo HTTP sbagliato (GET su route che vuole POST)"
-  [429]="Too Many Requests  — hai superato il rate limit"
-)
-
-for code in 400 401 403 404 405 429; do
-  status=$(curl -s -o /dev/null -w "%{http_code}" "$BASE/status/$code")
-  echo -e "  ${YELLOW}$status${RESET}  →  ${DESCR[$code]}"
-done
-
-echo ""
-
-pausa
-
-# =============================================================================
-# RIEPILOGO
-# =============================================================================
-sep "RIEPILOGO — differenza chiave 401 vs 403"
-
 echo -e "  ${YELLOW}401 Unauthorized${RESET}"
 echo -e "    → Il server NON SA CHI SEI"
-echo -e "    → Non hai mandato credenziali (o sono assenti/malformate)"
-echo -e "    → Il server include ${BOLD}WWW-Authenticate${RESET} per dirti come autenticarti"
+echo -e "    → Credenziali assenti o sbagliate"
+echo -e "    → Il server include ${BOLD}WWW-Authenticate${RESET} → ti dice come autenticarti"
 echo -e "    → Azione: fai login / manda le credenziali"
 echo ""
 echo -e "  ${YELLOW}403 Forbidden${RESET}"
 echo -e "    → Il server SA CHI SEI"
-echo -e "    → Le credenziali erano presenti, ma non hai i permessi necessari"
+echo -e "    → Credenziali presenti ma permessi insufficienti"
 echo -e "    → Nessun ${BOLD}WWW-Authenticate${RESET} — autenticarti di nuovo non serve"
 echo -e "    → Azione: chiedi all'amministratore i permessi"
 echo ""
-echo -e "${BOLD}  Fine simulazione 4xx.${RESET}"
+echo -e "${BOLD}  Fine simulazione 4xx (404/401/403).${RESET}"
 echo ""
+ 
