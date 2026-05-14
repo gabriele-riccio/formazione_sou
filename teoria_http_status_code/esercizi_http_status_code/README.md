@@ -69,6 +69,8 @@ Dimostra le tre risposte di successo principali.
 
 #### Output
 
+![200 OK — GET semplice](Screenshot2026-05-14%20alle09.46.58)
+
 **200 OK — GET semplice**
 ```
 Mandiamo dati al server con il metodo GET.
