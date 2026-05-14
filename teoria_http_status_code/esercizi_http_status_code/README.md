@@ -105,64 +105,15 @@ Dimostra il meccanismo dei redirect.
   - `301`: il page rank passa al nuovo URL
   - `302`: il page rank resta sul vecchio URL, per manuetenzioni temporanee.
 
+---
 
 #### Output
 
-**301 Moved Permanently**
-```
-La risorsa è stata spostata DEFINITIVAMENTE a un nuovo indirizzo.
-Il browser memorizza il redirect: la prossima volta va diretto.
-
-L'header Locazione nella risposta contiene il nuovo URL.
-
-Redirect (senza seguire direttamente verso l'url)
-
-curl -s -o /dev/null -w '  → Status: %{http_code}\n'
-     'https://httpbin.org/redirect-to?url=https://httpbin.org/get&status_code=301'
-
-  → Status: 301
-
-Mostro l'header Location con -v
-
-< HTTP/2 301
-< location: https://httpbin.org/get
-
---- In genere curl non segue il redirect con -L (come fa il browser) ---
---- Con -L lo segue come fa il browser ---
-
-curl -s -o /dev/null -w '  → Status finale: %{http_code}\n'
-     -L 'https://httpbin.org/redirect-to?url=https://httpbin.org/get&status_code=301'
-
-  → Status finale: 200
-```
-
-**302 Found (redirect temporaneo)**
-```
-La risorsa è TEMPORANEAMENTE a un altro indirizzo.
-
-Caso reale: sito in manutenzione che rimanda a una pagina temporanea.
-
-curl -s -o /dev/null -w '  → Status: %{http_code}\n'
-     'https://httpbin.org/redirect-to?url=https://httpbin.org/get&status_code=302'
-
-  → Status: 302
-
-Header Location:
-< HTTP/2 302
-< location: https://httpbin.org/get
-```
+**301 Moved Permanently — 302 Found**
+![301 Moved Permanently — 302 Found](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.31.06.png)
 
 **Riepilogo**
-```
-301 Moved Permanently  → nuovo URL definitivo, browser lo memorizza
-302 Found              → redirect temporaneo, si riverifica ogni volta
-
-Differenza pratica:
-– 301 → SEO passa al nuovo URL, vecchio link diventa irrilevante
-– 302 → SEO resta sul vecchio URL, utile per manutenzioni temporanee
-
-Fine simulazione 3xx.
-```
+![Riepilogo](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.31.06.png)
 
 ---
 
@@ -170,8 +121,8 @@ Fine simulazione 3xx.
 
 Sono gli errori lato client
 
-- **404 Bad Request**
-  La richiesta è malformata prima ancora che il server provi ad autenticare.
+- **404 Not Found — la risorsa non esiste**
+  La richiesta è malformata o non esiste prima ancora che il server provi ad autenticare.
   Esempio:
   URL del sito digitato male dall'utente.
 
@@ -220,115 +171,32 @@ Costruisce l'header `Authorization: Basic` necessario per HTTP Basic Auth.
   con il valore di ritorno.
 - Quando una funzione viene chiamata con `var=$(funzione)`, bash cattura tutto lo
   stdout.
-
+  
+---
 #### Output
 
 **404 Not Found — la risorsa non esiste**
-```
-Il server ti sta dicendo che la risorsa per come l'hai scritta non esiste.
 
-L'errore è sempre del CLIENT — hai richiesto qualcosa che non c'è.
-
-  Caso reale: URL digitato male
-
-Chiamiamo /urlsbagliato e httpbin non la conosce.
-
-curl -s -o /dev/null -w '  → Status: %{http_code}\n'
-     https://httpbin.org/urlsbagliato
-
-  → Status: 404
-```
+![404 Not Found — la risorsa non esiste](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.31.53.png)
 
 **401 Unauthorized — nessuna credenziale**
-```
-Il server NON SA CHI SEI.
-Hai chiamato una route protetta senza mandare nessun header.
 
-il server espone: /basic-auth/admin/secret123
-→ risponde 200 solo se mandi le credenziali giuste
-→ risponde 401 se non mandi niente
-
-  Richiesta senza header Authorization
-
-curl -s -v 'https://httpbin.org/basic-auth/admin/secret123' 2>&1 | grep -E 'HTTP|WWW'
-
-< HTTP/2 401
-
-  → Status: 401
-
-L'header WWW-Authenticate dice al client il tipo di auth
-che il server si aspetta (Basic, Bearer, Digest, ecc.).
-```
+![401 Unauthorized — nessuna credenziale](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.32.07.png)
 
 **403 Forbidden — autenticato ma senza permessi**
-```
-Il server SA CHI SEI, ma non ti fa passare, non hai l'autorizzazione.
 
-Caso reale: sei loggato ma provi ad aprire /admin senza avere il permesso.
-
---- Costruzione dell'header con credenziali sbagliate ---
-
-  Costruzione dell'header Authorization: Basic
-    1. credenziali:  hacker:tentativo
-    2. base64:       aGFja2VyOnRlbnRhdGl2bw==
-    3. header:       Authorization: Basic aGFja2VyOnRlbnRhdGl2bw==
-
-curl -s -o /dev/null -w '  → Status: %{http_code}\n'
-     -H 'Authorization: Basic aGFja2VyOnRlbnRhdGl2bw=='
-     'https://httpbin.org/basic-auth/admin/secret123'
-
-  → Status: 401
-```
+![403 Forbidden — autenticato ma senza permessi](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.32.37.png)
 
 > **Nota:** httpbin risponde 401 anche con credenziali sbagliate perché non distingue i due casi. Un server reale risponde 403 quando capisce che l'utente esiste ma non ha i permessi necessari.
 
 **404 vs 401 vs 403 — confronto diretto**
-```
-Quattro scenari che mostrano le tre famiglie di errore:
 
-[1] Url inesistente o sbagliato → 404
-    La richiesta è ben formata, ma la risorsa non esiste sul server.
-  → Status: 404
+![404 vs 401 vs 403 — confronto diretto](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.32.54.png)
 
-[2] Nessun header Authorization → 401
-    La richiesta è ben formata, ma manca completamente l'identità.
-  → Status: 401
+**RIEPILOGO - 404 vs 401 vs 403**
 
-[3] Credenziali presenti ma rifiutate → 403
-    L'identità è presente ma non ha i permessi per accedere.
-  → Status: 403
+![RIEPILOGO - 404 vs 401 vs 403](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.28.29.png)
 
-[4] Url corretto e credenziali corrette (admin:secret123) → 200
-{
-  "authenticated": true,
-  "user": "admin"
-}
-  → Status: 200
-```
-
-**Riepilogo — 404 vs 401 vs 403**
-```
-404 Not Found
-  → La risorsa richiesta non esiste (path sbagliato, ID inesistente)
-  → Il server ha capito la richiesta, ma non trova nulla da restituire
-  → Azione: verifica l'URL, l'ID o se la risorsa è stata eliminata
-
-401 Unauthorized
-  → Il server NON SA CHI SEI
-  → Credenziali assenti o sbagliate
-  → Il server include WWW-Authenticate → ti dice come autenticarti
-  → Azione: fai login / manda le credenziali
-
-403 Forbidden
-  → Il server SA CHI SEI
-  → Credenziali presenti ma permessi insufficienti
-  → Nessun WWW-Authenticate — autenticarti di nuovo non serve
-  → Azione: chiedi all'amministratore i permessi
-
-Fine simulazione 4xx (404/401/403).
-```
-
----
 
 ### `file_5XX_esercizio.sh` + `server_500.py` — Status code 5xx
 
