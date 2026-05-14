@@ -69,16 +69,17 @@ Dimostra le tre risposte di successo principali.
 
 #### Output
 
-
+**200 OK — GET semplice**
 
 ![200 OK — GET semplice](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.05.05.png)
 
 
-
+**201 OK — POST con corpo JSON**
 
 ![201 OK — POST con corpo JSON](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.29.51.png)
 
 
+**204 NO CONTENT — RIEPILOGO 2XX**
 
 ![204 NO CONTENT — RIEPILOGO 2XX](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.32.47.png)
 
@@ -110,9 +111,11 @@ Dimostra il meccanismo dei redirect.
 #### Output
 
 **301 Moved Permanently — 302 Found**
+
 ![301 Moved Permanently — 302 Found](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.31.06.png)
 
 **Riepilogo**
+
 ![Riepilogo](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.31.06.png)
 
 ---
@@ -229,106 +232,24 @@ anche in caso di errore o interruzione con `Ctrl+C`.
 
 #### Output
 
-**Avvio server Flask**
-```
-Server avviato (PID: 24780)
-* Serving Flask app 'server_500'
-* Debug mode: off
-Server pronto!
-```
-
-**500 — ZeroDivisionError (crash non gestito)**
-```
-Il codice Python fa letteralmente: risultato = 1 / 0
-Flask intercetta l'eccezione e risponde 500 tramite l'handler globale.
-
-La tua richiesta era corretta. Il bug è nel SERVER.
-
-curl -s -w '\n  → Status: %{http_code}\n' http://127.0.0.1:5000/crash
-
-[2026-05-13 15:13:20,327] ERROR in app: Exception on /crash [GET]
-Traceback (most recent call last):
-  ...
-  File ".../server_500.py", line 21, in crash_zero_division
-    risultato = 1 / 0          # ZeroDivisionError — non gestito
-ZeroDivisionError: division by zero
-{
-    "errore": "Internal Server Error",
-    "messaggio": "Il server ha incontrato un errore imprevisto.",
-    "tipo": "ZeroDivisionError"
-}
-  → Status: 500
-```
+**Avvio server Flask- 500 - ZeroDivisionError (crash non gestito)**
+![Avvio server Flask- 500 - ZeroDivisionError (crash non gestito)](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.25.47.png)
 
 **500 — ConnectionError (database non raggiungibile)**
-```
-Il server prova a connettersi a un DB che non esiste.
-Simula il caso reale più comune in produzione:
-il DB è giù, sovraccarico, o la stringa di connessione è sbagliata.
 
-curl -s -w '\n  → Status: %{http_code}\n' http://127.0.0.1:5000/crash-db
-
-[2026-05-13 15:13:22,062] ERROR in app: Exception on /crash-db [GET]
-Traceback (most recent call last):
-  ...
-  File ".../server_500.py", line 28, in crash_db
-    raise ConnectionError("Impossibile connettersi al database: timeout dopo 30s")
-ConnectionError: Impossibile connettersi al database: timeout dopo 30s
-
-  → Status: 500
-```
+![500 — ConnectionError (database non raggiungibile)](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.34.24.png)
 
 **500 — TypeError gestito dal codice**
-```
-Il server cattura l'eccezione lui stesso e costruisce
-una risposta 500 con un messaggio chiaro per il client.
 
-Buona pratica: non esporre mai lo stack trace al client,
-ma loggarlo internamente e dare un messaggio generico.
-
-curl -s -w '\n  → Status: %{http_code}\n' http://127.0.0.1:5000/crash-gestito
-
-{
-    "codice": 500,
-    "dettaglio": "object of type 'NoneType' has no len()",
-    "errore": "Errore interno del server"
-}
-  → Status: 500
-```
+![500 — TypeError gestito dal codice](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.34.36.png)
 
 **Gestito vs Non gestito — a confronto**
-```
-Non gestito (/crash):
-→ L'eccezione sale fino all'handler globale di Flask
-→ Il tipo di errore è visibile nella risposta (ZeroDivisionError)
-→ In produzione con debug=False, Flask nasconde i dettagli
 
-Gestito (/crash-gestito):
-→ try/except nel codice — il server controlla cosa esporre
-→ Messaggio human-readable, nessun leak di info interne
-→ Puoi loggare il dettaglio senza inviarlo al client
-```
+![Gestito vs Non gestito — a confronto](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.26.04.png)
 
 **Riepilogo — 5xx**
-```
-I 5xx indicano sempre un errore dal lato SERVER.
-La richiesta del client era corretta.
 
-500 Internal Server Error  → crash generico, bug nel codice
-502 Bad Gateway            → il reverse proxy non raggiunge il backend
-503 Service Unavailable    → server sovraccarico o in manutenzione
-504 Gateway Timeout        → il backend ha impiegato troppo tempo
-
-Risultati reali delle route testate:
-  500  /crash        — ZeroDivisionError (non gestito)
-  500  /crash-db     — ConnectionError — DB irraggiungibile
-  500  /crash-gestito — TypeError gestito nel codice
-
-Fine simulazione 5xx.
-
-Fermo il server Flask (PID 24780)...
-Server fermato.
-```
+![Riepilogo — 5xx](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.26.11.png)
 
 ---
 
