@@ -69,7 +69,7 @@ Dimostra le tre risposte di successo principali.
 
 #### Output
 
-![200 OK — GET semplice](Screenshot2026-05-14alle09.46.58.png)
+![200 OK — GET semplice](esercizio%20statuscode%20HTTP/Screenshot2026-05-14alle09.46.58.png)
 
 **200 OK — GET semplice**
 ```
