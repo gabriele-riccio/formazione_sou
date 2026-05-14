@@ -2,9 +2,14 @@
 # Comincio creando questo file di configurazione Vagrant  (chiamato Vagrantfile).
 #L'ho  utilizzato per l'automatizzazione,la creazione e la configurazione di 2 macchine virtuali (VM).
 #Nello specifico, questo script sta creando un ambiente con due macchine virtuali che comunicano tra loro.
-#Prima cosa apro il file di configurazione e dico a vagrant di usare la seconda versione della sua sintassi(standard attuale) poi inizio la configurazione decidendo come sistema operativo per entrambe le macchine virtuali dell'esercizio Ubuntu 20.04 LTS (Focal Fossa) a 64 bit.
+#Prima cosa apro il file di configurazione e dico a vagrant di usare la seconda versione della sua sintassi(standard attuale)#
+#poi inizio la configurazione decidendo come sistema operativo per entrambe le macchine virtuali dell'esercizio Ubuntu 20.04 LTS (Focal Fossa) a 64 bit.
 
-#Poi inizio a definire le 2 macchine virtuali assegnando nome, creando una rete privata host-only assegnandogli 2 indirizzi ip statici("192.168.56.10") in modo che possano comunicare tra loro. Poi faccio la parte di provisioning, dato che ho salvato nello script provision.sh il file per installare docker
+#Poi inizio a definire le 2 macchine virtuali assegnando nome, creando una rete privata host-only assegnandogli 
+#2 indirizzi ip statici("192.168.56.10") in modo che possano comunicare tra loro. 
+#Poi faccio la parte di provisioning, dato che ho salvato nello
+#script provision.sh il file per installare docker
+
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/focal64"
 
