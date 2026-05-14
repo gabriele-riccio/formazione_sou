@@ -69,7 +69,7 @@ Dimostra le tre risposte di successo principali.
 
 #### Output
 
-![200 OK — GET semplice](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.05.05.png)
+
 
 **200 OK — GET semplice**
 ```
@@ -93,6 +93,10 @@ curl -s -w '\n  → Status: %{http_code}\n' https://httpbin.org/get
   → Status: 200
 ```
 
+
+![200 OK — GET semplice](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.05.05.png)
+
+
 **201 OK — POST con corpo JSON**
 ```
 Mandiamo dati al server con il metodo POST.
@@ -104,6 +108,9 @@ curl -s -X POST -H 'Content-Type: application/json'
 
   → Status: 201
 ```
+
+![201 OK — POST con corpo JSON](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.29.51.png)
+
 
 **204 NO CONTENT — Vedere gli header della risposta**
 ```
@@ -118,12 +125,13 @@ access-control-allow-origin: *
 access-control-allow-credentials: true
 ```
 
-**Riepilogo — 2xx**
+**RIEPILOGO 2XX**
 ```
 200 OK          → richiesta riuscita, body presente
 201 Created     → risorsa creata (tipico delle POST su API REST)
 204 No Content  → successo ma nessun body da restituire
 ```
+![204 NO CONTENT — RIEPILOGO 2XX](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.32.47.png)
 
 ---
 
