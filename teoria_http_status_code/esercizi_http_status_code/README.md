@@ -71,66 +71,15 @@ Dimostra le tre risposte di successo principali.
 
 
 
-**200 OK — GET semplice**
-```
-Mandiamo dati al server con il metodo GET.
-Il server ha ricevuto la richiesta e risponde con successo.
-
-curl -s -w '\n  → Status: %{http_code}\n' https://httpbin.org/get
-
-{
-  "args": {},
-  "headers": {
-    "Accept": "*/*",
-    "Host": "httpbin.org",
-    "User-Agent": "curl/8.7.1",
-    "X-Amzn-Trace-Id": "Root=1-6a047d62-7ee4dc1905de88620f497be2"
-  },
-  "origin": "188.12.196.154",
-  "url": "https://httpbin.org/get"
-}
-
-  → Status: 200
-```
-
-
 ![200 OK — GET semplice](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.05.05.png)
 
 
-**201 OK — POST con corpo JSON**
-```
-Mandiamo dati al server con il metodo POST.
-Il server li riceve, li elabora e risponde 201 con l'eco dei dati.
 
-curl -s -X POST -H 'Content-Type: application/json'
-     -d '{"nome":"Mario","ruolo":"admin"}'
-     -w '\n  → Status: %{http_code}\n' https://httpbin.org/status/201
-
-  → Status: 201
-```
 
 ![201 OK — POST con corpo JSON](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.29.51.png)
 
 
-**204 NO CONTENT — Vedere gli header della risposta**
-```
-Con -I (o --head) curl mostra SOLO gli header HTTP, senza il body.
 
-curl -s -I https://httpbin.org/status/204
-
-HTTP/2 204
-date: Wed, 13 May 2026 13:32:22 GMT
-server: gunicorn/19.9.0
-access-control-allow-origin: *
-access-control-allow-credentials: true
-```
-
-**RIEPILOGO 2XX**
-```
-200 OK          → richiesta riuscita, body presente
-201 Created     → risorsa creata (tipico delle POST su API REST)
-204 No Content  → successo ma nessun body da restituire
-```
 ![204 NO CONTENT — RIEPILOGO 2XX](esercizio%20statuscode%20HTTP/Screenshot%202026-05-13%20alle%2015.32.47.png)
 
 ---
