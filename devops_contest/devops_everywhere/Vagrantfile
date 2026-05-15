@@ -16,8 +16,15 @@ Vagrant.configure("2") do |config|
 #venga automaticamente reindirizzato alla porta 80 della macchina virtuale
   config.vm.network "forwarded_port", guest: 80, host: 8080
 
-#Configura una rete privata tra il tuo computer fisico e la macchina virtuale, assegnando a quest'ultima l'indirizzo IP statico 192.168.56.20. Questo ti permette di comunicare direttamente con la VM tramite questo indirizzo IP locale.IP privato per accedere dalla rete locale
+#Configuro una rete privata tra il mio computer fisico e la macchina virtuale,
+#assegnando a quest'ultima l'indirizzo IP statico 192.168.56.20,
+#per far comunicare direttamente con la VM tramite questo indirizzo IP locale.
   config.vm.network "private_network", ip: "192.168.56.20"
+
+#Ora faccio una configurazione solo per il virtualbox, il provider che ho scelto per
+#eseguire la macchina virtuale(dove viene creata la vm). 
+
+#Scelgo nome memoria ram e numero di cpu(1 core del processore).
 
   config.vm.provider "virtualbox" do |vb|
     vb.name   = "webserver"
@@ -25,7 +32,13 @@ Vagrant.configure("2") do |config|
     vb.cpus   = 1
   end
 
-  # Provisioner: Ansible (gira sull'host Mac)
+#Provisioner:Con questa parte di script dico a Vagrant di utilizzare Ansible come "provisioner",
+# ovvero lo strumento che si occuperà di installare il software e configurare il sistema operativo 
+# dopo che la macchina virtuale è stata creata e avviata. 
+#Per fare questo ansible usa un file di istruzioni o playbook che è presente in questo progetto con il nome
+# di "provisioner_Ansible.yml".
+# Imposto la modalità verbosa in modo che man mano che esso lavora, posso vedere cosa fa dal terminale.
+
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = "provisioner_Ansible.yml"
     ansible.verbose  = "v"
