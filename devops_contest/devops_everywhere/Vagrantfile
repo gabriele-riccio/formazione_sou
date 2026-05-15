@@ -1,12 +1,22 @@
+#Attraverso questo script fornisco a Vagrant le istruzioni esatte per costruire 
+#e configurare la macchina virtuale che mi serve per l'esercizio.
+
+#Inizio aprendo il file di configurazione e dico a vagrant di usare la seconda versione della sua sintassi(standard attuale)
+#Poi inizio la configurazione decidendo come sistema operativo per le macchina virtuale dell'esercizio Ubuntu 20.04 LTS (Focal Fossa) a 64 bit.
+#Assegnando "webserver" come nome host (hostname) all'interno del sistema operativo guest della macchina virtuale. 
+
 Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/focal64"
   config.vm.hostname = "webserver"
 
-  # Porta 80 della VM accessibile su localhost:8080 del tuo Mac
+
+#Imposto una regola di port forwarding (inoltro delle porte).
+#Faccio sì che tutto il traffico web indirizzato alla porta 8080 del mio computer fisico (il Mac) 
+#venga automaticamente reindirizzato alla porta 80 della macchina virtuale
   config.vm.network "forwarded_port", guest: 80, host: 8080
 
-  # IP privato per accedere dalla rete locale
+#Configura una rete privata tra il tuo computer fisico e la macchina virtuale, assegnando a quest'ultima l'indirizzo IP statico 192.168.56.20. Questo ti permette di comunicare direttamente con la VM tramite questo indirizzo IP locale.IP privato per accedere dalla rete locale
   config.vm.network "private_network", ip: "192.168.56.20"
 
   config.vm.provider "virtualbox" do |vb|
