@@ -1,3 +1,62 @@
+#Questo è un file(in formato yaml) ed è un playbook ansible.
+#Non è altro che il file che vagrant dice ad ansible di eseguire per 
+#installare e configurare tutto il software necessario sulla VM appena creata.
+
+#I tre trattini --- indicano l'inizio di un file YAML
+
+# Inizio nel dare un nome descrittivo al file, dicendo poi ad ansible di eseguire le operazioni su tutte le vm collegate.
+# il become:true è l'equivalente di sudo in bash, dice ad ansible di eseguire le operazioni con permesso di amministratore root sulle VM
+(per installare programmi etc)
+
+# Poi con vars apro la sezione dedicata alla creazione di variabili, per non ripetere le cose più volte;
+
+# N.B Ansible è idempotente --> proprietà di un'operazione o funzione per cui l'applicazione multipla della stessa 
+# produce lo stesso risultato della prima applicazione
+
+#Creo una variabile chiamata documento_root con valore /var/www/html
+(che è la cartella predefinita dove i server web su Ubuntu cercano i file dei siti da mostrare).
+
+#Ora con tasks apro la lista delle operazioni effettive da eseguire, nell'ordine esatto in cui sono scritte, dando un nome ad ogni azione
+# e delle informazioni:
+
+#La prima azione è aggiornare la lista dei pacchetti, richiamo il modulo di Ansible che comanda apt, 
+#il gestore di pacchetti dei sistemi Ubuntu/Debian.apt, e con update_cache: yes
+#faccio eseguire l'equivalente del comando apt update,
+#scaricando da internet la lista aggiornata dei software disponibili prima di tentare qualsiasi installazione.
+
+#La seconda azione installazione del software: faccio installare Nginx curl e vim.
+
+#Ngnix è un server web usatissimo, che "ascolta" le richieste in arrivo su Internet e risponde inviando i file corretti
+#Nel mio caso è il cuore del mio progetto --> Ansible lo installa, lo mette nella cartella /var/www/html.
+#Da quel momento in poi, Nginx rimane attivo in background sulla macchina virtuale.
+#Dopo aver fatto vagrant up etc se apro il browser e vado allindirizzo http://192.168.56.20, 
+#il mio browser(client) "bussa" alla porta della macchina virtuale, Nginx apre la porta, legge la richiesta,
+#va a pescare il file index.html che gli ho caricato e lo spedisce a schermo.
+
+#Inoltre faccio installare anche Curl per testare richieste le di rete e Vim per avere un editor di testo.
+#Richiamo sempre il modulo di ansible che richiama apt e con state: present mi assicuro che questi siano installati altrimenti ansible deve installarli.
+
+# La terza azione è copiare la pagina index.html per caricare la pagina del sito web
+#(ho usato il font di una pagina che avevo usato per un mio progetto di quando facevo frontend).
+
+#Richiamo il modulo copy per gestire la copia dei file:
+#Con src: files/index.html indico il file da copiare ad ansible (è nella stessa cartella del progetto all'interno della cartella file).
+# con dest: "{{ documento_root }}/index.html" indico il percorso di destinazione finale del file sulla VM, sarà questo /var/www/html/index.html.
+#Imposto inoltre l'utente standard e il gruppo standard di Nginx come proprietari del file caricato.
+#Inoltre imposto i permessi al file (in questo caso permmesso di scrittura e lettura al root e solo lettura agli altri,quindi
+#4+2 proprietario lettura e scrittura
+#4 gruppi sola lettura
+#4 altri sola lettura
+
+#Quarta azione avvio server(boot) dopo che Nginx è avviato:
+#Utilizzo il modulo Ansible per gestire i servizi in esecuzione in background (tramite systemd): service
+#Attraverso  name: nginx dico su quale servizio deve agire; con state: started mi assicuro che il processo sia in esecuzione;
+# con enabled: yes configuro il sistema operativo della VM affinchè faccia partire in maniera automatica Nginx al suo avvio.
+
+#La quinta azione è la stampa del messaggio finale,usando debug modulo usato per stampare messaggi personalizzati a schermo 
+#durante l'esecuzione del playbook, che Ansible stamperà nel tuo terminale per confermarmi 
+#che tutto è andato a buon fine e per ricordarti i due indirizzi IP (configurati in precedenza nel Vagrantfile)
+#tramite i quali posso testare il sito(localhost).
 ---
 - name: Configura webserver
   hosts: all
