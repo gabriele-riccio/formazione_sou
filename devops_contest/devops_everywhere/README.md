@@ -49,8 +49,9 @@ vagrant up
 
 Apri il browser su `http://localhost:8080` e ottengo :
 
-## Output
+## Pagina web:
 
+![prima parte sito web](esercizio%20statuscode%20HTTP/Screenshot%202026-05-14%20alle%2010.05.05.png)
 
 ## Struttura
 
