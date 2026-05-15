@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vagrant Webserver</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e2e8f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .card {
+      background: #1a1d2e;
+      border: 1px solid #2d3148;
+      border-radius: 12px;
+      padding: 48px;
+      max-width: 560px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      background: #22c55e22;
+      color: #22c55e;
+      border: 1px solid #22c55e44;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 12px;
+      color: #f8fafc;
+    }
+
+    p {
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .stack {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #7dd3fc;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="badge">● Online</div>
+    <h1>Vagrant Webserver</h1>
+    <p>
+      Macchina Linux provisioned con <strong>Ansible</strong>.<br>
+      Nginx installato e configurato automaticamente al primo <code>vagrant up</code>.
+    </p>
+    <div class="stack">
+      <span class="tag">Ubuntu 20.04</span>
+      <span class="tag">Nginx</span>
+      <span class="tag">Ansible</span>
+      <span class="tag">Vagrant</span>
+    </div>
+  </div>
+</body>
+</html>
+

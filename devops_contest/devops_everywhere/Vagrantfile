@@ -1,0 +1,24 @@
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/focal64"
+  config.vm.hostname = "webserver"
+
+  # Porta 80 della VM accessibile su localhost:8080 del tuo Mac
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+
+  # IP privato per accedere dalla rete locale
+  config.vm.network "private_network", ip: "192.168.56.20"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.name   = "webserver"
+    vb.memory = "512"
+    vb.cpus   = 1
+  end
+
+  # Provisioner: Ansible (gira sull'host Mac)
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+    ansible.verbose  = "v"
+  end
+
+end

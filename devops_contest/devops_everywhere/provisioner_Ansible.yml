@@ -1,0 +1,39 @@
+---
+- name: Configura webserver
+  hosts: all
+  become: true
+
+  vars:
+    documento_root: /var/www/html
+
+  tasks:
+
+    - name: Aggiorna la lista dei pacchetti
+      apt:
+        update_cache: yes
+
+    - name: Installa Nginx, curl e vim
+      apt:
+        name:
+          - nginx
+          - curl
+          - vim
+        state: present
+
+    - name: Copia la pagina index.html
+      copy:
+        src: files/index.html
+        dest: "{{ documento_root }}/index.html"
+        owner: www-data
+        group: www-data
+        mode: "0644"
+
+    - name: Assicurati che Nginx sia avviato e abilitato al boot
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Mostra IP della macchina
+      debug:
+        msg: "Webserver pronto su http://192.168.56.20 oppure http://localhost:8080"
