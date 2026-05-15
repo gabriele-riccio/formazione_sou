@@ -53,6 +53,10 @@ Apri il browser su `http://localhost:8080` e ottengo :
 
 ![prima parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.04.52.png)
 
+![seconda parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.05.08.png)
+
+![terza parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.05.23.png)
+
 ## Struttura
 
 ```
