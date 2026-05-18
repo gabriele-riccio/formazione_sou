@@ -12,7 +12,7 @@ Vagrant.configure("2") do |config|
 
 
 #Imposto una regola di port forwarding (inoltro delle porte).
-#Faccio sì che tutto il traffico web indirizzato alla porta 8080 del mio computer fisico (il Mac) 
+#Faccio sì che tutto il traffico web indirizzato alla porta 8080 del mio computer fisico (il Mac)
 #venga automaticamente reindirizzato alla porta 80 della macchina virtuale
   config.vm.network "forwarded_port", guest: 80, host: 8080
 
@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.network "private_network", ip: "192.168.56.20"
 
 #Ora faccio una configurazione solo per il virtualbox, il provider che ho scelto per
-#eseguire la macchina virtuale(dove viene creata la vm). 
+#eseguire la macchina virtuale(dove viene creata la vm).
 
 #Scelgo nome memoria ram e numero di cpu(1 core del processore).
 
@@ -37,10 +37,10 @@ Vagrant.configure("2") do |config|
 #vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"] che fa usare alla VM di usare il DNS del MAC e vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 #che Dice a VirtualBox di fare da proxy per le richieste DNS.
 
-  
+
 #Provisioner:Con questa parte di script dico a Vagrant di utilizzare Ansible come "provisioner",
-# ovvero lo strumento che si occuperà di installare il software e configurare il sistema operativo 
-# dopo che la macchina virtuale è stata creata e avviata. 
+# ovvero lo strumento che si occuperà di installare il software e configurare il sistema operativo
+# dopo che la macchina virtuale è stata creata e avviata.
 #Per fare questo ansible usa un file di istruzioni o playbook che è presente in questo progetto con il nome
 # di "provisioner_Ansible.yml".
 # Imposto la modalità verbosa in modo che man mano che esso lavora, posso vedere cosa fa dal terminale.

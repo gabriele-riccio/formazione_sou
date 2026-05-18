@@ -1,3 +1,46 @@
+<!--
+Ho deciso di fare un documento HTML a singolo file, dove ho potuto inserire sia la struttura(HTML) che lo
+stile(CSS) nello stesso file.
+Nella prima parte ho inserito le istruzioni obbligatorie relative ad un file HTML come il DOCTYPE html e 
+la lingua.
+Poi ho aperto l'head per inserire i metadati(impostazioni tecniche) per la codifica UTF-8 e per renderlo 'responsive',
+per non far rimpicciolire il sito se si usa un dispositivo 'smartphone'.
+Ho inserito poi il titolo e i link per collegarmi ai server di Google Font per scaricare i font per il
+testo normale e in grassetto.
+
+Poi inizio unendo la parte di style(CSS) al file HTML: con *, " *::before, *::after " inserisco delle impostazioni di stile
+per ogni elemento della pagina(come rimuovere i margini, la spaziatura interna con padding e impostando border-box in modo da non
+fare uscire fuori il contenuto dalla pagina.
+Mi concentro poi su due sezioni: root e body
+In root ho definito delle variabili in modo da salvare i colori in esse e rendere più facile la scrittura e la modifica futura del codice.
+Mentre nel body ho impostato lo stile della pagina: tipo di testo, font, sfondo etc..
+
+Dopo ho continuato la parte del CSS integrando componenti grafici e Layout, dato che prima mi sono concentrato sullo stile generale della pagina
+ora vado a scrivere lo stile per le zone della pagina web:
+Ho descritto la barra nera in alto e con 'position: sticky; top: 0;'faccio in modo che la barra rimanga incollata in cima allo schermo 
+anche quando scorro la pagina verso il basso.
+Ho impostato una grandezza massima della pagina web a 960px e ho descritto la Hero section, che sarebbe la sezione introduttiva dove è presente
+un sottotitolo con il mio nome e una descrizione. Ho diviso quest'area in due colonne con il numero 6 che deve prendersi lo spazio necessario con 'auto'.
+Ho definito gli stack-tag(le etichette bash, linux etc che compaiono nella sezione 'chi sono') inserendo l'istruzione "transition: background 0.2s, 
+color 0.2s,border-color 0.2s;" in modo di far cambiare colore quando ci si passa sopra con il mouse.
+Poi mi sono concentrato sullo stile dei progetti (.projects, .card, .tags) definendo l'aspetto delle singole "schede" degli esercizi svolti durante
+l'Academy, le classi di colore (.tag-bash, .tag-docker, ecc.)assegnando colori di sfondo e testo specifici a ogni singola etichetta tecnologica
+per renderle visivamente distinguibili, le Animazioni (.fade, @keyframes up, .d1...)che sono le regole che fanno apparire i testi al caricamento 
+della pagina(ad esempio il testo parte invisibile (opacity: 0) è spostato in basso di 16px, per poi scivolare in alto e 
+apparire gradualmente in 0,5 secondi e le classi d1, d2 aggiungono un ritardo in modo che gli elementi appaiano uno dopo l'altro (effetto a cascata)).
+Ho inoltre inserito un'altra regole sulla grandezza dello schermo: Se esso è più piccolo di 640 px(smartphone), le due colonne iniziali dell' hero
+section diventano 1 con il 6 che viene spostato in basso.
+
+Poi mi sono concentrato sulla struttura della pagina web: Creando la barra superiore con <div class="topbar">, rappresentando
+il contenuto principale della pagina nel main, la sezione iniziale hero, i progetti , le singole classi e il footer: il piè di pagina con 
+contenente i crediti e il riassunto dell'infrastruttura sottostante (Nginx, Ansible, Vagrant).
+
+
+
+
+
+-->
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -128,7 +171,6 @@
       margin-top: 4px;
     }
 
-    /* ── ABOUT ── */
     .about {
       padding: 56px 0;
       border-bottom: 1px solid var(--border);
@@ -179,7 +221,7 @@
       border-color: var(--orange);
     }
 
-    /* ── PROJECTS ── */
+    /* ── PROGETTI ── */
     .projects-section { padding: 56px 0 80px; }
 
     .section-title {
@@ -314,7 +356,7 @@
 
     .footer-inner p span { color: var(--orange); }
 
-    /* ── ANIM ── */
+    /* ── ANIMAZIONI ── */
     .fade { opacity: 0; transform: translateY(16px); animation: up 0.5s forwards; }
     @keyframes up { to { opacity: 1; transform: none; } }
     .d1{animation-delay:.05s} .d2{animation-delay:.15s} .d3{animation-delay:.25s}

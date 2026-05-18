@@ -15,7 +15,11 @@
 # produce lo stesso risultato della prima applicazione
 
 #Creo una variabile chiamata documento_root con valore /var/www/html
+
 #che è la cartella predefinita dove i server web su Ubuntu cercano i file dei siti da mostrare).
+
+
+
 
 #Ora con tasks apro la lista delle operazioni effettive da eseguire, nell'ordine esatto in cui sono scritte, dando un nome ad ogni azione
 # e delle informazioni:
@@ -54,11 +58,10 @@
 #Attraverso  name: nginx dico su quale servizio deve agire; con state: started mi assicuro che il processo sia in esecuzione;
 # con enabled: yes configuro il sistema operativo della VM affinchè faccia partire in maniera automatica Nginx al suo avvio.
 
-#La quinta azione è la stampa del messaggio finale,usando debug modulo usato per stampare messaggi personalizzati a schermo
-#durante l'esecuzione del playbook, che Ansible stamperà nel tuo terminale per confermarmi
-#che tutto è andato a buon fine e per ricordarti i due indirizzi IP (configurati in precedenza nel Vagrantfile)tramite i quali posso testare il sito(localhost).
-
-
+#La quinta azione è la stampa del messaggio finale,usando debug modulo usato per stampare messaggi personalizzati a schermo 
+#durante l'esecuzione del playbook, che Ansible stamperà nel tuo terminale per confermarmi 
+#che tutto è andato a buon fine e per ricordarti i due indirizzi IP (configurati in precedenza nel Vagrantfile)
+#tramite i quali posso testare il sito(localhost).
 
 - name: Configura webserver
   hosts: all
