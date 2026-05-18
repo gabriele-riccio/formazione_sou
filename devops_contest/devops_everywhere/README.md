@@ -2,8 +2,8 @@
 
 **Traccia**
 - Creare un progetto Vagrant. 
-- Tramite un provisioner a vostra scelta (shell scripting, Puppet, Ansible, Chef, ecc...) configurate una
-  macchina Linux ( nessuna preferenza sulla distribuzione ho scelto Ubuntu).
+- Tramite un provisioner a vostra scelta (shell scripting, Puppet, Ansible, Chef, ecc... , io ho scelto
+  Ansible) configurate una macchina Linux ( nessuna preferenza sulla distribuzione, io ho scelto Ubuntu).
 - Sarete liberi di decidere cosa far fare alla macchina l'importante è che sia portabile.
 - Colui che analizzerà il vostro progetto dovrà eseguire 'vagrant up' e utilizzarla.
 - L’aspetto fantasioso sarà un dato preferenziale.
@@ -14,12 +14,11 @@ automaticamente tramite **Ansible** al primo `vagrant up`.
 
 ## Cosa fa
 
-Al primo `vagrant up` la macchina viene provisioned con Ansible che:
+Al primo `vagrant up` la macchina viene provisionata con Ansible che:
 
 1. Installa Nginx, curl e vim
-2. Copia il portfolio `files/index.html` nella document root di Nginx(L'ho implementato da un progetto
-   precedente che avevo svolto in un progetto che avevo fatto per un corso di programmazione che ho seguito
-   prima di inziare l'Academy).
+2. Copia il portfolio `files/index.html` nella document root di Nginx(l'ho implementato da un progetto
+   precedente che avevo svolto per un corso di programmazione che ho seguito prima di inziare l'Academy).
 3. Avvia Nginx e lo abilita al boot.
 
 La pagina è raggiungibile immediatamente su `http://localhost:8080` senza nessuna configurazione manuale.
@@ -31,7 +30,8 @@ Un portfolio personale in stile **Sourcesense DevOps Academy** con:
 - Presentazione personale e stack tecnologico
 - Lista di tutti i progetti/esercizi bonus realizzati fin ora durante l'Academy:
   - HTTP Status Code (Bash, curl, Flask)
-  - Ping Pong Container (Vagrant, Docker, Bash) in corso...
+  - Ping Pong Container (Vagrant, Docker, Bash) che è in corso di svolgimento,
+    lo barrerò con 'completato' una volta finito...
   - Vagrant Webserver (questo progetto)
   - Port Scanner (Bash)
   - Gestione Processi ed Errori (Bash)
@@ -44,6 +44,7 @@ Un portfolio personale in stile **Sourcesense DevOps Academy** con:
 | VirtualBox | 6.x            |
 | Ansible    | qualsiasi      |
 
+
 ## Svolgimento
 
 Ho installato Ansible:
@@ -53,6 +54,8 @@ pip3 install ansible
 Ho dovuto farlo con pip3 e non con Homebrew dato che si bloccava per la pesantezza delle librerie.
 
 ## Avvio
+
+Clono la mia repository GitHub e faccio partire vagrant con 'vagrant up'
 
 ```bash
 git clone https://github.com/gabriele-riccio/formazione_sou.git
@@ -72,6 +75,7 @@ Apro il browser su `http://localhost:8080` o  `http://192.168.56.20` e ottengo :
 ![terza parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.05.23.png)
 
 
+
 ## Struttura
 
 ```
@@ -86,7 +90,7 @@ Apro il browser su `http://localhost:8080` o  `http://192.168.56.20` e ottengo :
 ├── files/
 │   └── index.html      # portfolio personale stile Sourcesense
 │    
-└── README.md
+└── README.md          #Readme di spiegazione generale
 
 ```
 
@@ -104,6 +108,6 @@ vagrant destroy   # elimina la VM
 
 | URL                    | Descrizione        |
 |------------------------|--------------------|
-| http://localhost:8080  | Dal tuo Mac        |
+| http://localhost:8080  | Dal  Mac        |
 | http://192.168.56.20   | Dalla rete privata |
 
