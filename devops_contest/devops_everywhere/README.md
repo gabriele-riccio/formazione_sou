@@ -55,14 +55,30 @@ Ho dovuto farlo con pip3 e non con Homebrew dato che si bloccava per la pesantez
 
 ## Avvio
 
-Clono la mia repository GitHub e faccio partire vagrant con 'vagrant up'
+Clono la mia repository GitHub 
 
 ```bash
 git clone https://github.com/gabriele-riccio/formazione_sou.git
 cd formazione_sou/devops_contest/devops_everywhere
-vagrant up
+
 ```
 
+## Output terminale
+Una volta fatto l'esercizio per farlo partire scrivo **vagrant up** da terminale e **vagrant provision** per riapplicare il playbook dopo eventuali modifiche.
+
+```bash
+vagrant up
+vagrant provision
+
+```
+L'output che ottengo sarà questo:
+
+
+![prima parte terminale](index_file/Screenshot%202026-05-15%20alle%2017.44.58.png)
+![prima parte terminale](index_file/Screenshot%202026-05-15%20alle%2017.45.14.png)
+
+
+Da questo momento posso andare sul browser per vedere la pagina web;
 Apro il browser su `http://localhost:8080` o  `http://192.168.56.20` e ottengo :
 
 
@@ -73,6 +89,7 @@ Apro il browser su `http://localhost:8080` o  `http://192.168.56.20` e ottengo :
 ![seconda parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.05.08.png)
 
 ![terza parte sito web](index_file/Screenshot%202026-05-15%20alle%2017.05.23.png)
+
 
 
 
