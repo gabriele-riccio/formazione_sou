@@ -1,3 +1,4 @@
+---
 #Questo è un file(in formato yaml) ed è un playbook ansible.
 #Non è altro che il file che vagrant dice ad ansible di eseguire per 
 #installare e configurare tutto il software necessario sulla VM appena creata.
@@ -6,7 +7,7 @@
 
 # Inizio nel dare un nome descrittivo al file, dicendo poi ad ansible di eseguire le operazioni su tutte le vm collegate.
 # il become:true è l'equivalente di sudo in bash, dice ad ansible di eseguire le operazioni con permesso di amministratore root sulle VM
-(per installare programmi etc)
+#(per installare programmi etc)
 
 # Poi con vars apro la sezione dedicata alla creazione di variabili, per non ripetere le cose più volte;
 
@@ -14,7 +15,7 @@
 # produce lo stesso risultato della prima applicazione
 
 #Creo una variabile chiamata documento_root con valore /var/www/html
-(che è la cartella predefinita dove i server web su Ubuntu cercano i file dei siti da mostrare).
+#(che è la cartella predefinita dove i server web su Ubuntu cercano i file dei siti da mostrare).
 
 #Ora con tasks apro la lista delle operazioni effettive da eseguire, nell'ordine esatto in cui sono scritte, dando un nome ad ogni azione
 # e delle informazioni:
@@ -57,7 +58,6 @@
 #durante l'esecuzione del playbook, che Ansible stamperà nel tuo terminale per confermarmi 
 #che tutto è andato a buon fine e per ricordarti i due indirizzi IP (configurati in precedenza nel Vagrantfile)
 #tramite i quali posso testare il sito(localhost).
----
 - name: Configura webserver
   hosts: all
   become: true
