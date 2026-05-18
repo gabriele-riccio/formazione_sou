@@ -159,7 +159,7 @@ vagrant up
 **2. Avvia la migrazione:**
 
 ```bash
-chmod +x migrate.sh
+chmod +x migrate.sh provision.sh Vagrantfile
 bash migrate.sh
 ```
 **3. Per fermare tutto:**
