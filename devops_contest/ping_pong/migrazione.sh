@@ -42,7 +42,14 @@
 #Inizio adesso con l'avvio con un if che effettua una verifica che vagrant sia disponibile stampando 
 #un messaggio di errore altrimenti.
 
-#Ora il bello, dopo una pulizia iniziale con la funzione cleanup, 
+#Ora il bello, dopo una pulizia iniziale con la funzione cleanup, scrivo il loop infinito per la migrazione tra le 2 VM:
+#Seleziona il nodo da usare nel turno corrente usando la variabile $CURRENT (che all'inizio è 0, quindi "node1", poi 1 quindi
+#"node2" ripetendosi attraverso un trucco matematico srivendo in NEXT=$1-CURRENT in modo che se CURRENT è 0 il next è 1 quindi il 
+#secondo nodo, tornando poi a 0 essendo poi il CUURENT 1).
+#Ogni turno avvia il server web sul nodo di turno con start_container "$ACTIVE_NODE", poi con sleep sta fermo per 60 secondi
+#($INTERVAL) e finiti i 60 secondi, spegne il container dal nodo in cui si trovava e una volta aggiornata la variabile con
+#CURRENT=$NEXT, riparte dall'inizio del while accendendo il container sull'altro nodo e così via "per sempre" fin quando non 
+#lo fermiamo con CTRL +C.
 
 
 
