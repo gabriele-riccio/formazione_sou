@@ -1,7 +1,6 @@
-# Echo Server — Ping Pong tra due nodi Vagrant
+# Ping Pong tra due nodi Vagrant
 
-Container `ealen/echo-server` che migra automaticamente tra `node1` e `node2`
-ogni 60 secondi.
+L'esercizio simula la **migrazione live di un container Docker** tra due macchine virtuali, alternandolo ogni 60 secondi(per questo viene denominato PingPong).
 
 ## Requisiti
 
@@ -15,10 +14,15 @@ ogni 60 secondi.
 
 ```
 .
-├── Vagrantfile       # due nodi Ubuntu con Docker
-├── provision.sh      # installa Docker su ogni nodo
-├── migrate.sh        # script di migrazione (gira sull'host)
+├── Vagrantfile       # due nodi Ubuntu con Docker.
+├── provision.sh      # installa Docker su ogni nodo e scarica l'immagine Docker.
+├── migrazione.sh        # script di migrazione (gira sull'host).
+├── files/migrazione     #cartella di immagini output per il README.
+│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
+│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
+│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
 └── README.md
+
 ```
 
 ## Come usare
@@ -28,6 +32,10 @@ ogni 60 secondi.
 ```bash
 vagrant up
 ```
+
+![prima parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2016.59.55.png)
+
+
 
 **2. In un altro terminale, avvia la migrazione:**
 
