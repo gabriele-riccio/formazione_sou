@@ -23,6 +23,19 @@ Ho impostato una grandezza massima della pagina web a 960px e ho descritto la He
 un sottotitolo con il mio nome e una descrizione. Ho diviso quest'area in due colonne con il numero 6 che deve prendersi lo spazio necessario con 'auto'.
 Ho definito gli stack-tag(le etichette bash, linux etc che compaiono nella sezione 'chi sono') inserendo l'istruzione "transition: background 0.2s, 
 color 0.2s,border-color 0.2s;" in modo di far cambiare colore quando ci si passa sopra con il mouse.
+Poi mi sono concentrato sullo stile dei progetti (.projects, .card, .tags) definendo l'aspetto delle singole "schede" degli esercizi svolti durante
+l'Academy, le classi di colore (.tag-bash, .tag-docker, ecc.)assegnando colori di sfondo e testo specifici a ogni singola etichetta tecnologica
+per renderle visivamente distinguibili, le Animazioni (.fade, @keyframes up, .d1...)che sono le regole che fanno apparire i testi al caricamento 
+della pagina(ad esempio il testo parte invisibile (opacity: 0) è spostato in basso di 16px, per poi scivolare in alto e 
+apparire gradualmente in 0,5 secondi e le classi d1, d2 aggiungono un ritardo in modo che gli elementi appaiano uno dopo l'altro (effetto a cascata)).
+Ho inoltre inserito un'altra regole sulla grandezza dello schermo: Se esso è più piccolo di 640 px(smartphone), le due colonne iniziali dell' hero
+section diventano 1 con il 6 che viene spostato in basso.
+
+Poi mi sono concentrato sulla struttura della pagina web: Creando la barra superiore con <div class="topbar">, rappresentando
+il contenuto principale della pagina nel main, la sezione iniziale hero, i progetti , le singole classi e il footer: il piè di pagina con 
+contenente i crediti e il riassunto dell'infrastruttura sottostante (Nginx, Ansible, Vagrant).
+
+
 
 
 
@@ -158,7 +171,6 @@ color 0.2s,border-color 0.2s;" in modo di far cambiare colore quando ci si passa
       margin-top: 4px;
     }
 
-    /* ── ABOUT ── */
     .about {
       padding: 56px 0;
       border-bottom: 1px solid var(--border);
@@ -209,7 +221,7 @@ color 0.2s,border-color 0.2s;" in modo di far cambiare colore quando ci si passa
       border-color: var(--orange);
     }
 
-    /* ── PROJECTS ── */
+    /* ── PROGETTI ── */
     .projects-section { padding: 56px 0 80px; }
 
     .section-title {
@@ -344,7 +356,7 @@ color 0.2s,border-color 0.2s;" in modo di far cambiare colore quando ci si passa
 
     .footer-inner p span { color: var(--orange); }
 
-    /* ── ANIM ── */
+    /* ── ANIMAZIONI ── */
     .fade { opacity: 0; transform: translateY(16px); animation: up 0.5s forwards; }
     @keyframes up { to { opacity: 1; transform: none; } }
     .d1{animation-delay:.05s} .d2{animation-delay:.15s} .d3{animation-delay:.25s}
