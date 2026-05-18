@@ -20,7 +20,7 @@ L'esercizio simula la **migrazione live di un container Docker** tra due macchin
 ├── Vagrantfile       # due nodi Ubuntu con Docker.
 ├── provision.sh      # installa Docker su ogni nodo e scarica l'immagine Docker.
 ├── migrazione.sh        # script di migrazione (gira sull'host).
-├── files/migrazione     #cartella di immagini output per il README.
+├── files/migrazione     # cartella di immagini output per il README.
 │   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
 │   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
 │   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
@@ -36,11 +36,11 @@ L'esercizio simula la **migrazione live di un container Docker** tra due macchin
 Il `Vagrantfile` è il file di configurazione di Vagrant che automatizza
 la creazione e la configurazione delle due macchine virtuali.
 
-Utilizza la sintassi in versione 2 (lo standard attuale di Vagrant) e
-imposta **Ubuntu 20.04 LTS (Focal Fossa) a 64 bit** come sistema operativo
-per entrambe le VM.
+L'ho impostato in modo che utilizzasse la sintassi in versione 2 (lo standard attuale 
+di Vagrant) e gli ho fatto impostare **Ubuntu 20.04 LTS (Focal Fossa) a 64 bit** come
+sistema operativo per entrambe le VM.
 
-Vengono definiti due nodi:
+Definisco due nodi:
 
 | Nodo  | Hostname | IP              |
 |-------|----------|-----------------|
@@ -64,8 +64,7 @@ node.vm.provision "shell", path: "provision.sh"
 ### provision.sh
 
 Lo script di provisioning viene eseguito **una sola volta** su ogni VM,
-in automatico durante il `vagrant up`. Il suo compito è preparare
-l'ambiente installando Docker e pre-scaricando l'immagine del container.
+in automatico durante il `vagrant up`.
 
 Le operazioni svolte in sequenza sono:
 
@@ -85,9 +84,8 @@ Le operazioni svolte in sequenza sono:
 docker pull ealen/echo-server
 ```
 
-L'immagine viene scaricata in anticipo così la prima migrazione avviene
-senza ritardi: il container parte immediatamente senza dover attendere
-il download.
+L'immagine l'ho fatta scaricare in anticipo per far avvenire la prima 
+migrazione senza ritardi.
 
 **3. Verifica**
 
@@ -99,8 +97,7 @@ andato a buon fine.
 
 ### migrate.sh
 
-Lo script di migrazione è il cuore dell'esercizio. Gira **sull'host**
-(il tuo PC), non dentro le VM, e usa `vagrant ssh` per inviare comandi
+Esso gira **sull'host** (Mac), non dentro le VM, e usa `vagrant ssh` per inviare comandi
 Docker ai due nodi a distanza.
 
 **Variabili principali**
@@ -109,7 +106,7 @@ Docker ai due nodi a distanza.
 CONTAINER_NAME="echo-server"   # nome del container Docker
 INTERVAL=60                    # secondi tra una migrazione e l'altra
 NODES=("node1" "node2")        # i due nodi disponibili
-CURRENT=0                      # indice del nodo attivo (0 = node1)
+CURRENT=0                      # indice del nodo attivo (0 = node1; 1 = node2)
 ```
 
 **Funzioni**
@@ -120,7 +117,7 @@ CURRENT=0                      # indice del nodo attivo (0 = node1)
 | `stop_container` | Ferma (`docker stop`) e rimuove (`docker rm`) il container   |
 | `start_container`| Avvia il container in background sulla porta 80              |
 | `node_ip`        | Restituisce l'IP del nodo passato come argomento             |
-| `cleanup`        | Intercetta Ctrl+C, ferma il container su entrambi i nodi ed esce pulito |
+| `cleanup`        | Ferma il container su entrambi i nodi ed esce pulito         |
 
 **Loop principale**
 
@@ -147,37 +144,41 @@ t=120s  node1 [ON]   node2 [off]
 ...
 ```
 
-In ogni momento **un solo nodo risponde** alle richieste HTTP sulla
+N.B In ogni momento **un solo nodo risponde** alle richieste HTTP sulla
 porta 80; l'altro restituisce "connection refused".
 
 ---
 ## Come funziona:
 
 
-**1. Avviare i due nodi** (la prima volta scarica la box e installa Docker):
+**1. Avviare i due nodi** :
 
 ```bash
 vagrant up
 ```
-
-![prima parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2016.59.55.png)
-
 **2. Avvia la migrazione:**
 
 ```bash
 chmod +x migrate.sh
 bash migrate.sh
 ```
-![seconda parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2017.00.17.png)
-
-![terza parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2017.01.43.png)
-
 **3. Per fermare tutto:**
 
 ```bash
 Ctrl+C          # ferma la migrazione e il container
 vagrant halt    # spegne le VM
 ```
+
+## OUTPUT
+
+![prima parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2016.59.55.png)
+
+![seconda parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2017.00.17.png)
+
+![terza parte terminale](files/migrazione/Screenshot%202026-05-18%20alle%2017.01.43.png)
+
+
 ---
+
 
 
