@@ -36,22 +36,22 @@ find /var/log -type f -mtime +30 -print -delete
 
 ## Installazione e configurazione
 
-### 1. Clona il repository
+### 1. Clono il repository
 
 ```bash
 git clone https://github.com/gabriele-riccio/formazione_sou.git
 cd formazione_sou
 ```
 
-### 2. Rendi lo script eseguibile
+### 2. Rendo lo script eseguibile
 
 ```bash
 chmod +x cleanup_old_files.sh
 ```
 
-### 4. Configura il crontab di root
+### 4. Configuro il crontab di root
 
-Apri il crontab di root:
+Apro il crontab di root:
 
 ```bash
 sudo crontab -e
@@ -61,7 +61,7 @@ sudo crontab -e
 **Output**
 ![prima parte terminale](files/Screenshot%202026-05-19%20alle%2017.33.06.png)
 
-Aggiungi questa riga:
+Aggiungo questa riga:
 
 ![seconda parte terminale](files/Screenshot%202026-05-19%20alle%2017.32.52.png)
 
@@ -81,9 +81,11 @@ Aggiungi questa riga:
 ---
 ## Verifica
 Per verificare che sta funzionando:
+
 ```bash
 sudo bash cleanup_old_files.sh
 ```
+
 In modo da poter controllare che lo script funzioni.
 
 N.B Non sarà eseguibile e mi darà permission denied se non uso 'sudo':
