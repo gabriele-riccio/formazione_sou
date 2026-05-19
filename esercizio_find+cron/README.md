@@ -57,11 +57,13 @@ Apri il crontab di root:
 sudo crontab -e
 ```
 
+
+**Output**
+![prima parte terminale](files/Screenshot%202026-05-19%20alle%2017.33.06.png)
+
 Aggiungi questa riga:
 
-```
-30 6 * * 1 /usr/local/bin/cleanup_old_files.sh
-```
+![seconda parte terminale](files/Screenshot%202026-05-19%20alle%2017.32.52.png)
 
 #### Spiegazione della sintassi cron
 
@@ -77,6 +79,18 @@ Aggiungi questa riga:
 > Lo script verrà eseguito **ogni lunedì alle 06:30**.
 
 ---
+## Verifica
+Per verificare che sta funzionando:
+```bash
+sudo bash cleanup_old_files.sh
+```
+In modo da poter controllare che lo script funzioni.
+
+N.B Non sarà eseguibile e mi darà permission denied se non uso 'sudo':
+
+![terza parte terminale](files/Screenshot%202026-05-19%20alle%2017.34.57.png)
+
+---
 
 ## Log
 
@@ -86,18 +100,9 @@ Lo script registra le proprie operazioni in:
 /var/log/cleanup_script.log
 ```
 
-Esempio di output nel log:
+**Output nel log** :
 
-```
-========================================
-Esecuzione: 2025-05-19 06:30:01
-Directory target: /var/log
-Eliminazione file più vecchi di 30 giorni...
-/var/log/syslog.old
-/var/log/auth.log.2
-Operazione completata.
-========================================
-```
+![quarta parte terminale](files/Screenshot%202026-05-19%20alle%2017.35.21.png)
 
 ---
 
