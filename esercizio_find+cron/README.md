@@ -39,20 +39,14 @@ find /var/log -type f -mtime +30 -print -delete
 ### 1. Clona il repository
 
 ```bash
-git clone 
-cd <tuo-repo>
+git clone https://github.com/gabriele-riccio/formazione_sou.git
+cd formazione_sou
 ```
 
 ### 2. Rendi lo script eseguibile
 
 ```bash
 chmod +x cleanup_old_files.sh
-```
-
-### 3. Sposta lo script (opzionale)
-
-```bash
-sudo mv cleanup_old_files.sh /usr/local/bin/cleanup_old_files.sh
 ```
 
 ### 4. Configura il crontab di root
