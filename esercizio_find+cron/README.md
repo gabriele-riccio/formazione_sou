@@ -1,4 +1,4 @@
-# Find & Cron – Pulizia automatica file vecchi
+# Find + Cron – Pulizia automatica file vecchi
 
 ## Descrizione
 
@@ -39,7 +39,7 @@ find /var/log -type f -mtime +30 -print -delete
 ### 1. Clona il repository
 
 ```bash
-git clone https://github.com/<tuo-username>/<tuo-repo>.git
+git clone 
 cd <tuo-repo>
 ```
 
