@@ -10,7 +10,7 @@
 
 TARGET_DIR="/var/log"
 DAYS=30
-LOG_FILE="$HOME/cleanup_script.log"
+LOG_FILE="/var/log/cleanup_script.log"
 echo "========================================"  >> "$LOG_FILE"
 echo "Esecuzione: $(date '+%Y-%m-%d %H:%M:%S')" >> "$LOG_FILE"
 echo "Directory target: $TARGET_DIR"            >> "$LOG_FILE"
