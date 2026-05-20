@@ -48,7 +48,7 @@ chmod +x file_egrep_1.sh file_egrep_2.sh file_egrep_3.sh file_egrep_4.sh
 Utilizzerò il comando:
 
 ```bash
-egrep '[a-zA-Z]+' file.txt
+egrep '[a-zA-Z]+' file_egrep_1.sh
 ```
 
 **Input di esempio (`file_egrep_1.sh`):**
@@ -79,7 +79,7 @@ ciao123Mondo
 Utilizzerò il comando:
 
 ```bash
-egrep -v '^#' script.sh
+egrep -v '^#' file_egrep_2.sh
 ```
 
 **Input di esempio :**
@@ -117,7 +117,7 @@ ls -la
 ![terza parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.09.47.png)
 
 > **Nota:** i commenti preceduti da spazi non vengono rimossi perché `^` richiede che `#` sia il primo carattere della riga, per questo in questo caso ` # commento indentato (NON rimosso)` non viene rimosso.
-> Per rimuovere anche quelli, bisogna usare `egrep -v '^\s*#'`.
+> Per rimuovere anche quelli, bisogna usare `egrep -v '^\s*#'`file_egrep_2.sh .
 
 ---
 
@@ -126,10 +126,10 @@ ls -la
 **Obiettivo:** matchare righe che contengono tra 3 e 6 occorrenze consecutive della lettera `a`.
 
 ```bash
-egrep 'a{3,6}' file.txt
+egrep 'a{3,6}' file_egrep_3.sh
 ```
 
-**Input di esempio (`file_egrep_2.sh`):**
+**Input di esempio (`file_egrep_3.sh`):**
 
 ```bash
 a
@@ -157,7 +157,7 @@ come va
   
 > **Nota:** per matchare esattamente sequenze isolate di 3–6 'a' (senza che facciano parte di sequenze più lunghe), aggiungere word boundary:
 > ```bash
-> egrep '\ba{3,6}\b' file.txt
+> egrep '\ba{3,6}\b' file_egrep_3.sh
 > ```
 **Output**
 
@@ -170,10 +170,10 @@ come va
 **Obiettivo:** trovare le righe che contengono almeno una delle parole specificate.
 
 ```bash
-egrep 'apple|pear|orange' file.txt
+egrep 'apple|pear|orange' file_egrep_4.sh
 ```
 
-**Input di esempio (`file.txt`):**
+**Input di esempio (`file_egrep_4.sh`):**
 ```bash
 I like apple juice
 banana smoothie
@@ -196,10 +196,10 @@ orange
 > **Varianti utili:**
 > ```bash
 > # Case-insensitive (include anche APPLE, Pear, ORANGE, ecc.)
-> egrep -i 'apple|pear|orange' file.txt
+> egrep -i 'apple|pear|orange' file_egrep_4.sh
 >
 > # Solo parole intere (evita match parziali come "pineapple")
-> egrep '\b(apple|pear|orange)\b' file.txt
+> egrep '\b(apple|pear|orange)\b' file_egrep_4.sh
 > ```
 
 ---
