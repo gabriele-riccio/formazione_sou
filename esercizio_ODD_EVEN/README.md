@@ -21,7 +21,6 @@ Lo script controlla tre condizioni di errore nell'ordine:
 ```bash
 if [ $# -ne 1 ]; then
     echo "Errore: numero di argomenti non valido." >&2
-    echo "Uso: $0 <numero>" >&2
     exit 1
 fi
 ```
