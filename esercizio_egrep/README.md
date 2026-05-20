@@ -49,8 +49,8 @@ chmod +x file_egrep_1.sh file_egrep_2.sh file_egrep_3.sh file_egrep_4.sh
 egrep '[a-zA-Z]+' file.txt
 ```
 
-**Input di esempio (`file.txt`):**
-```
+**Input di esempio (`file_egrep_1.sh`):**
+```bash
 hello World
 12345
 foo 99 BAR
@@ -59,12 +59,7 @@ ciao123Mondo
 ```
 
 **Output:**
-```
-hello World
-foo 99 BAR
-ciao123Mondo
-```
-
+![prima parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.06.52.png)
 **Spiegazione:**
 - `[a-zA-Z]` — classe di caratteri: lettere minuscole (`a-z`) o maiuscole (`A-Z`)
 - `+` — quantificatore: uno o più caratteri consecutivi della classe
