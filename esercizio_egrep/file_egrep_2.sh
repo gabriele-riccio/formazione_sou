@@ -2,4 +2,4 @@
 echo "Hello"
 # Altro commento
 ls -la
-# commento indentato (NON rimosso)
+ # commento indentato (NON rimosso)
