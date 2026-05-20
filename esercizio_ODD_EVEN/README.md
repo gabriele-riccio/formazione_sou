@@ -78,17 +78,6 @@ done
   - se il resto è 1 → il numero è **dispari**
 
 ---
-
-## Codici di uscita
-
-| Codice | Significato |
-|--------|-------------|
-| `0` | Esecuzione completata con successo |
-| `1` | Numero di argomenti errato |
-| `2` | Argomento non numerico |
-| `3` | Argomento uguale a zero |
-
----
 ## Come eseguire lo script
 
 ```bash
@@ -96,7 +85,7 @@ done
 chmod +x odd_even.sh
 
 # Eseguilo
-./odd_even.sh 10
+./odd_even.sh 7
 ```
 
 ---
@@ -107,6 +96,7 @@ chmod +x odd_even.sh
 ```bash
 ./odd_even.sh 7
 ```
+![prima parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.20.png)
 
 ```
 1 -> dispari
