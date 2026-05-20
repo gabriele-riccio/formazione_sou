@@ -82,10 +82,10 @@ done
 
 ```bash
 # Rendi lo script eseguibile
-chmod +x odd_even.sh
+chmod +x file_odd_even.sh
 
 # Eseguilo
-./odd_even.sh 7
+./file_odd_even.sh 7
 ```
 
 ---
@@ -94,71 +94,47 @@ chmod +x odd_even.sh
 ### Input valido
 
 ```bash
-./odd_even.sh 7
+./file_odd_even.sh 7
 ```
 ![prima parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.20.png)
 
-```
-1 -> dispari
-2 -> pari
-3 -> dispari
-4 -> pari
-5 -> dispari
-6 -> pari
-7 -> dispari
-```
 
 ### Nessun argomento
 
 ```bash
-./odd_even.sh
+./file_odd_even.sh
 ```
-
-```
-Errore: numero di argomenti non valido.
-Uso: ./odd_even.sh <numero>
-```
+![seconda parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.27.png)
 
 ### Troppi argomenti
 
 ```bash
-./odd_even.sh 3 7
+./file_odd_even.sh 3 7
 ```
 
-```
-Errore: numero di argomenti non valido.
-Uso: ./odd_even.sh <numero>
-```
+![terza parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2017.05.54.png)
 
 ### Argomento non numerico
 
 ```bash
-./odd_even.sh ciao
+./file_odd_even.sh ciao
 ```
 
-```
-Errore: l'argomento 'ciao' non è un numero intero positivo.
-```
+![quarta parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.36.png)
 
 ### Argomento zero
 
 ```bash
-./odd_even.sh 0
+./file_odd_even.sh 0
 ```
-
-```
-Errore: il numero deve essere maggiore di 0.
-```
+![quinta parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.43.png)
 
 ### Argomento misto (numeri e lettere)
 
 ```bash
-./odd_even.sh 12abc
+./file_odd_even.sh 12ciao
 ```
-
-```
-Errore: l'argomento '12abc' non è un numero intero positivo.
-```
+![sesta parte terminale](file_ODD/Screenshot%202026-05-20%20alle%2016.46.48.png)
 
 ---
 
