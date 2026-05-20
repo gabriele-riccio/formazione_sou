@@ -3,6 +3,9 @@
 > `egrep` è equivalente a `grep -E` e supporta le Extended Regular Expressions (ERE) senza bisogno di escape per i quantificatori (`+`, `?`, `{n,m}`, `|`, ecc.).
 
 ---
+## Prima di fare gli esercizi:
+
+---
 
 ## Esercizio 1 — Sequenze alfabetiche (maiuscole e minuscole)
 
