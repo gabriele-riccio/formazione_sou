@@ -1,10 +1,44 @@
 # Esercizi `egrep` — Extended Regular Expressions
 
 > `egrep` è equivalente a `grep -E` e supporta le Extended Regular Expressions (ERE) senza bisogno di escape per i quantificatori (`+`, `?`, `{n,m}`, `|`, ecc.).
+---
+
+## Traccia:
+
+- Utilizzare il comando **egrep** per risolvere i seguenti esercizi (dando esempi di possibili input):
+  - Matchare sequenze alfabetiche di almeno un carattere, sia maiuscole che minuscole
+  - Togliere tutte le righe di commento di uno script Bash matchando le righe che iniziano con '#'
+  - Matchare in un file le righe che contengono sequenze di 'a' ripetute da 3 a 6 volte
+  - Matchare in un file tutte le righe che contengono una delle seguenti parole: apple, pear, orange
 
 ---
 ## Prima di fare gli esercizi:
 
+**1. Clono il repository**
+
+```bash
+git clone https://github.com/gabriele-riccio/formazione_sou.git
+cd formazione_sou
+```
+**2. Creo la cartella esercizio_egrep**
+
+```bash
+mkdir esercizio_egrep
+cd esercizio_egrep
+```
+**3. Creo i 4 script(input) per gli esercizi** :
+
+```bash
+vim file_egrep_1.sh
+vim file_egrep_2.sh
+vim file_egrep_3.sh
+vim file_egrep_4.sh
+```
+**4. Rendo eseguibili gli script** :
+
+```bash
+chmod +x file_egrep_1.sh file_egrep_2.sh file_egrep_3.sh file_egrep_4.sh
+```
 ---
 
 ## Esercizio 1 — Sequenze alfabetiche (maiuscole e minuscole)
