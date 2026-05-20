@@ -7,7 +7,7 @@
 ## Utilizzo
 
 ```bash
-./odd_even.sh <numero>
+./file_odd_even.sh <numero>
 ```
 
 ---
@@ -28,7 +28,7 @@ fi
 
 - `$#` contiene il numero di argomenti passati allo script
 - `-ne 1` significa "not equal to 1"
-- `>&2` redirige il messaggio di errore sullo standard error
+- `>&2` reindirizza il messaggio di errore sullo standard error
 - `exit 1` termina lo script con codice di uscita 1
 
 ### 2 — Argomento non numerico
@@ -42,7 +42,7 @@ fi
 
 - `[[ $1 =~ ^[0-9]+$ ]]` usa una regex per verificare che l'argomento sia composto solo da cifre
 - `^` ancora all'inizio, `$` ancora alla fine → esclude stringhe miste come `12abc`
-- Il `!` nega la condizione: entra nell'if se il match **fallisce**
+- Il `!` nega la condizione: entra nell'if se il match fallisce
 - `exit 2` codice di uscita dedicato agli errori di tipo
 
 ### 3 — Argomento uguale a zero
@@ -54,8 +54,8 @@ if [ $1 -eq 0 ]; then
 fi
 ```
 
-- Una sequenza da 1 a 0 non avrebbe senso
-- `-eq 0` confronta il valore numerico con 0
+- Non sapevo come includere lo 0 che è < 1
+- `-eq 0` confronta il valore numerico con 0, se sono uguali manda l'errore.
 - `exit 3` codice di uscita dedicato al caso zero
 
 ---
@@ -72,8 +72,8 @@ for (( i=1; i<=$1; i++ )); do
 done
 ```
 
-- `for (( i=1; i<=$1; i++ ))` — ciclo in stile C che va da 1 al numero passato
-- `(( i % 2 == 0 ))` — usa l'aritmetica bash: il modulo `%` restituisce il resto della divisione per 2
+- `for (( i=1; i<=$1; i++ ))` — ciclo in stile javascript/C++ che va da 1 all'argomento dato
+- `(( i % 2 == 0 ))` — usa l'aritmetica bash con `%` che restituisce il resto della divisione per 2
   - se il resto è 0 → il numero è **pari**
   - se il resto è 1 → il numero è **dispari**
 
@@ -89,7 +89,17 @@ done
 | `3` | Argomento uguale a zero |
 
 ---
+## Come eseguire lo script
 
+```bash
+# Rendi lo script eseguibile
+chmod +x odd_even.sh
+
+# Eseguilo
+./odd_even.sh 10
+```
+
+---
 ## Esempi
 
 ### Input valido
@@ -162,17 +172,6 @@ Errore: l'argomento '12abc' non è un numero intero positivo.
 
 ---
 
-## Come eseguire lo script
-
-```bash
-# Rendi lo script eseguibile
-chmod +x odd_even.sh
-
-# Eseguilo
-./odd_even.sh 10
-```
-
----
 
 ## Riepilogo costrutti usati
 
