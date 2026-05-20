@@ -45,6 +45,8 @@ chmod +x file_egrep_1.sh file_egrep_2.sh file_egrep_3.sh file_egrep_4.sh
 
 **Obiettivo:** matchare righe che contengono almeno un carattere alfabetico.
 
+Utilizzerò il comando:
+
 ```bash
 egrep '[a-zA-Z]+' file.txt
 ```
@@ -59,8 +61,11 @@ ciao123Mondo
 ```
 
 **Output:**
+
 ![prima parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.06.52.png)
+
 **Spiegazione:**
+
 - `[a-zA-Z]` — classe di caratteri: lettere minuscole (`a-z`) o maiuscole (`A-Z`)
 - `+` — quantificatore: uno o più caratteri consecutivi della classe
 - Le righe `12345` e `!!!` non contengono lettere, quindi vengono escluse
@@ -71,32 +76,48 @@ ciao123Mondo
 
 **Obiettivo:** stampare solo le righe che **non** iniziano con `#`.
 
+Utilizzerò il comando:
+
 ```bash
 egrep -v '^#' script.sh
 ```
 
-**Input di esempio (`script.sh`):**
+**Input di esempio :**
+
 ```bash
 # Questo è un commento
 echo "Hello"
 # Altro commento
 ls -la
-  # commento indentato (NON rimosso)
+# commento 
 ```
 
 **Output:**
-```bash
-echo "Hello"
-ls -la
-  # commento indentato (NON rimosso)
-```
+
+![seconda parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.07.39.png)
 
 **Spiegazione:**
 - `^` — ancora di inizio riga
 - `#` — il carattere cancelletto
 - `-v` — inverte il match: stampa le righe che **non** corrispondono al pattern
+- Le righe `# Questo è un commento`,`# Altro commento` e `# commento` sono commenti con il # ad inizio riga, quindi vengono escluse.
 
-> **Nota:** i commenti preceduti da spazi (es. `  # nota`) non vengono rimossi perché `^` richiede che `#` sia il primo carattere della riga. Per rimuovere anche quelli, usare `egrep -v '^\s*#'`.
+**Altro input(`file_egrep_2.sh`)** :
+
+```bash
+# Questo è un commento
+echo "Hello"
+# Altro commento
+ls -la
+ # commento indentato (NON rimosso)
+```
+
+**Output:**
+
+![terza parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.09.47.png)
+
+> **Nota:** i commenti preceduti da spazi non vengono rimossi perché `^` richiede che `#` sia il primo carattere della riga, per questo in questo caso ` # commento indentato (NON rimosso)` non viene rimosso.
+> Per rimuovere anche quelli, bisogna usare `egrep -v '^\s*#'`.
 
 ---
 
@@ -108,34 +129,39 @@ ls -la
 egrep 'a{3,6}' file.txt
 ```
 
-**Input di esempio (`file.txt`):**
-```
+**Input di esempio (`file_egrep_2.sh`):**
+
+```bash
 a
+shqveu
+aaaaaa
 aa
-aaa
+jernowc
 aaaaa
 aaaaaaa
 baaat
 baaaaab
+ciaoaaaaaaaaaaaaaatutti
+come va
 ```
 
 **Output:**
-```
-aaa
-aaaaa
-aaaaaaa
-baaat
-baaaaab
-```
+
+![quarta parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.11.02.png)
 
 **Spiegazione:**
 - `a{3,6}` — quantificatore di intervallo: da 3 a 6 occorrenze consecutive di `a`
-- La riga `aaaaaaa` (7 'a') viene inclusa perché contiene al suo interno una sottosequenza valida
-
+- La riga `aaaaaaa` (7 'a') viene inclusa perché contiene al suo interno una sottosequenza valida, come anche le righe 
+  `baaat` e `ciaoaaaaaaaaaaaaaatutti`.
+- Le righe `come va`,`jernowc` vengono eliminate.
+  
 > **Nota:** per matchare esattamente sequenze isolate di 3–6 'a' (senza che facciano parte di sequenze più lunghe), aggiungere word boundary:
 > ```bash
 > egrep '\ba{3,6}\b' file.txt
 > ```
+**Output**
+
+![quinta parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.46.19.png)
 
 ---
 
@@ -148,24 +174,24 @@ egrep 'apple|pear|orange' file.txt
 ```
 
 **Input di esempio (`file.txt`):**
-```
+```bash
 I like apple juice
 banana smoothie
 one pear and one orange
-PEAR in uppercase
+PEAR maiuscolo
 grapefruit
+orange
 ```
 
 **Output:**
-```
-I like apple juice
-one pear and one orange
-```
+
+![sesta parte terminale](files_egrep/Screenshot%202026-05-20%20alle%2011.11.40.png)
 
 **Spiegazione:**
+
 - `|` — operatore di alternanza (OR logico): matcha `apple` oppure `pear` oppure `orange`
-- Il match è **case-sensitive**: `PEAR` non viene incluso
-- `grapefruit` non contiene nessuna delle parole cercate (nonostante contenga `pear` come sottostringa... attenzione: in realtà `grapefruit` non contiene `pear`, ma `grape` sì contiene `ape`)
+- Il match è **case-sensitive**: `PEAR maiuscolo` non viene incluso
+- `grapefruit` non contiene nessuna delle parole cercate quindi viene escluso
 
 > **Varianti utili:**
 > ```bash
@@ -193,4 +219,3 @@ one pear and one orange
 
 ---
 
-> `egrep` è disponibile su sistemi Unix/Linux/macOS. Su alcune distribuzioni è un alias di `grep -E`.
