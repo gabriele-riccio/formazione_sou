@@ -29,7 +29,33 @@ L'obiettivo è spostare tutto senza che il lupo mangi la pecora o che la pecora 
 
 ### Come si traduce tutto ciò?
 
-Tutto ciò si trasforma in 
+Il classico indovinello del lupo, della capra e del cavolo può essere reinterpretato come **un problema di migrazione di processi tra virtual machine attraverso un network bridge**.
+
+## Tabella Rappresentativa
+
+Ogni elemento del puzzle tradizionale ha un corrispettivo preciso nell'infrastruttura DevOps.
+
+| Elemento storia | Ruolo | Tipo | Cosa rappresenta | Cosa fa |
+|----------|---------------|------|------------------|---------|
+| Lupo | `lupo` `PID-001` | Processo | Un processo aggressivo che termina altri processi se non supervisionato | Invia `SIGKILL` a `capra` se lasciato solo con lei |
+| Capra | `capra` `PID-002` | Processo | Il processo più vincolato: incompatibile con entrambi gli altri | Invia `SIGTERM` a `cavolo`; viene terminata da `lupo` |
+| Cavolo | `cavolo` `PID-003` | Processo | Un processo passivo senza dipendenze conflittuali | Viene terminato da `capra`; convive con `lupo` senza problemi |
+| Riva di partenza | `vm1` (nodo di partenza) | Virtual Machine 1 | Il nodo sorgente — contiene tutti i processi prima della migrazione | Ospita i processi in esecuzione e li cede uno alla volta al container (li riceve all'occorrenza) e verifica se ci sono errori |
+| Riva di arrivo | `vm2` (nodo di arrivo) | Virtual Machine 2 | Il nodo destinazione — riceve i processi migrati | Accoglie i processi scaricati/caricati ogni volta dal container e verifica se ci sono errori |
+| Fiume | Network bridge `TCP/river` | Infrastruttura | Il canale di rete che separa le due VM (non ha stato proprio) | Trasporta il container(barca) tra i due nodi; non applica regole di conflitto(è un canale di sicurezza, dato che è presente l'admin) |
+| Barca | Ferry container | Container Docker | Mezzo che trasferire processi tra le VM con capienza massima 1(oltre il traghettatore) | Esegue `load → cross → unload`(poi vediamo bene cosa sono)e porta sempre con sé l'admin (supervisore) |
+| Traghettatore | Orchestratore / admin | Supervisore | L'unico attore che può prevenire i conflitti, difatti la sua presenza su una VM rende sicura qualsiasi coppia | Decide la sequenza delle mosse ed è sempre presente sulla VM dove si trova il container |
+
+---
+
+| Processo | Range primo ottetto | Uso tipico |
+|--------|--------------------|-----------:|
+| A | 1 – 126 | Reti molto grandi |
+| B | 128 – 191 | Reti medie |
+| C | 192 – 223 | Reti piccole |
+| D | 224 – 239 | Multicast |
+| E | 240 – 255 | Riservato/sperimentale |
+
 
 IPv4 (Internet Protocol version 4) è il protocollo di rete che assegna un indirizzo univoco a ogni dispositivo connesso a una rete. È definito nell'RFC 791 (1981) ed è tuttora il protocollo più diffuso, affiancato sempre più da IPv6.
 
