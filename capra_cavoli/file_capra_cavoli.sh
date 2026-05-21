@@ -73,7 +73,7 @@ print_state() {
         echo -e "        ${CYAN}ferry${cargo_str}${RESET}  ${GRAY}@ vm2${RESET}"
     fi
 
-    echo -e "  ${BOLD}vm-b${RESET}  $(vm_display "$VM2")"
+    echo -e "  ${BOLD}vm2${RESET}  $(vm_display "$VM2")"
     echo ""
 }
 
@@ -182,7 +182,7 @@ run_auto() {
     echo -e "${GRAY}Migrazione automatica in 7 step${RESET}\n"
 
     log_info "orchestrator init -- puzzle v1.0"
-    log_info "processes spawned on vm-a: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
+    log_info "processes spawned on vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
     log_info "ferry container ready @ vm1"
     log_info "goal: migrate all processes to vm2"
     log_warn "CONSTRAINT: lupo e capra non possono coesistere senza admin"
