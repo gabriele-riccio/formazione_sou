@@ -8,7 +8,7 @@ diventano servizi(container) e le rive sono VM e il fiume una barriera.
 
 ## Indovinello originale
 
-![prima_parte_foto](capra_cavoli/Screenshot%202026-05-21%10alle%2010.09.49.png)
+![prima_parte_foto](capra_cavoli/Screenshot%202026-05-21%20alle%2010.09.49.png)
 
 Questo celebre indovinello di logica richiede il trasporto di tre elementi oltre un fiume.
 La barca può ospitare solo il traghettatore più un elemento alla volta.
@@ -25,7 +25,7 @@ L'obiettivo è spostare tutto senza che il lupo mangi la pecora o che la pecora 
 - **5 Porta la pecora (di nuovo)** : Infine, porta la pecora sull'altra sponda.
       Tutti e tre sono ora sull'altra sponda, sani e salvi.
 
-![seconda_parte_foto](capra_cavoli/Screenshot%202026-05-21%10alle%2010.13.29.png)
+![seconda_parte_foto](capra_cavoli/Screenshot%202026-05-21%20alle%2010.13.29.png)
 
 ### Come si traduce tutto ciò?
 
