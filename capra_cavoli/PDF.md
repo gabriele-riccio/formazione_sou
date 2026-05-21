@@ -29,6 +29,8 @@ L'obiettivo è spostare tutto senza che il lupo mangi la pecora o che la pecora 
 
 ### Come si traduce tutto ciò?
 
+Tutto ciò si trasforma in 
+
 IPv4 (Internet Protocol version 4) è il protocollo di rete che assegna un indirizzo univoco a ogni dispositivo connesso a una rete. È definito nell'RFC 791 (1981) ed è tuttora il protocollo più diffuso, affiancato sempre più da IPv6.
 
 Un indirizzo IPv4 è lungo **32 bit**, suddivisi in 4 gruppi da 8 bit ciascuno chiamati **ottetti**. Viene rappresentato in *decimal dotted notation*: ogni ottetto è convertito in decimale e separato da un punto.
