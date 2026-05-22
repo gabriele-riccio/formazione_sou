@@ -1,7 +1,7 @@
 # Capra e Cavoli — DevOps Edition
 
-Reinterpretazione del classico indovinello medievale in chiave DevOps/Sysadmin.
-Lupo, capra e cavolo diventano processi Linux. Le sponde del fiume diventano macchine virtuali. Il fiume diventa un network bridge TCP.
+- Reinterpretazione del classico indovinello medievale in chiave DevOps.
+Lupo, capra e cavolo diventano processi Linux, le sponde del fiume diventano macchine virtuali e il fiume diventa un network bridge TCP.
 
 ![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-21%20alle%2010.09.49.png)
 
