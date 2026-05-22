@@ -9,14 +9,16 @@
 
 # Uso:
 #   chmod +x file_capra_cavoli.sh
-#   ./file_capra_cavoli.sh o bash file_capra_cavoli.sh  → esegue la soluzione automatica attraverso la funzione run_auto
+#   ./file_capra_cavoli.sh o bash file_capra_cavoli.sh  → esegue la soluzione automatica attraverso la funzione run_auto.
+#   ./file_capra_cavoli.sh --play o bash file_capra_cavoli.sh --play → esegue la modalità interattiva passo per passo
 # ===========================================================================================================================================
 
-set -e
+set -e #Fa in modo di interrompere lo script immediatamente se un qualsiasi comando fallisce, per evitare problemi.
 
-# ─────────────────────────────────────────────
-# COLORI per il terminale
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+# COLORI per il terminale(uso i codici di escape ANSI per la formattazione del terminale)
+#li uso ormai per ogni esercizio.
+# ─────────────────────────────────────────────────────────────────────────────────────────────
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -26,20 +28,29 @@ GRAY='\033[0;90m'
 BOLD='\033[1m'
 RESET='\033[0m'
 
-# ─────────────────────────────────────────────
-# STATO — variabili globali che rappresentano il sistema
-# ─────────────────────────────────────────────
-VM1="lupo capra cavolo"
-VM2=""
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+# Variabili di STATO — variabili globali che rappresentano lo stato iniziale del sistema 
+# Inoltre introduco BARCA_POS come posizione corrente del vettore di migrazione e 
+# Barca_Cargo che funge da registro di transito (o buffer temporaneo)che impedisce 
+# che un processo svanisca nel nulla durante lo spostamento.
+# ─────────────────────────────────────────────────────────────────────────────────────────────
+VM1="lupo capra cavolo" # Stato iniziale della prima macchina virtuale (sorgente)
+VM2=""                  # Stato iniziale della seconda macchina virtuale (target)
 
-BARCA_POS="vm1"
-BARCA_CARGO=""
+BARCA_POS="vm1"         # Posizione corrente del vettore di migrazione (il traghetto/barca)
+BARCA_CARGO=""          # Buffer temporaneo per il processo attualmente in transito
 
-STEPS=0
+STEPS=0                 # Contatore incrementale dei passaggi effettuati
 
-# ─────────────────────────────────────────────
-# CONFLICT CHECKER
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# Inserisco poi una funzione che vada a rilevare i conflitti nella modalità interattiva:
+#mi definisco la variabile locale vm_content con valore $1(ci andranno i vari processi)
+#il primo if prende il valore della variabile e lo passa al grep che silentemente se il processo lupo e vm_content=capra sono 
+#insieme da errore(dato che il lupo e la capra non possono stare insieme, quindi lupo sigterm capra)
+#il secoondo if prende il valore della variabile e lo passa al grep che silentemente se il processo capra e
+#vm_content=cavolo stanno insieme da errore(dato che la capra e il cavolo non possono stare insieme, quindi capra sigterm cavolo)
+#altrimenti non da errori, è tutto giusto ritorna 0.
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 check_conflicts() {
     local vm_content="$1"
 
@@ -56,9 +67,20 @@ check_conflicts() {
     return 0
 }
 
-# ─────────────────────────────────────────────
-# DISPLAY
-# ─────────────────────────────────────────────
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────
+# DISPLAY: Sarebbe la parte visiva dell'output
+#La prima funzione print_state() è quella che esegue la visione dell'output mentre vm_display() è di supporto
+#l'ho usata solo per l'output delle VM(infatti uso -z "$content"che controlla se la stringa  è vuota.
+#se lo è stampa la scritta (vuota) in grigio e interrompe la funzione con return.(l'ho visto da internet per
+#abbellire l'output.
+# La funzione principale print_state() invece è una funzione che stampa passo dopo passo ad ogni azione dell'
+#indovinello l'otput come se fossero le due Vm le sponde(che possono avere dei processi) il fiume in mezzo che le
+#divide e la barca con il traghettatore(admin).
+#Infatti stampo la vm1 prima(con le azioni della funzione supporto, con i processi presenti) 
+#poi mi definisco una variabile locale che mi rappresenta l'unione tra barca e fiume
+#Se la barca sta su Vm1 allora disegna prima la barca e poi la linea che rappresenta il network river 
+#Viceversa se la barca sta su Vm2
+# ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 print_state() {
     echo ""
     echo -e "  ${BOLD}vm1${RESET}  $(vm_display "$VM1")"
@@ -91,18 +113,24 @@ vm_display() {
     echo -e "$out"
 }
 
-# ─────────────────────────────────────────────
-# LOGGER
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────
+# LOGGER: Come ho fatto in altri esercizi uso la funzione di testo per stampare dei messaggi 
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────
 log_info()    { echo -e "${BLUE}\$${RESET} $*"; }
 log_ok()      { echo -e "${GREEN}[OK]${RESET} $*"; }
 log_warn()    { echo -e "${YELLOW}[WARN]${RESET}  $*"; }
 log_error()   { echo -e "${RED}[ERR]${RESET} $*"; }
 log_step()    { echo -e "\n${BOLD}── step $STEPS ─────────────────────────────${RESET}"; }
 
-# ─────────────────────────────────────────────
-# MIGRATE
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# MIGRATE:
+#Funzione principale per la migrazione dei processi da una VM all'altra:
+#prima cosa mi genero una varibile locale process che prende il nome del processo passato come argomento (es. migrate "capra") e 
+#se  non passo nulla, con la sintassi ${1:-} assegno una stringa vuota (viaggio vuoto).
+#Poi la variabile origin che prende la posizione della barca, cambiando ogni volta la varibile destinazione se origin cambia(se 
+#origin è vm1 la destination 
+
+# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 migrate() {
     local process="${1:-}"
 
@@ -153,6 +181,36 @@ migrate() {
     print_state
 }
 
+# ─────────────────────────────────────────────
+# MODALITÀ INTERATTIVA
+# ─────────────────────────────────────────────
+play_interactive() {
+    echo -e "\n${BOLD}Modalità Interattiva — Risolvi l'indovinello!${RESET}"
+    echo -e "Digita il nome del processo da caricare sulla barca insieme al traghettatore."
+    echo -e "Comandi disponibili: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} (viaggia vuoto) | ${CYAN}q${RESET} (esci)\n"
+
+    print_state
+
+    while true; do
+        # Condizione di vittoria: VM1 è vuota e non c'è nulla in transito
+        if [[ -z "$VM1" && -z "$BARCA_CARGO" ]]; then
+            echo -e "${GREEN}${BOLD}[SUCCESS] Fantastico! Migrazione completata in ${STEPS} step!${RESET}\n"
+            log_ok "Tutti i processi attivi e salvi su vm2"
+            log_ok "E vm1 offline — nessun processo residuo"
+            exit 0
+        fi
+
+        echo -ne "${CYAN}→ Inserisci processo da migrare [Riva attuale: ${BARCA_POS}]: ${RESET}"
+        read -r input
+
+        # Uscita volontaria
+        [[ "$input" == "q" ]] && echo "Uscita dal gioco." && exit 0
+
+        # Esegue la migrazione (se fallisce perché il processo non esiste sulla sponda, il ciclo continua)
+        migrate "$input" || true
+    done
+}
+
 
 # ─────────────────────────────────────────────
 # SOLUZIONE
@@ -189,10 +247,12 @@ run_auto() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ENTRYPOINT
-# #Per farlo partire in maniera automatica metto la funzione run_auto:
+# ENTRYPOINT (Gestione dei parametri di avvio) 
 # ─────────────────────────────────────────────────────────────────────────────
-run_auto
+case "${1:-}" in
+    --play|-p)  play_interactive ;;
+    *)          run_auto ;;
+esac
 
 
 
