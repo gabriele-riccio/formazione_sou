@@ -72,7 +72,7 @@ sposta() {
         RIVA2="$RIVA2 $BARCA_CARGO"
         RIVA2=$(echo "$RIVA2" | xargs) # Pulisce gli spazi in più
         BARCA_CARGO=""
-        
+
         # Controlliamo la riva che abbiamo appena LASCIATO (vm1)
         controlla_pericoli "$RIVA1"
     else
