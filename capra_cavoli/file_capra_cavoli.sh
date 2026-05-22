@@ -31,8 +31,8 @@ RESET='\033[0m'
 VM1="lupo capra cavolo"
 VM2=""
 
-FERRY_POS="vm1"
-FERRY_CARGO=""
+BARCA_POS="vm1"
+BARCA_CARGO=""
 
 STEPS=0
 
@@ -63,14 +63,14 @@ print_state() {
     echo -e "  ${BOLD}vm1${RESET}  $(vm_display "$VM1")"
 
     local cargo_str=""
-    [[ -n "$FERRY_CARGO" ]] && cargo_str=" [${FERRY_CARGO}]"
+    [[ -n "$BARCA_CARGO" ]] && cargo_str=" [${BARCA_CARGO}]"
 
-    if [[ "$FERRY_POS" == "vm1" ]]; then
-        echo -e "        ${CYAN}ferry${cargo_str}${RESET}  ${GRAY}@ vm1${RESET}"
+    if [[ "$BARCA_POS" == "vm1" ]]; then
+        echo -e "        ${CYAN}barca${cargo_str}${RESET}  ${GRAY}@ vm1${RESET}"
         echo -e "        ${GRAY}────── network bridge ──────${RESET}"
     else
         echo -e "        ${GRAY}────── network bridge ──────${RESET}"
-        echo -e "        ${CYAN}ferry${cargo_str}${RESET}  ${GRAY}@ vm2${RESET}"
+        echo -e "        ${CYAN}barca${cargo_str}${RESET}  ${GRAY}@ vm2${RESET}"
     fi
 
     echo -e "  ${BOLD}vm2${RESET}  $(vm_display "$VM2")"
@@ -105,7 +105,7 @@ log_step()    { echo -e "\n${BOLD}── step $STEPS ─────────
 migrate() {
     local process="${1:-}"
 
-    local origin="$FERRY_POS"
+    local origin="$BARCA_POS"
     local destination
     [[ "$origin" == "vm1" ]] && destination="vm2" || destination="vm1"
 
@@ -120,14 +120,14 @@ migrate() {
             exit 1
         fi
         eval "$origin_var=\"$(echo "${!origin_var}" | tr ' ' '\n' | grep -v "^${process}$" | tr '\n' ' ' | xargs)\""
-        FERRY_CARGO="$process"
+        BARCA_CARGO="$process"
     fi
 
-    FERRY_POS="$destination"
+    BARCA_POS="$destination"
 
-    if [[ -n "$FERRY_CARGO" ]]; then
-        eval "$dest_var=\"${!dest_var:+${!dest_var} }${FERRY_CARGO}\""
-        FERRY_CARGO=""
+    if [[ -n "$BARCA_CARGO" ]]; then
+        eval "$dest_var=\"${!dest_var:+${!dest_var} }${BARCA_CARGO}\""
+        BARCA_CARGO=""
     fi
 
     STEPS=$((STEPS + 1))
@@ -139,51 +139,31 @@ migrate() {
     local conflict
     if ! conflict=$(check_conflicts "${!origin_var}" 2>&1); then
         log_error "CONFLITTO su ${origin}: ${conflict}"
-        log_error "Sistema instabile — eseguire rollback"
+        log_error "Sistema instabile — fare il rollback"
         print_state
         exit 1
     fi
 
     [[ -n "$process" ]] && log_ok "${process} deployed su ${destination}" \
-                        || log_warn "ferry traversato vuoto — solo admin"
+                        || log_warn "Vuoto — solo admin"
 
     print_state
 }
 
-# ─────────────────────────────────────────────
-# MODALITÀ INTERATTIVA
-# ─────────────────────────────────────────────
-play_interactive() {
-    echo -e "\n${BOLD}Modalità interattiva${RESET} — digita il processo da migrare o invio per viaggiare vuoto."
-    echo -e "Comandi: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} (vuoto) | ${CYAN}q${RESET} (esci)\n"
-
-    print_state
-
-    while true; do
-        if [[ -z "$VM1" && -z "$FERRY_CARGO" ]]; then
-            echo -e "\n${GREEN}${BOLD}[SUCCESS] Migrazione completata in ${STEPS} step!${RESET}\n"
-            exit 0
-        fi
-
-        echo -ne "${CYAN}→ Processo da migrare [${FERRY_POS}]: ${RESET}"
-        read -r input
-
-        [[ "$input" == "q" ]] && echo "Uscita." && exit 0
-
-        migrate "$input"
-    done
-}
 
 # ─────────────────────────────────────────────
-# SOLUZIONE AUTOMATICA (default)
+# SOLUZIONE
 # ─────────────────────────────────────────────
 run_auto() {
-    echo -e "\n${BOLD}Container Ferry — River Crossing Puzzle${RESET}"
-    echo -e "${GRAY}Migrazione automatica in 7 step${RESET}\n"
+    echo -e "\n${BOLD}Indovinello Capra Cavolo Lupo ${RESET}"
+    log_ok "tutti i processi attivi su vm1"
+    log_ok "vm2 offline — nessun processo attivo"
+    echo -e "${RED}${BOLD}[Inizio Migrazione]${RESET}\n"
+    
 
     log_info "orchestrator init -- puzzle v1.0"
     log_info "processes spawned on vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
-    log_info "ferry container ready @ vm1"
+    log_info "barca pronta @ vm1"
     log_info "goal: migrate all processes to vm2"
     log_warn "CONSTRAINT: lupo e capra non possono coesistere senza admin"
     log_warn "CONSTRAINT: capra e cavolo non possono coesistere senza admin"
@@ -194,9 +174,9 @@ run_auto() {
 
     migrate "capra"
     migrate ""
-    migrate "lupo"
-    migrate "capra"
     migrate "cavolo"
+    migrate "capra"
+    migrate "lupo"
     migrate ""
     migrate "capra"
 
@@ -205,18 +185,6 @@ run_auto() {
     log_ok "vm1 offline — nessun processo residuo"
 }
 
-# ─────────────────────────────────────────────
-# ENTRYPOINT
-# ─────────────────────────────────────────────
-case "${1:-}" in
-    --play|-p)  play_interactive ;;
-    --help|-h)
-        echo "Uso: $0 [--play] [--help]"
-        echo "  (nessun flag)  esegue la soluzione automatica"
-        echo "  --play, -p     modalità interattiva"
-        ;;
-    *)          run_auto ;;
-esac
 
 
 
