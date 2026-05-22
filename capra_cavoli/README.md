@@ -32,7 +32,7 @@ Ogni elemento dell'indovinello diventa un'entità informatica reale:
 | **Riva di arrivo** | `vm2` | Virtual Machine | Nodo destinazione, riceve i processi migrati |
 | **Fiume** | Network bridge `TCP/river` | Infrastruttura | Canale che separa le due VM |
 | **Barca** | Ferry container | Container Docker | Trasporta un processo alla volta |
-| **Traghettatore** | Admin / orchestratore | Supervisore | Sempre presente col ferry; la sua presenza neutralizza qualsiasi conflitto |
+| **Traghettatore** | Admin / orchestratore | Supervisore | Sempre presente con la barca; la sua presenza neutralizza qualsiasi conflitto |
 
 ### Vincoli di runtime
 
@@ -42,7 +42,7 @@ SIGTERM: capra →  cavolo   (se soli sulla stessa VM senza admin)
 OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 ```
 
-> La presenza dell'admin (dentro il ferry) su una VM la rende sicura per qualunque coppia di processi.
+> La presenza dell'admin (dentro la barca) su una VM la rende sicura per qualunque coppia di processi.
 
 ---
 
