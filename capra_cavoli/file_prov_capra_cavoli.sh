@@ -41,15 +41,15 @@ cat > /etc/sudoers.d/ferry-puzzle << 'SUDOERS'
 # ferry-puzzle — regole di kill tra i processi del puzzle
 # ============================================================
 
-# 🐺 lupo può mandare SIGKILL (kill -9) SOLO ai processi dell'utente 'capra'
-lupo ALL=(root) NOPASSWD: /bin/kill -9 --user capra *, /bin/kill -s 9 --user capra *
-lupo ALL=(root) NOPASSWD: /usr/bin/kill -9 --user capra *, /usr/bin/kill -s 9 --user capra *
+#lupo può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'capra'
+lupo ALL=(root) NOPASSWD: /bin/kill -15 --user capra *, /bin/kill -s 15 --user capra *
+lupo ALL=(root) NOPASSWD: /usr/bin/kill -15 --user capra *, /usr/bin/kill -s 15 --user capra *
 
-# 🐐 capra può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'cavolo'
+#capra può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'cavolo'
 capra ALL=(root) NOPASSWD: /bin/kill -15 --user cavolo *, /bin/kill -s 15 --user cavolo *
 capra ALL=(root) NOPASSWD: /usr/bin/kill -15 --user cavolo *, /usr/bin/kill -s 15 --user cavolo *
 
-# 👨‍🌾 vagrant (admin / orchestratore) può eseguire lo script e usare kill liberamente
+# vagrant (admin / orchestratore) può eseguire lo script e usare kill liberamente
 vagrant ALL=(ALL) NOPASSWD: /vagrant/file_capra_cavoli.sh
 vagrant ALL=(ALL) NOPASSWD: /bin/kill *, /usr/bin/kill *
 SUDOERS
@@ -62,8 +62,9 @@ chmod 0440 /etc/sudoers.d/ferry-puzzle
 # ──────────────────────────────────────────────────────────
 echo ""
 echo "==> [provision] Riepilogo permessi configurati:"
-echo "    lupo    → sudo kill -9 --user capra <PID>   (SIGKILL solo su capra)"
+echo "    lupo    → sudo kill -15 --user capra <PID>   (SIGTERM solo su capra)"
 echo "    capra   → sudo kill -15 --user cavolo <PID> (SIGTERM solo su cavolo)"
 echo "    vagrant → sudo /vagrant/file_capra_cavoli.sh (orchestratore)"
 echo ""
 echo "==> [provision] Completato con successo."
+

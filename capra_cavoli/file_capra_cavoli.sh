@@ -4,7 +4,7 @@
 # ============================================================
 # Il classico indovinello reinterpretato come migrazione di
 # processi tra due VM attraverso un network bridge.
-#
+
 # Uso:
 #   chmod +x file_capra_cavoli.sh
 #   ./file_capra_cavoli.sh          → esegue la soluzione automatica
@@ -43,7 +43,7 @@ check_conflicts() {
     local vm_content="$1"
 
     if echo "$vm_content" | grep -q "lupo" && echo "$vm_content" | grep -q "capra"; then
-        echo "lupo consuma capra → kill -9 capra:PID-002"
+        echo "lupo consuma capra → SIGTERM capra:PID-002"
         return 1
     fi
 
@@ -187,7 +187,7 @@ run_auto() {
     log_info "goal: migrate all processes to vm2"
     log_warn "CONSTRAINT: lupo e capra non possono coesistere senza admin"
     log_warn "CONSTRAINT: capra e cavolo non possono coesistere senza admin"
-    log_warn "SUDOERS:    lupo → sudo kill -9  <PID>  (SIGKILL su capra)"
+    log_warn "SUDOERS:    lupo → sudo kill -15 <PID>  (SIGTERM su capra)"
     log_warn "SUDOERS:    capra → sudo kill -15 <PID>  (SIGTERM su cavolo)"
 
     print_state
@@ -217,3 +217,222 @@ case "${1:-}" in
         ;;
     *)          run_auto ;;
 esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
