@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================================================================
-# file_prov_capra_cavoli.sh — Classico esercizio che riprende l'indovinello del lupo,capra e cavolo
+# file_prov_automatico.sh — Classico esercizio che riprende l'indovinello del lupo,capra e cavolo
 # e lo riporta in informatica trasformando gli attori in processi le rive in vm1 e vm2 e il fiume 
 # che rappresenta un canale di rete tra le due VM.
 

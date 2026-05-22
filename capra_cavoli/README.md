@@ -1,8 +1,7 @@
-# Capra e Cavoli — Container Ferry Puzzle
+# Capra e Cavoli — DevOps Edition
 
-> Il classico indovinello del lupo, della capra e del cavolo reinterpretato come migrazione di processi tra due virtual machine attraverso un network bridge.
-
-![Shell](https://img.shields.io/badge/Shell-Bash-blue) ![Vagrant](https://img.shields.io/badge/IaC-Vagrant-orange) ![Docker](https://img.shields.io/badge/Container-Docker-green)
+Reinterpretazione del classico indovinello medievale in chiave DevOps/Sysadmin.
+Lupo, capra e cavolo diventano processi Linux. Le sponde del fiume diventano macchine virtuali. Il fiume diventa un network bridge TCP.
 
 ---
 
@@ -24,7 +23,7 @@ Ogni elemento dell'indovinello diventa un'entità informatica reale:
 
 | Elemento storia | Ruolo | Tipo | Comportamento |
 |---|---|---|---|
-| **Lupo** | `lupo` `PID-001` | Processo | Invia `SIGKILL` a `capra` se lasciato solo con lei |
+| **Lupo** | `lupo` `PID-001` | Processo | Invia `SIGTERM` a `capra` se lasciato solo con lei |
 | **Capra** | `capra` `PID-002` | Processo | Invia `SIGTERM` a `cavolo`; viene terminata da `lupo` |
 | **Cavolo** | `cavolo` `PID-003` | Processo | Passivo — convive con `lupo` senza problemi |
 | **Riva di partenza** | `vm1` | Virtual Machine | Nodo sorgente, ospita i processi inizialmente |
@@ -36,7 +35,7 @@ Ogni elemento dell'indovinello diventa un'entità informatica reale:
 ### Vincoli di runtime
 
 ```
-SIGKILL: lupo  →  capra    (se soli sulla stessa VM senza admin)
+SIGTERM: lupo  →  capra    (se soli sulla stessa VM senza admin)
 SIGTERM: capra →  cavolo   (se soli sulla stessa VM senza admin)
 OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 ```
@@ -44,6 +43,16 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 > La presenza dell'admin (dentro il ferry) su una VM la rende sicura per qualunque coppia di processi.
 
 ---
+## Struttura del progetto
+.
+├── Vagrantfile                        # Vagrantfile per la modalità interattiva (usa file_prov_capra_cavoli.sh)
+├── Vagrantfile_automatico             # Vagrantfile per la modalità automatica (usa file_prov_automatico.sh)
+│
+├── file_capra_cavoli.sh               # Script principale — modalità automatica + interattiva
+├── file_capra_cavoli_automatico.sh    # Script solo automatico (senza modalità --play)
+│
+├── file_prov_capra_cavoli.sh          # Provisioning per lo script completo
+└── file_prov_automatico.sh            # Provisioning per lo script automatico
 
 ## Architettura
 
@@ -56,7 +65,7 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
            ┌─────────────┼─────────────┐
            ▼             ▼             ▼
      ┌──────────┐  ┌──────────────────┐  ┌──────────┐
-     │   vm1    │  │  ferry container │  │   vm2    │
+     │   vm1    │  │      Barca       │  │   vm2    │
      │ (Nodo di │  │    capienza: 1   │  │ (Nodo di │
      │ partenza)│  │                  │  │  arrivo) │
      └──────────┘  └──────────────────┘  └──────────┘
@@ -67,16 +76,6 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 
 ---
 
-## Struttura dei file
-
-```
-.
-├── Vagrantfile                  — definisce vm1 e vm2 (Ubuntu 20.04, rete host-only)
-├── file_capra_cavoli.sh         — script principale: migrazione automatica o interattiva
-└── file_prov_capra_cavoli.sh    — provisioning: utenti, sudoers, dipendenze
-```
-
----
 
 ## Algoritmo di migrazione — 7 step
 
@@ -110,7 +109,7 @@ vm1: [lupo]             processo isolato, ok
 vm2: [cavolo, capra]    admin presente, nessun conflitto
 ```
 
-### Step 4 — capra → vm1 ⚠️ la mossa chiave
+### Step 4 — capra → vm1  
 
 ```
 vm1: [capra, lupo]      admin presente
@@ -141,89 +140,91 @@ vm2: [lupo, cavolo, capra]   ✓ tutti i processi su vm2
 ```
 
 ---
+## Avvio rapido
 
-## Permessi sudoers
-
-Il provisioning configura i kill-rights in `/etc/sudoers.d/ferry-puzzle`, replicando i conflitti dell'indovinello a livello di sistema:
-
-```bash
-# lupo può mandare SIGKILL solo ai processi dell'utente capra
-lupo  ALL=(root) NOPASSWD: /bin/kill -9  --user capra  *
-
-# capra può mandare SIGTERM solo ai processi dell'utente cavolo
-capra ALL=(root) NOPASSWD: /bin/kill -15 --user cavolo *
-
-# vagrant (admin/orchestratore) può eseguire lo script e usare kill liberamente
-vagrant ALL=(ALL) NOPASSWD: /vagrant/file_capra_cavoli.sh
-vagrant ALL=(ALL) NOPASSWD: /bin/kill *
-```
-
----
-
-## Utilizzo
-
-### 1. Avvio delle VM
+**Modalità automatica**
+Lo script esegue in autonomia la sequenza ottimale di 7 passi.  
+Viene stampato ad ogni step lo stato delle due VM, la posizione della barca e il processo in transito.
 
 ```bash
+# Avvia le VM con provisioning automatico
 vagrant up
-```
 
-Crea e provisiona `vm1` e `vm2` con Ubuntu 20.04, rete privata host-only (`192.168.56.10` / `192.168.56.11`), utenti di sistema e regole sudoers.
-
-### 2. Connessione al nodo di partenza
-
-```bash
+# Entra nella vm1 e lancia lo script
 vagrant ssh vm1
+bash /vagrant/file_capra_cavoli_automatico.sh
 ```
+**OUTPUT**
+FOTO
 
-### 3. Esecuzione
+**Modalità interattiva**
+
+Disponibile **solo** in `file_capra_cavoli.sh` tramite il flag `--play` (o `-p`).  
+L'utente sceglie a ogni turno quale processo caricare sulla barca. Se la mossa genera un conflitto, lo script stampa un errore e chiede di correggere.
 
 ```bash
-# Soluzione automatica in 7 step con log colorato
-sudo /vagrant/file_capra_cavoli.sh
+# Avvia le VM
+vagrant up
 
-# Modalità interattiva passo per passo
-sudo /vagrant/file_capra_cavoli.sh --play
+# Entra nella vm1
+vagrant ssh vm1
 
-# Aiuto
-sudo /vagrant/file_capra_cavoli.sh --help
+# Avvia lo script in modalità automatica
+bash /vagrant/file_capra_cavoli.sh
+
+# Oppure in modalità interattiva
+bash /vagrant/file_capra_cavoli.sh --play
 ```
 
-### Output atteso (modalità automatica)
+**OUTPUT**
+
+FOTO
+
+Comandi disponibili durante il gioco:
+
+| Input      | Effetto                                  |
+|------------|------------------------------------------|
+| `lupo`     | Carica il lupo sulla barca               |
+| `capra`    | Carica la capra sulla barca              |
+| `cavolo`   | Carica il cavolo sulla barca             |
+| *(invio)*  | Viaggia vuoto (solo traghettatore)       |
+| `q`        | Esce dal gioco                           |
+
+In caso di mossa errata lo script segnala il conflitto con `[ERR]` e blocca l'esecuzione richiedendo un rollback.
+
+FOTO
+
+---
+
+
+## Provisioning
+
+Entrambi i file di provisioning (`file_prov_capra_cavoli.sh` e `file_prov_automatico.sh`) eseguono le stesse operazioni su ogni VM al primo avvio:
+
+1. **Aggiornamento pacchetti** — installa `procps`, `curl`, `vim`, `bash`
+2. **Creazione utenti di sistema** — `lupo`, `capra`, `cavolo` (nologin) e `traghettatore` (shell bash)
+3. **Configurazione sudoers** — permessi granulari in `/etc/sudoers.d/capra_lupo`:
 
 ```
-Container Ferry — River Crossing Puzzle
-Migrazione automatica in 7 step
-
-$ orchestrator init -- puzzle v1.0
-$ processes spawned on vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]
-...
-── step 1 ──────────────────────────────
-$ docker run --migrate capra  vm1 → vm2
-[OK] capra deployed su vm2
-
-  vm1  lupo  cavolo
-        ferry  @ vm2
-        ────── network bridge ──────
-  vm2  capra
-
-...
-
-[SUCCESS] Migrazione completata in 7 step!
-[OK] tutti i processi attivi su vm2
-[OK] vm1 offline — nessun processo residuo
+lupo        → sudo kill -15 --user capra   (SIGTERM solo su capra)
+capra       → sudo kill -15 --user cavolo  (SIGTERM solo su cavolo)
+traghettatore → sudo /vagrant/file_capra_cavoli.sh (orchestratore completo)
 ```
 
 ---
 
-## Rilevamento conflitti
+## Vincoli di runtime e conflitti
 
-Lo script verifica lo stato di ogni VM dopo ogni spostamento. Se una coppia incompatibile si trova sola (senza admin), il sistema emette un errore e termina:
+| Coppia sulla stessa VM | Supervisore presente | Esito         |
+|------------------------|----------------------|---------------|
+| `lupo` + `capra`       | No                   | ❌ SIGTERM → capra  |
+| `capra` + `cavolo`     | No                   | ❌ SIGTERM → cavolo |
+| `lupo` + `cavolo`      | No                   | ✅ Sicuro     |
+| qualsiasi coppia       | Sì (admin/ferry)     | ✅ Sicuro     |
 
-```
-[ERR] CONFLITTO su vm1: capra consuma cavolo → SIGTERM cavolo:PID-003
-[ERR] Sistema instabile — eseguire rollback
-```
+Nella modalità interattiva, ogni mossa viene validata da `check_conflicts()` prima di essere applicata. In caso di conflitto viene stampato `[ERR] CONFLITTO su <vm>` e lo script richiede un rollback(ripetere da capo).
+
+
 
 ---
 
