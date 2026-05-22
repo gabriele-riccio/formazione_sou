@@ -136,7 +136,7 @@ migrate() {
     log_step
 
     local cargo_label="${process:-vuoto}"
-    log_info "docker run --migrate ${cargo_label}  ${origin} → ${destination}"
+    log_info "Migrazione  ${cargo_label}  ${origin} → ${destination}"
 
     local conflict
     if ! conflict=$(check_conflicts "${!origin_var}" 2>&1); then
