@@ -19,13 +19,14 @@
 # e installo alcuni strumenti base(come procps per il comando kill(SIGTERM))
 #Faccio poi un ciclo for per creare gli utenti(processi): esso controlla
 #se esistono già(in tal caso passa avanti).
-#Crea una variabile user che varrà lupo,capra,cavoloe e poi traghettatore cambia ogni volta, 
+#Crea una variabile user che varrà lupo,capra,cavolo e poi a parte traghettatorecambia ogni volta, 
 #Controlla se lupo,capra etc esistono (controllato con id "$user" che controlla 
 #se un utente esiste controllando i suoi dati(uid gruppi etc) con il ! nego quindi se non esiste
 #procede all'interno del blocco useradd --system --no-create-home --shell "$user":
 #che crea un nuovo user di sistema senza cartella home assegnandogli come shell /usr/sbin/nologin in modo
-#che nessuno ci faccia l'accesso, e quindi lo salva nell $user cioè il nome dell'utente(lupo,capra,cavolo,traghettatore).
-
+#che nessuno ci faccia l'accesso, e quindi lo salva nell $user cioè il nome dell'utente(lupo,capra,cavolo,).
+#Poi faccio la creazione dell'utente admin traghetttatore che invece deve avere una shell reale per lanciare lo script,
+#per cui uso shell bin/bash
 #Poi configuro 'sudoers' in modo che gli utenti abbiano dei permessi:
 #Creo un file di configurazione dentro /etc/sudoers.d con cat
 #/etc/sudoers.d/capra_lupo(per cambiare nome, non tocco /etc/sudoers.d direttamente). 
@@ -51,16 +52,22 @@ apt-get install -y -qq procps curl vim bash
 # Ciclo for per creare i processi
 # ──────────────────────────────────────────────────────────
 
-echo "==> [provision] Creazione utenti lupo / capra / cavolo..."
+echo "==> [provision] Creazione utenti lupo / capra / cavolo/ traghettatore"
 
 
-for user in lupo capra cavolo traghettatore; do
+for user in lupo capra cavolo; do
     if ! id "$user" &>/dev/null; then
         # Per il traghettatore potresti volere una shell valida se devi usarlo per lanciare lo script
         useradd --system --no-create-home --shell /usr/sbin/nologin "$user"
         echo "  utente '$user' creato"
     fi
 done
+
+if ! id "traghettatore" &>/dev/null; then
+    useradd --system --no-create-home --shell /bin/bash traghettatore
+    echo "  utente 'traghettatore' creato "
+fi
+
 
 # ──────────────────────────────────────────────────────────
 # Permessi sudoers (Configurazione Sicura)
@@ -93,7 +100,7 @@ echo ""
 echo "==> [provision] Riepilogo permessi configurati:"
 echo "    lupo    → sudo kill -15 --user capra <PID>   (SIGTERM solo su capra)"
 echo "    capra   → sudo kill -15 --user cavolo <PID> (SIGTERM solo su cavolo)"
-echo "    vagrant → sudo /vagrant/file_capra_cavoli.sh (orchestratore)"
+echo "    traghettatore → sudo /vagrant/file_capra_cavoli.sh (orchestratore)"
 echo ""
 echo "==> [provision] Completato con successo."
 
