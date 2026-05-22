@@ -47,18 +47,7 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 ---
 
 ## Struttura del progetto
-
-├── Vagrantfile         # configurazione VM (Ubuntu 20.04, porta 8080)
-├── provisioner_Ansible.yml        # provisioner Ansible(playbook)
-├── index_file/
-│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
-│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
-│   └── Screenshoot 2026-05....png      # Screenshoot per le immagini di output
-│
-├── files/
-│   └── index.html      # portfolio personale stile Sourcesense
-│
-└── README.md          #Readme di spiegazione generale
+```
 
 ├── Vagrantfile                        # Vagrantfile per la modalità interattiva (usa file_prov_capra_cavoli.sh)
 ├── Vagrantfile_automatico             # Vagrantfile per la modalità automatica (usa file_prov_automatico.sh)
@@ -68,7 +57,7 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 │
 ├── file_prov_capra_cavoli.sh          # Provisioning per lo script completo
 └── file_prov_automatico.sh            # Provisioning per lo script automatico
-
+```
 ---
 ## Architettura
 
