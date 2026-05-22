@@ -15,12 +15,12 @@
 #      - traghettatore che gestisce l'orchestratore senza password
 # =========================================================================================================================
 # ========================================================================================================================
-# Per prima cosa aggiorno silenziosamente (-qq) l'elenco dei pacchetti installabili 
+# Per prima cosa aggiorno silenziosamente (-qq) l'elenco dei pacchetti installabili
 # e installo alcuni strumenti base(come procps per il comando kill(SIGTERM))
 #Faccio poi un ciclo for per creare gli utenti(processi): esso controlla
 #se esistono già(in tal caso passa avanti).
-#Crea una variabile user che varrà lupo,capra,cavolo e poi a parte traghettatorecambia ogni volta, 
-#Controlla se lupo,capra etc esistono (controllato con id "$user" che controlla 
+#Crea una variabile user che varrà lupo,capra,cavolo e poi a parte traghettatorecambia ogni volta,
+#Controlla se lupo,capra etc esistono (controllato con id "$user" che controlla
 #se un utente esiste controllando i suoi dati(uid gruppi etc) con il ! nego quindi se non esiste
 #procede all'interno del blocco useradd --system --no-create-home --shell "$user":
 #che crea un nuovo user di sistema senza cartella home assegnandogli come shell /usr/sbin/nologin in modo
@@ -29,20 +29,19 @@
 #per cui uso shell bin/bash
 #Poi configuro 'sudoers' in modo che gli utenti abbiano dei permessi:
 #Creo un file di configurazione dentro /etc/sudoers.d con cat
-#/etc/sudoers.d/capra_lupo(per cambiare nome, non tocco /etc/sudoers.d direttamente). 
+#/etc/sudoers.d/capra_lupo(per cambiare nome, non tocco /etc/sudoers.d direttamente).
 #Con questo file dico al sistema chi può "killare" chi senza inserire una password (NOPASSWD).
 #In questo modo permetto al lupo di terminare(con kill -15) l'user capra senza password(NOPASSWD),
-#all'utente capra di terminare il cavolo (con kill -15 che è Sigterm) senza password(NOPASSWD) e 
+#all'utente capra di terminare il cavolo (con kill -15 che è Sigterm) senza password(NOPASSWD) e
 #all'utente traghettatore di eseguire lo script e controllare tutto da root.
 
 # Imposto poi i permessi corretti per il file sudoers ( altrimenti sudo lo ignora:
-lettura consentita solo al proprietario e al gruppo(lupo e capra)) e 
+#lettura consentita solo al proprietario e al gruppo proprietario e
 #faccio un riepilogo finale.
 
 # ================================================================================================================
 
 set -e #Fa in modo di interrompere lo script immediatamente se un qualsiasi comando fallisce, per evitare problemi.
-       
 
 echo "==> [provision] Aggiornamento pacchetti..."
 apt-get update -qq
@@ -74,7 +73,7 @@ fi
 # ──────────────────────────────────────────────────────────
 echo "==> [provision] Configurazione sudoers..."
 
-# File dedicato in /etc/sudoers.d/ 
+# File dedicato in /etc/sudoers.d/
 cat > /etc/sudoers.d/capra_lupo << 'SUDOERS'
 
 #lupo può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'capra'

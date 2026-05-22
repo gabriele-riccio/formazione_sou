@@ -159,7 +159,6 @@ run_auto() {
     log_ok "tutti i processi attivi su vm1"
     log_ok "vm2 offline — nessun processo attivo"
     echo -e "${RED}${BOLD}[Inizio Migrazione]${RESET}\n"
-    
 
     log_info "orchestrator init -- puzzle v1.0"
     log_info "processes spawned on vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
