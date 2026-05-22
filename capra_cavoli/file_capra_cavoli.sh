@@ -158,14 +158,14 @@ migrate() {
 # ─────────────────────────────────────────────
 run_auto() {
     echo -e "\n${BOLD}Indovinello Capra Cavolo Lupo ${RESET}"
-    log_ok "tutti i processi attivi su vm1"
-    log_ok "vm2 offline — nessun processo attivo"
-    echo -e "${RED}${BOLD}[Inizio Migrazione]${RESET}\n"
+    log_ok "Tutti i processi attivi su vm1"
+    log_ok "Mentre vm2 offline — nessun processo attivo"
+    echo -e "${GREEN}${BOLD}[Inizio Migrazione]${RESET}\n"
 
-    log_info "orchestrator init -- puzzle v1.0"
-    log_info "processes spawned on vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
-    log_info "barca pronta @ vm1"
-    log_info "goal: migrate all processes to vm2"
+    log_info "TRACCIA"
+    log_info "Processi tutti su vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
+    log_info "Barca pronta su vm1"
+    log_info "Obiettivo: migrare tutti i processi su vm2"
     log_warn "CONSTRAINT: lupo e capra non possono coesistere senza admin"
     log_warn "CONSTRAINT: capra e cavolo non possono coesistere senza admin"
     log_warn "SUDOERS:    lupo → sudo kill -15 <PID>  (SIGTERM su capra)"
@@ -182,8 +182,8 @@ run_auto() {
     migrate "capra"
 
     echo -e "${GREEN}${BOLD}[SUCCESS] Migrazione completata in ${STEPS} step!${RESET}\n"
-    log_ok "tutti i processi attivi su vm2"
-    log_ok "vm1 offline — nessun processo residuo"
+    log_ok "Tutti i processi attivi su vm2"
+    log_ok "E vm1 offline — nessun processo residuo"
 }
 
 
