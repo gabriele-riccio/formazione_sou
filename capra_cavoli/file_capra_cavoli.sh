@@ -119,7 +119,9 @@ migrate() {
             log_error "Errore: $process non trovato su $origin"
             exit 1
         fi
-        eval "$origin_var=\"$(echo "${!origin_var}" | tr ' ' '\n' | grep -v "^${process}$" | tr '\n' ' ' | xargs)\""
+        local new_list
+        new_list=$(echo "${!origin_var}" | tr ' ' '\n' | grep -v "^${process}$" | tr '\n' ' ' | xargs || true)
+        eval "$origin_var=\"$new_list\""
         BARCA_CARGO="$process"
     fi
 
