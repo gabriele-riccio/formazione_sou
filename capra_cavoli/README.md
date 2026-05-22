@@ -3,7 +3,7 @@
 Reinterpretazione del classico indovinello medievale in chiave DevOps/Sysadmin.
 Lupo, capra e cavolo diventano processi Linux. Le sponde del fiume diventano macchine virtuali. Il fiume diventa un network bridge TCP.
 
-![prima parte terminale](capre_cavoli/Screenshot%202026-05-21%20alle%2010.09.49.png)
+![prima parte terminale](capre_cavoli_img/Screenshot%202026-05-21%20alle%2010.09.49.png)
 
 ---
 
