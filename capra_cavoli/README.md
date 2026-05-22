@@ -31,7 +31,7 @@ Ogni elemento dell'indovinello diventa un'entità informatica reale:
 | **Riva di partenza** | `vm1` | Virtual Machine | Nodo sorgente, ospita i processi inizialmente |
 | **Riva di arrivo** | `vm2` | Virtual Machine | Nodo destinazione, riceve i processi migrati |
 | **Fiume** | Network bridge `TCP/river` | Infrastruttura | Canale che separa le due VM |
-| **Barca** | Ferry container | Container Docker | Trasporta un processo alla volta |
+| **Barca** | Barca | contenitore per trasportare i processi | Trasporta un processo alla volta |
 | **Traghettatore** | Admin / orchestratore | Supervisore | Sempre presente con la barca; la sua presenza neutralizza qualsiasi conflitto |
 
 ### Vincoli di runtime
@@ -64,7 +64,7 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 ```
 ┌────────────────────────────────────────────────────────────────────┐
 │                      ORCHESTRATORE / ADMIN                         │
-│            (supervisore presente dove si trova il ferry)           │
+│            (supervisore presente dove si trova la barca)           │
 └────────────────────────┬───────────────────────────────────────────┘
                          │ gestisce
            ┌─────────────┼─────────────┐
