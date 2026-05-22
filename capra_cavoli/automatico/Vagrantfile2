@@ -6,12 +6,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "vm1" do |node|
     node.vm.hostname = "vm1"
     node.vm.network "private_network", ip: "192.168.56.10"
-    node.vm.provision "shell", path: "provision_prova.sh"
+    node.vm.provision "shell", path: "file_prov_automatico.sh"
   end
   config.vm.define "vm2" do |node|
     node.vm.hostname = "vm2"
     node.vm.network "private_network", ip: "192.168.56.11"
-    node.vm.provision "shell", path: "provision_prova.sh"
+    node.vm.provision "shell", path: "file_prov_automatico.sh"
   end
 end
 
