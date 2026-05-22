@@ -122,15 +122,23 @@ log_warn()    { echo -e "${YELLOW}[WARN]${RESET}  $*"; }
 log_error()   { echo -e "${RED}[ERR]${RESET} $*"; }
 log_step()    { echo -e "\n${BOLD}── step $STEPS ─────────────────────────────${RESET}"; }
 
-# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 # MIGRATE:
 #Funzione principale per la migrazione dei processi da una VM all'altra:
-#prima cosa mi genero una varibile locale process che prende il nome del processo passato come argomento (es. migrate "capra") e 
+#prima cosa mi genero una varibile locale process che prende il nome del processo passato come argomento (es. migrate "capra") e
 #se  non passo nulla, con la sintassi ${1:-} assegno una stringa vuota (viaggio vuoto).
-#Poi la variabile origin che prende la posizione della barca, cambiando ogni volta la varibile destinazione se origin cambia(se 
-#origin è vm1 la destination 
+#Poi la variabile origin che prende la posizione della barca, cambiando ogni volta la varibile destinazione se origin cambia(se
+#origin è vm1 la destinatione sarà vm2 e viceversa).
+#Poi genero due variabili locali per rappresentare i processi presenti su ogni VM, in base alla posizione della barca.
+#Se è stato passato un processo da migrare, controllo che questo processo sia presente sulla VM di origine, altrimenti stampo un messaggio di errore e termino lo script con exit 1.
+#Se il processo è presente, genero una nuova lista di processi per la VM di origine, escludendo il processo in migrazione, e aggiorno la variabile corrispondente.
+#Poi aggiorno la posizione della barca alla destinazione e se c'è un processo in migrazione, lo aggiungo alla lista dei processi della VM di destinazione, aggiornando la variabile corrispondente.
+#Infine incremento il contatore dei passaggi, stampo un messaggio di migrazione e controllo se ci sono conflitti sulla VM di origine dopo la migrazione.
+#Non ci saranno dato che la funzione migrazione viene usata da run_auto che segue una sequenza predefinita di migrazioni che evita i conflitti.
+#A differenza di quello automatico in questo caso ho essendoci la parte manuale potrebbero esserci degli errori
+#ho log error che viene inserito se si commette un errorre nello svoglimento manuale, in tal caso si deve fare il rollback(tornare indietro)
 
-# ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+# ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 migrate() {
     local process="${1:-}"
 
@@ -181,41 +189,77 @@ migrate() {
     print_state
 }
 
-# ─────────────────────────────────────────────
-# MODALITÀ INTERATTIVA
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# MODALITÀ INTERATTIVA (L'indovinello svolto dall'utente)
+# ─────────────────────────────────────────────────────────────────────────────
+# Questa funzione play_interactive() implementa un "Game Loop" standard.
+# Rimane in ascolto degli input dell'utente sul terminale, aggiorna lo stato delle
+# VM e delega il controllo della stabilità del sistema alla funzione migrate.
 play_interactive() {
+    # -------------------------------------------------------------------------
+    # 1. INTRODUZIONE E ISTRUZIONI PER L'UTENTE
+    #faccio una breve introduzione all'indovinello e spiego le regole e i comandi disponibili per l'utente.
+    # -------------------------------------------------------------------------
     echo -e "\n${BOLD}Modalità Interattiva — Risolvi l'indovinello!${RESET}"
     echo -e "Digita il nome del processo da caricare sulla barca insieme al traghettatore."
     echo -e "Comandi disponibili: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} (viaggia vuoto) | ${CYAN}q${RESET} (esci)\n"
 
+    # Mostra la topologia iniziale del cluster prima di chiedere il primo input
     print_state
 
+    # -------------------------------------------------------------------------
+    # 2. IL GAME LOOP (Ciclo infinito di elaborazione degli input)
+    # -------------------------------------------------------------------------
     while true; do
-        # Condizione di vittoria: VM1 è vuota e non c'è nulla in transito
+        # --- CONDIZIONE DI VITTORIA (Controllo di terminazione) ---
+        # Controlla se la stringa $VM1 è completamente vuota (-z) e contemporaneamente (&&) se la stringa $BARCA_CARGO è vuota,
+        #il che significa che non ci sono processi attivi su vm1 e non c'è nessun processo rimasto "bloccato" nel buffer della barca ($BARCA_CARGO),
+        #quindi è avvenuta la migrazione completa di tutti i processi su vm2 e la barca è vuota, indicando che non c'è nessun processo in transito.
+        #tutto ciò viene stampato alla fine e man mano si inserisce l'acquisizione dell'input.
         if [[ -z "$VM1" && -z "$BARCA_CARGO" ]]; then
             echo -e "${GREEN}${BOLD}[SUCCESS] Fantastico! Migrazione completata in ${STEPS} step!${RESET}\n"
             log_ok "Tutti i processi attivi e salvi su vm2"
             log_ok "E vm1 offline — nessun processo residuo"
-            exit 0
+            exit 0 # Termina con successo l'intero script interrompendo il ciclo
         fi
 
+        # --- ACQUISIZIONE DELL'INPUT ---
+        # Stampa il prompt dinamico mostrando la riva in cui si trova attualmente la barca ($BARCA_POS)
+        # il flag "-n" evita il ritorno a capo, lasciando il cursore pronto per la digitazione.
         echo -ne "${CYAN}→ Inserisci processo da migrare [Riva attuale: ${BARCA_POS}]: ${RESET}"
-        read -r input
+        read -r input # Legge l'input dell'utente e lo salva nella variabile locale $input
+                      # Il flag "-r" impedisce l'interpretazione dei caratteri di escape (es. backslash)
 
-        # Uscita volontaria
+        # --- GESTIONE USCITA VOLONTARIA ---
+        # Se l'utente digita "q", il programma intercetta il comando e si chiude in modo pulito
         [[ "$input" == "q" ]] && echo "Uscita dal gioco." && exit 0
 
-        # Esegue la migrazione (se fallisce perché il processo non esiste sulla sponda, il ciclo continua)
+        # --- VALUTAZIONE DELLA MOSSA ---
+        # Chiama la funzione principale passandogli l'input dell'utente (lupo, capra, cavolo o vuoto).
+        # Inserisco l'operatore "|| true" che è FONDAMENTALE:
+        # Impedisce allo script di crashare a causa del "set -e" iniziale nel caso in cui la funzione
+        # migrate restituisca un errore di digitazione (ad esempio se l'utente digita "lupo"
+        # ma il lupo si trova sulla sponda opposta rispetto alla barca).
+        #In questo modo il ciclo non si interrompe e l'utente può riprovare la mossa.
         migrate "$input" || true
     done
 }
 
 
-# ─────────────────────────────────────────────
-# SOLUZIONE
-# ─────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────────────────
+# SOLUZIONE AUTOMATICA
+# ─────────────────────────────────────────────────────────────────────────────
+# Questa funzione rappresenta tutto l'indovinello.
+# Esegue una sequenza predefinita di migrazioni (7 passi) per
+# spostare i processi in modo sicuro, rispettando i vincoli di coesistenza.
 run_auto() {
+    # -------------------------------------------------------------------------
+    # 1. INIZIALIZZAZIONE :
+    # inizio stampando con echo e la funzione log il titolo dove sono i processi e 
+    # e che sta per iniziare la migrazione.
+    #poi i log di informazione e l'obiettivo
+    #Poi i log di costrizione cioè come possono commettere gli errori
+    # -------------------------------------------------------------------------
     echo -e "\n${BOLD}Indovinello Capra Cavolo Lupo ${RESET}"
     log_ok "Tutti i processi attivi su vm1"
     log_ok "Mentre vm2 offline — nessun processo attivo"
@@ -225,21 +269,54 @@ run_auto() {
     log_info "Processi tutti su vm1: [lupo:PID-001, capra:PID-002, cavolo:PID-003]"
     log_info "Barca pronta su vm1"
     log_info "Obiettivo: migrare tutti i processi su vm2"
-    log_warn "CONSTRAINT: lupo e capra non possono coesistere senza admin"
-    log_warn "CONSTRAINT: capra e cavolo non possono coesistere senza admin"
-    log_warn "SUDOERS:    lupo → sudo kill -15 <PID>  (SIGTERM su capra)"
-    log_warn "SUDOERS:    capra → sudo kill -15 <PID>  (SIGTERM su cavolo)"
 
+    # Avvisi di sicurezza sui vincoli (Constraints) e mappatura dei permessi reali di Sudoers
+    log_warn "CONSTRAINT: lupo e capra non possono coesistere senza traghettatore"
+    log_warn "CONSTRAINT: capra e cavolo non possono coesistere senza traghettatore"
+    log_warn "SUDOERS:    lupo  → sudo kill -15 --user capra <PID>   (SIGTERM su capra)"
+    log_warn "SUDOERS:    capra → sudo kill -15 --user cavolo <PID>  (SIGTERM su cavolo)"
+
+    # Stampa visiva della topologia iniziale del sistema (Tutti su vm1, vm2 vuota)
     print_state
 
-    migrate "capra"
-    migrate ""
-    migrate "cavolo"
-    migrate "capra"
-    migrate "lupo"
-    migrate ""
+    # -------------------------------------------------------------------------
+    # 2. SEQUENZA TRANSAZIONALE DEI 7 PASSI (L'algoritmo di risoluzione)
+    # -------------------------------------------------------------------------
+
+    # Step 1: Il traghettatore isola la capra portandola su vm2.
+    # Stato risultante: vm1 ospita [lupo, cavolo] (Coesistenza Sicura).
     migrate "capra"
 
+    # Step 2: La barca ritorna su vm1 senza alcun processo a bordo.
+    # Stato risultante: la capra è da sola su vm2, il traghettatore è su vm1.
+    migrate ""
+
+    # Step 3: Viene migrato il cavolo su vm2.
+    # Stato risultante: vm1 ospita solo [lupo]. Su vm2 ci sono [capra, cavolo] (PERICOLO!).
+    # Ma la presenza temporanea del traghettatore su vm2 impedisce il kill del cavolo.
+    migrate "cavolo"
+
+    # Step 4: Per non lasciare la capra sola col cavolo, il traghettatore la ricarica e la riporta su vm1.
+    # Stato risultante: vm1 ospita [lupo, capra] (Prossimo potenziale pericolo). vm2 ospita solo [cavolo].
+    migrate "capra"
+
+    # Step 5: Il traghettatore scarica la capra su vm1 e imbarca il lupo, migrandolo su vm2.
+    # Stato risultante: la capra rimane da sola su vm1 (Sicura). Su vm2 coesistono [lupo, cavolo] (Sicura).
+    migrate "lupo"
+
+    # Step 6: La barca ritorna vuota su vm1 per recuperare l'ultimo processo rimasto indifeso.
+    # Stato risultante: [lupo, cavolo] sono stabili su vm2. La capra aspetta su vm1.
+    migrate ""
+
+    # Step 7: Ultima migrazione della capra verso la destinazione finale.
+    # Stato risultante: vm1 si svuota definitivamente. vm2 ospita tutti i processi salvi.
+    migrate "capra"
+
+    # -------------------------------------------------------------------------
+    # 3. VERIFICA FINALE DI SUCCESSO
+    # -------------------------------------------------------------------------
+    # Se il sistema non è andato in crash (grazie al controllo ad ogni step di migrate),
+    # l'orchestrazione dichiara il successo dell'operazione.
     echo -e "${GREEN}${BOLD}[SUCCESS] Migrazione completata in ${STEPS} step!${RESET}\n"
     log_ok "Tutti i processi attivi su vm2"
     log_ok "E vm1 offline — nessun processo residuo"
@@ -247,7 +324,7 @@ run_auto() {
 
 
 # ─────────────────────────────────────────────────────────────────────────────
-# ENTRYPOINT (Gestione dei parametri di avvio) 
+# ENTRYPOINT (Gestione dei parametri di avvio)
 # ─────────────────────────────────────────────────────────────────────────────
 case "${1:-}" in
     --play|-p)  play_interactive ;;
