@@ -1,15 +1,16 @@
 #!/usr/bin/env bash
-# ============================================================
-# file_capra_cavoli.sh — Container Ferry: lupo, capra e cavolo
-# ============================================================
-# Il classico indovinello reinterpretato come migrazione di
-# processi tra due VM attraverso un network bridge.
+# ==========================================================================================================================================
+# file_capra_cavoli.sh — ESERCIZIO: lupo, capra e cavolo
+# ==========================================================================================================================================
+# Il classico indovinello medievale reinterpretato in chiave DevOps/Sysadmin.
+# Gli attori sono reali processi di sistema Linux (lupo, capra, cavolo), le sponde del fiume sono
+# due Macchine Virtuali (vm1 e vm2) e il fiume stesso è un canale di comunicazione di rete (network bridge).
+
 
 # Uso:
 #   chmod +x file_capra_cavoli.sh
-#   ./file_capra_cavoli.sh          → esegue la soluzione automatica
-#   ./file_capra_cavoli.sh --play   → modalità interattiva passo per passo
-# ============================================================
+#   ./file_capra_cavoli.sh o bash file_capra_cavoli.sh  → esegue la soluzione automatica attraverso la funzione run_auto
+# ===========================================================================================================================================
 
 set -e
 
