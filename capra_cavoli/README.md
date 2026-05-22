@@ -144,20 +144,37 @@ vm2: [lupo, cavolo, capra]   ✓ tutti i processi su vm2
 ---
 ## Avvio rapido
 
+```bash
+# Creo la cartella per l'esercizio e due sottocartelle per le 2 modalità
+
+mkdir capra_cavoli
+cd capra_cavoli
+mkdir automatico
+mkdir manuale
+```
 **Modalità automatica**
+
 Lo script esegue in autonomia la sequenza ottimale di 7 passi.  
 Viene stampato ad ogni step lo stato delle due VM, la posizione della barca e il processo in transito.
 
 ```bash
+# Passo nella cartella automatico
+cd automatico
+
+# Rendo lo script eseguibile
+chmod +x file_capra_cavoli_automatico.sh
+
 # Avvia le VM con provisioning automatico
 vagrant up
 
 # Entra nella vm1 e lancia lo script
 vagrant ssh vm1
 bash /vagrant/file_capra_cavoli_automatico.sh
+
 ```
 **OUTPUT**
-FOTO
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2016.59.54.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.00.08.png)
 
 **Modalità interattiva**
 
@@ -165,6 +182,10 @@ Disponibile **solo** in `file_capra_cavoli.sh` tramite il flag `--play` (o `-p`)
 L'utente sceglie a ogni turno quale processo caricare sulla barca. Se la mossa genera un conflitto, lo script stampa un errore e chiede di correggere.
 
 ```bash
+
+#Passo in modalità manuale
+cd manuale
+
 # Avvia le VM
 vagrant up
 
@@ -180,7 +201,16 @@ bash /vagrant/file_capra_cavoli.sh --play
 
 **OUTPUT**
 
-FOTO
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.01.35.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.01.53.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.04.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.14.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.27.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.40.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.48.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.02.57.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.03.04.png)
+
 
 Comandi disponibili durante il gioco:
 
@@ -194,7 +224,10 @@ Comandi disponibili durante il gioco:
 
 In caso di mossa errata lo script segnala il conflitto con `[ERR]` e blocca l'esecuzione richiedendo un rollback.
 
-FOTO
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.03.21.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.03.28.png)
+![prima parte terminale](capra_cavoli_img/Screenshot%202026-05-22%20alle%2017.03.49.png)
+
 
 ---
 
