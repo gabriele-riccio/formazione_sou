@@ -46,7 +46,7 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 
 ---
 ## Struttura del progetto
-.
+
 ├── Vagrantfile                        # Vagrantfile per la modalità interattiva (usa file_prov_capra_cavoli.sh)
 ├── Vagrantfile_automatico             # Vagrantfile per la modalità automatica (usa file_prov_automatico.sh)
 │
