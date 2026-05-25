@@ -1,4 +1,25 @@
 #!/bin/bash4
+#si può usare anche #!/usr/bin/env bash
+
+#questo script mostra come utilizzare gli array associativi (conosciuti in altri linguaggi di programmazione come dizionari,
+#mappe o chiave-valore) che abbiamo già usato in un esercizio precedente.
+
+#A differenza degli array normali, che usano i numeri come indice (0, 1, 2...), 
+#gli array associativi permettono di usare del testo (stringhe) come indice per memorizzare e recuperare i dati. 
+#Nel caso specifico di questo script, viene creata una rubrica in cui il nome di una persona è la chiave e il suo indirizzo è il valore.
+
+#per prima cosa si dichiara l'array associativo address con -A a differenza della dichiarazione di un array normale con -a.
+
+#Poi vengono inseriti tre elementi (3 valori che indicano la via, la città e il Cap) 
+#all'interno dell'array address, usando i nomi propri come chiavi(tra parentesi quadre).
+
+#poi vengono stampati gli indirizzi per ogni persona usando la variabile dollaro e l'array associativo appena creato (con le parentesi 
+#graffe, che è il modo per leggere tale array in bash.
+
+#infine si usa "${!address[*]}" recuperare l'elenco di tutte le chiavi (indici) registrate nell'array, anziché i loro valori, dato che ! dice 
+# a Bash "voglio le chiavi, non i valori" mentre l'asterisco * significa "tutti gli elementi".
+
+
 # fetch_address.sh
 
 declare -A address
