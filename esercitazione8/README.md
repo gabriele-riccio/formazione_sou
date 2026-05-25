@@ -40,6 +40,7 @@ Al termine stampa un messaggio di conferma.
 sudo bash file_script_1.sh
 # Output: Log files cleaned up.
 ```
+![prima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2010.38.48.png)
 
 ---
 
