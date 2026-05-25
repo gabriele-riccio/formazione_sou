@@ -42,24 +42,37 @@ sudo bash file_script_1.sh
 ## file_script_2.sh — Verifica utente root
 
 ### Cosa fa
-Controlla se l'utente che esegue lo script è `root`, confrontando la variabile d'ambiente `$UID` con il valore `0` (che corrisponde sempre all'utente root). Stampa un messaggio diverso a seconda del risultato. Una seconda verifica (mai eseguita, dopo `exit 0`) mostra un metodo alternativo usando il comando `id`.
+Questo script controlla se l'utente che esegue lo script è `root`, confrontando la variabile d'ambiente `$UID` con il valore `0` (che corrisponde sempre all'utente root) e stampa un messaggio diverso a seconda del risultato. 
 
-### Concetti trattati
-- Istruzione condizionale `if/then/else/fi`
-- Variabile speciale `$UID`
-- Operatori di confronto numerico (`-eq`)
-- Comando `exit` e codici di uscita
-- Codice irraggiungibile dopo `exit`
-- Sostituzione di comando con i backtick `` `comando` ``
+Una secondo script mostra un metodo alternativo usando il comando `id`.
 
-### Esempio di esecuzione
+
+### Esempio di esecuzione per entrambi gli script:
+
+```bash
+vim file_script_2_secondo.sh
+vim file_script_2.sh
+chmod +x file_script_2_secondo.sh file_script_2.sh
+```
+![seconda parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2011.19.44.png)
+
 ```bash
 bash file_script_2.sh
 # Output (utente normale): You are just an ordinary user (but mom loves you just the same).
 
 sudo bash file_script_2.sh
 # Output (root): You are root.
+
 ```
+![terza parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2011.20.35.png)
+
+```bash
+bash file_script_2_secondo.sh
+# Output (utente normale): You are just a regular fella.
+sudo bash file_script_2.sh
+# Output (root): Rooty, toot, toot. You are root.
+```
+![quarta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2011.21.06.png)
 
 ---
 
