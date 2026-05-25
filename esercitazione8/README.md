@@ -229,4 +229,6 @@ bash file_script_7.sh
 
 ![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.05.25.png)
 
+**Per tutti i comementi visitare i file dentro le cartelle**.
+
 ---
