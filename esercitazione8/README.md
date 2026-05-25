@@ -126,15 +126,15 @@ bash file_script_3.sh 1 2 3 4 5 6 7
 ## file_script_4.sh — Variabili e assegnazione
 
 ### Cosa fa
-Illustra i diversi modi in cui una variabile può essere assegnata in Bash: assegnazione diretta, tramite `let`, in un ciclo `for` e tramite `read` (input da tastiera). Mostra anche la distinzione tra variabile "nuda" (usata nell'assegnazione, senza `$`) e variabile referenziata (con `$`).
+Illustra i diversi modi in cui una variabile può essere assegnata in Bash: assegnazione diretta, tramite `let`, in un ciclo `for` e tramite `read` (input da tastiera).
+Mostra anche la distinzione tra variabile "nuda" (usata nell'assegnazione, senza `$`) e variabile referenziata (con `$`).
 
-### Concetti trattati
-- Assegnazione diretta (`a=879`)
-- Assegnazione aritmetica con `let`
-- Ciclo `for` con lista di valori
-- Input interattivo con `read`
-- Differenza tra `a=valore` (assegnazione) e `$a` (riferimento)
-- Opzione `-n` di `echo` per non andare a capo
+---
+
+**Regola fondamentale**:
+**Senza $** si scrive/assegna, **Con $** si legge/invoca.
+
+---
 
 ### Esempio di esecuzione
 ```bash
@@ -146,19 +146,17 @@ bash file_script_4.sh
 # Enter "a": [attende input]
 # The value of "a" is now [valore inserito].
 ```
+![sesta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2014.15.35.png)
+
+![settima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2014.16.07.png)
 
 ---
 
 ## file_script_5.sh — Exit status
 
 ### Cosa fa
-Dimostra il funzionamento della variabile speciale `$?`, che contiene il codice di uscita dell'ultimo comando eseguito. Esegue prima un comando valido (`echo hello`) e poi uno inesistente (`lskdf`), mostrando come `$?` valga `0` in caso di successo e un valore diverso da zero in caso di errore. Lo script termina con `exit 113`.
+Dimostra il funzionamento della variabile speciale **`$?`**, che contiene il codice di uscita dell'ultimo comando eseguito. Esegue prima un comando valido (`echo hello`) e poi uno inesistente (`lskdf`), mostrando come `$?` valga `0` in caso di successo e un valore diverso da zero in caso di errore. Lo script termina con `exit 113`.
 
-### Concetti trattati
-- Variabile speciale `$?` (exit status dell'ultimo comando)
-- Convenzione: `0` = successo, valore non-zero = errore
-- Comando `exit` con codice personalizzato
-- Comportamento in caso di comando non riconosciuto
 
 ### Esempio di esecuzione
 ```bash
@@ -172,6 +170,9 @@ bash file_script_5.sh
 echo $?   # Dopo la terminazione dello script
 # Output: 113
 ```
+![ottava parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2014.18.32.png)
+
+![nona parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2014.18.52.png)
 
 ---
 
