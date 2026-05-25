@@ -104,8 +104,22 @@ bash file_script_3.sh 1 2 3 4 5 6 7 8 9 10
 ```
 ![quinta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2012.17.56.png)
 
-![sesta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2012.18.01.png)
+```bash
+bash file_script_3.sh 1 2 3 4 5 6 7 
+# Output:
+# The name of this script is "file_script_3.sh".
+# The name of this script is "file_script_3.sh".
+# Parameter #1 is 1
+# Parameter #2 is 2
+# Parameter #3 is 3
+# ...
+# ...
+# Parameter #10 is 10
+# All the command-line parameters are: 1 2 3 4 5 6 7
 
+# This script needs at least 10 command-line arguments!
+```
+![sesta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2012.18.01.png)
 
 ---
 
