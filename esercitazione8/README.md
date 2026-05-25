@@ -79,24 +79,33 @@ sudo bash file_script_2.sh
 ## file_script_3.sh — Gestione dei parametri
 
 ### Cosa fa
-Mostra il nome dello script (`$0`) e i parametri passati da riga di comando (`$1`, `$2`, ..., `${10}`). Stampa poi tutti i parametri insieme con `$*` e, se ne sono stati passati meno di 10, avvisa l'utente.
+Dopo aver inserito dei parametri dopo il file di script mostra il nome dello script (`$0`) 
+e i parametri passati da riga di comando (`$1`, `$2`, ..., `${10}`). 
 
-### Concetti trattati
-- Variabili speciali: `$0` (nome script), `$1`–`$9` (parametri posizionali), `${10}` (parametri oltre il nono, con parentesi graffe obbligatorie), `$*` (tutti i parametri), `$#` (numero di parametri)
-- Comando `basename` per estrarre solo il nome del file dal percorso
-- Test su stringhe con `-n` (stringa non vuota)
-- Confronto numerico con `-lt` (less than)
+Stampa poi tutti i parametri insieme con `$*` e, se ne sono stati passati meno di 10, avvisa l'utente.
+
+> stampa solo 1,2,3 e poi 10 perchè gli altri if non li scrive e stampa due volte il nome perchè c'è anche il baseline.  
+
 
 ### Esempio di esecuzione
 ```bash
+chmod +x file_script_3.sh
 bash file_script_3.sh 1 2 3 4 5 6 7 8 9 10
 # Output:
 # The name of this script is "file_script_3.sh".
+# The name of this script is "file_script_3.sh".
 # Parameter #1 is 1
+# Parameter #2 is 2
+# Parameter #3 is 3
+# ...
 # ...
 # Parameter #10 is 10
 # All the command-line parameters are: 1 2 3 4 5 6 7 8 9 10
 ```
+![quinta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2012.17.56.png)
+
+![sesta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2012.18.01.png)
+
 
 ---
 
