@@ -187,7 +187,8 @@ Crea un array associativo (dizionario chiave→valore) che mappa nomi di persone
 - Accesso ai valori: `${array[chiave]}`
 - Stampa di tutte le chiavi con `${!array[*]}`
 
-> ⚠️ L'array associativo richiede **Bash 4 o superiore** (lo shebang usa `#!/bin/bash4`). Su macOS la versione di default di Bash potrebbe essere la 3.x; in quel caso è necessario installare una versione aggiornata.
+> L'array associativo richiede **Bash 4 o superiore** (nello shebang ho usato `#!/bin/bash4`). Ho cercato su internet e va bene, io di solito, avendo già
+> una versione >4, usavo #!/usr/bin/env bash funziona lo stesso.
 
 ### Esempio di esecuzione
 ```bash
