@@ -26,17 +26,12 @@ Per ogni script creare un file con spiegazione del codice.
 Svuota due file di log di sistema (`/var/log/messages` e `/var/log/wtmp`) redirigendo su di essi il contenuto vuoto di `/dev/null`.
 Al termine stampa un messaggio di conferma.
 
-### Concetti trattati
-- Navigazione nel filesystem con `cd`
-- Utilizzo di `/dev/null` come sorgente vuota
-- Redirezione dell'output con `>`
-- Operazioni che richiedono privilegi di root
-
-### Note importanti
-> ⚠️ Lo script **deve essere eseguito come root**. Modificare i log di sistema su macchine in produzione può causare perdita di dati diagnostici importanti. Usare solo in ambienti di test.
+### Nota importante
+> Lo script **deve essere eseguito come root**.
 
 ### Esempio di esecuzione
 ```bash
+chmod +x file_script_1.sh
 sudo bash file_script_1.sh
 # Output: Log files cleaned up.
 ```
