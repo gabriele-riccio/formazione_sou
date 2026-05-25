@@ -181,14 +181,10 @@ echo $?   # Dopo la terminazione dello script
 ### Cosa fa
 Crea un array associativo (dizionario chiave→valore) che mappa nomi di persone ai rispettivi indirizzi. Stampa i valori accedendovi tramite chiave e infine elenca tutti gli indici (chiavi) dell'array.
 
-### Concetti trattati
-- Dichiarazione di array associativi con `declare -A`
-- Assegnazione di valori: `array[chiave]="valore"`
-- Accesso ai valori: `${array[chiave]}`
-- Stampa di tutte le chiavi con `${!array[*]}`
-
 > L'array associativo richiede **Bash 4 o superiore** (nello shebang ho usato `#!/bin/bash4`). Ho cercato su internet e va bene, io di solito, avendo già
 > una versione >4, usavo #!/usr/bin/env bash funziona lo stesso.
+
+---
 
 ### Esempio di esecuzione
 ```bash
@@ -198,8 +194,9 @@ bash file_script_6.sh
 # Wilma's address is 1854 Vermont Ave, Los Angeles, CA 90023.
 # John's address is 202 E. 3rd St., New York, NY 10009.
 #
-# Charles John Wilma
+# Wilma Charles John 
 ```
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.02.37.png)
 
 ---
 
@@ -208,14 +205,8 @@ bash file_script_6.sh
 ### Cosa fa
 Simula una barra di avanzamento testuale (a punti) mentre un processo "lungo" è in esecuzione. La barra viene avviata come processo in background e stampa un punto ogni secondo; al termine del processo principale viene fermata inviandole il segnale `SIGUSR1`. Gestisce anche l'interruzione manuale con `Ctrl+C` tramite una trap sul segnale `EXIT`.
 
-### Concetti trattati
-- Esecuzione di processi in background con `&`
-- Recupero del PID dell'ultimo processo in background con `$!`
-- Segnali Unix e comando `kill` (con `SIGUSR1` e `-USR1`)
-- `trap` per intercettare segnali e l'evento `EXIT`
-- `wait` per attendere la terminazione di un processo
-- Ciclo `while true` per esecuzione indefinita
-- Subshell con `{ ... } &`
+> Lo script deve essere eseguito con `bash` (non con `sh`), come indicato anche nel commento iniziale.
+---
 
 ### Esempio di esecuzione
 ```bash
@@ -223,28 +214,19 @@ bash file_script_7.sh
 # Output:
 # Long-running process ..........  Finished!
 ```
-
-> ⚠️ Lo script deve essere eseguito con `bash` (non con `sh`), come indicato anche nel commento iniziale.
-
----
-
-## Requisiti
-
-- Sistema operativo: Linux o macOS
-- Shell: **Bash 4+** (obbligatorio per `file_script_6.sh`; consigliato per tutti)
-- Permessi di root: richiesti solo per `file_script_1.sh`
-
-## Come eseguire gli script
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.12.49.png)
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.12.31.png)
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.12.53.png)
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.04.28.png)
 
 ```bash
-# Rendere eseguibile uno script
-chmod +x file_script_N.sh
+bash file_script_7.sh
+# Output:(se faccio Ctrl + C)
+# Long-running process .^C!
 
-# Eseguirlo direttamente
-./file_script_N.sh
 
-# Oppure passarlo esplicitamente a bash
-bash file_script_N.sh
 ```
 
+![decima parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2015.05.25.png)
 
+---
