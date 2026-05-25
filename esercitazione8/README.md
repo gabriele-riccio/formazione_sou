@@ -143,8 +143,8 @@ bash file_script_4.sh
 # The value of "a" is 879.
 # The value of "a" is now 21.
 # Values of "a" in the loop are: 7 8 9 11
-# Enter "a": [attende input]
-# The value of "a" is now [valore inserito].
+# Enter "a": [esempio 12]
+# The value of "a" is now 12.
 ```
 ![sesta parte terminale](esercitazione8/Screenshot%202026-05-25%20alle%2014.15.35.png)
 
