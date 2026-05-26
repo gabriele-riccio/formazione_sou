@@ -12,7 +12,7 @@
 # 3. Si configura 'sudoers' in modo sicuro da avere:
 #      - lupo che può inviare SIGTERM SOLO ai processi di capra
 #      - capra che può inviare SIGTERM SOLO ai processi di cavolo
-#      - traghettatore che gestisce l'orchestratore senza password
+#      - traghettatore che gestisce da root senza password
 # =========================================================================================================================
 # ========================================================================================================================
 # Per prima cosa aggiorno silenziosamente (-qq) l'elenco dei pacchetti installabili
@@ -56,13 +56,13 @@ echo "==> [provision] Creazione utenti lupo / capra / cavolo/ traghettatore"
 
 for user in lupo capra cavolo; do
     if ! id "$user" &>/dev/null; then
-        # Per il traghettatore potresti volere una shell valida se devi usarlo per lanciare lo script
         useradd --system --no-create-home --shell /usr/sbin/nologin "$user"
         echo "  utente '$user' creato"
     fi
 done
 
 if ! id "traghettatore" &>/dev/null; then
+    # Per il traghettatore metto una shell valida  per lanciare lo script
     useradd --system --no-create-home --shell /bin/bash traghettatore
     echo "  utente 'traghettatore' creato "
 fi
@@ -78,18 +78,19 @@ cat > /etc/sudoers.d/capra_lupo << 'SUDOERS'
 
 #lupo può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'capra'
 lupo ALL=(root) NOPASSWD: /bin/kill -15 --user capra *, /bin/kill -s 15 --user capra *
-lupo ALL=(root) NOPASSWD: /usr/bin/kill -15 --user capra *, /usr/bin/kill -s 15 --user capra *
+lupo ALL=(root) NOPASSWD: /usr/bin/kill -15 --user capra *, /usr/bin/kill -s 15 --user capra *     #per la posizione del comando kill
 
 #capra può mandare SIGTERM (kill -15) SOLO ai processi dell'utente 'cavolo'
 capra ALL=(root) NOPASSWD: /bin/kill -15 --user cavolo *, /bin/kill -s 15 --user cavolo *
 capra ALL=(root) NOPASSWD: /usr/bin/kill -15 --user cavolo *, /usr/bin/kill -s 15 --user cavolo *
 
 # Traghettatore (admin / orchestratore) può eseguire lo script e usare kill liberamente
-traghettatore ALL=(ALL) NOPASSWD: /vagrant/file_capra_cavoli.sh
-traghettatore ALL=(ALL) NOPASSWD: /bin/kill *, /usr/bin/kill *
+traghettatore ALL=(ALL) NOPASSWD: capra_cavoli/file_capra_cavoli.sh #per la posizione dell'esercizio
+traghettatore ALL=(ALL) NOPASSWD: /bin/kill *, /usr/bin/kill *       #per la posizione del comando kill
 SUDOERS
 
-# Imposto poi i permessi corretti per il file sudoers (obbligatorio, altrimenti sudo lo ignora)
+#Imposto poi i permessi corretti per il file sudoers (lettura consentita solo al proprietario e gruppo proprietario)
+
 chmod 0440 /etc/sudoers.d/capra_lupo
 
 # ──────────────────────────────────────────────────────────
