@@ -49,4 +49,5 @@ echo ""
 echo "==> [provision] Docker installato con successo!"
 docker --version
 echo "==> [provision] Completato."
-
+mkdir -p /tmp/migrazione
+chmod 777 /tmp/migrazione
