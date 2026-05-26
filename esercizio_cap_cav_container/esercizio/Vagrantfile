@@ -1,0 +1,32 @@
+# =============================================================================================================================================
+=
+# Vagrantfile — Esercizio capra e cavoli
+# =============================================================================================================================================
+=
+#Attraverso questo script fornisco a Vagrant le istruzioni esatte per costruire
+#e configurare le due  macchine virtuali che mi servono per l'esercizio.
+#Ho creato due macchine virtuali (che mi rappresentano le due sponde del fiume) che comunicano tra loro
+#Inizio aprendo il file di configurazione e dico a vagrant di usare la seconda versione della sua sintassi(standard attuale)
+#Poi inizio la configurazione decidendo come sistema operativo per le macchina virtuale dell'esercizio Ubuntu 20.04 LTS (Focal Fossa)
+#a 64 bit.
+#Poi inizio a definire le 2 macchine virtuali assegnando nome, creando una rete privata host-only assegnandogli
+#2 indirizzi ip statici("192.168.56.10" e "192.168.56.11") in modo che possano comunicare tra loro.
+#Poi faccio la parte di provisioning, dato che ho salvato nello script 'provision.sh' il file per installare docker
+#e chiudo lo script.
+# ======================================================================================================================================================
+Vagrant.configure("2") do |config|
+
+  config.vm.box = "ubuntu/focal64"
+  config.vm.provider "virtualbox"
+
+  config.vm.define "vm1" do |node|
+    node.vm.hostname = "vm1"
+    node.vm.network "private_network", ip: "192.168.56.10"
+    node.vm.provision "shell", path: "file_prov_container.sh"
+  end
+  config.vm.define "vm2" do |node|
+    node.vm.hostname = "vm2"
+    node.vm.network "private_network", ip: "192.168.56.11"
+    node.vm.provision "shell", path: "file_prov_container.sh"
+  end
+end
