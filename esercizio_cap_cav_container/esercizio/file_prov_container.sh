@@ -42,8 +42,8 @@ systemctl enable docker
 systemctl start docker
 
 # Copia lo script dell'esercizio nella VM
-cp /vagrant/file_capra_cavoli_docker.sh /home/vagrant/
-chmod +x /home/vagrant/file_capra_cavoli_docker.sh
+cp /vagrant/file_script_container.sh /home/vagrant/
+chmod +x /home/vagrant/file_script_container.sh
 
 echo ""
 echo "==> [provision] Docker installato con successo!"
