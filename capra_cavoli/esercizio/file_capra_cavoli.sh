@@ -183,7 +183,7 @@ migrate() {
         exit 1
     fi
 
-    [[ -n "$process" ]] && log_ok "${process} deployed su ${destination}" \
+    [[ -n "$process" ]] && log_ok "${process} migrato su ${destination}" \
                         || log_warn "Vuoto — solo admin"
 
     print_state
@@ -236,11 +236,7 @@ play_interactive() {
 
         # --- VALUTAZIONE DELLA MOSSA ---
         # Chiama la funzione principale passandogli l'input dell'utente (lupo, capra, cavolo o vuoto).
-        # Inserisco l'operatore "|| true" che è FONDAMENTALE:
-        # Impedisce allo script di crashare a causa del "set -e" iniziale nel caso in cui la funzione
-        # migrate restituisca un errore di digitazione (ad esempio se l'utente digita "lupo"
-        # ma il lupo si trova sulla sponda opposta rispetto alla barca).
-        #In questo modo il ciclo non si interrompe e l'utente può riprovare la mossa.
+        # Inserisco l'operatore "|| true".
         migrate "$input" || true
     done
 }
