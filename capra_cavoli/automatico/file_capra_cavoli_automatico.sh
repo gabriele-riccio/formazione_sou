@@ -29,9 +29,9 @@ BOLD='\033[1m'
 RESET='\033[0m'
 
 # ─────────────────────────────────────────────────────────────────────────────────────────────
-# Variabili di STATO — variabili globali che rappresentano lo stato iniziale del sistema 
-# Inoltre introduco BARCA_POS come posizione corrente del vettore di migrazione e 
-# Barca_Cargo che funge da registro di transito (o buffer temporaneo)che impedisce 
+# Variabili di STATO — variabili globali che rappresentano lo stato iniziale del sistema
+# Inoltre introduco BARCA_POS come posizione corrente del vettore di migrazione e
+# Barca_Cargo che funge da registro di transito (o buffer temporaneo)che impedisce
 # che un processo svanisca nel nulla durante lo spostamento.
 # ─────────────────────────────────────────────────────────────────────────────────────────────
 VM1="lupo capra cavolo" # Stato iniziale della prima macchina virtuale (sorgente)
@@ -51,9 +51,9 @@ STEPS=0                 # Contatore incrementale dei passaggi effettuati
 # La funzione principale print_state() invece è una funzione che stampa passo dopo passo ad ogni azione dell'
 #indovinello l'otput come se fossero le due Vm le sponde(che possono avere dei processi) il fiume in mezzo che le
 #divide e la barca con il traghettatore(admin).
-#Infatti stampo la vm1 prima(con le azioni della funzione supporto, con i processi presenti) 
+#Infatti stampo la vm1 prima(con le azioni della funzione supporto, con i processi presenti)
 #poi mi definisco una variabile locale che mi rappresenta l'unione tra barca e fiume
-#Se la barca sta su Vm1 allora disegna prima la barca e poi la linea che rappresenta il network river 
+#Se la barca sta su Vm1 allora disegna prima la barca e poi la linea che rappresenta il network river
 #Viceversa se la barca sta su Vm2
 # ───────────────────────────────────────────────────────────────────────────────────────────────────────────
 print_state() {
@@ -172,7 +172,7 @@ migrate() {
 run_auto() {
     # -------------------------------------------------------------------------
     # 1. INIZIALIZZAZIONE :
-    # inizio stampando con echo e la funzione log il titolo dove sono i processi e 
+    # inizio stampando con echo e la funzione log il titolo dove sono i processi e
     # e che sta per iniziare la migrazione.
     #poi i log di informazione e l'obiettivo
     #Poi i log di costrizione cioè come possono commettere gli errori
