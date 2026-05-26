@@ -32,7 +32,7 @@ Ogni elemento dell'indovinello diventa un'entità informatica reale:
 | **Riva di arrivo** | `vm2` | Virtual Machine | Nodo destinazione, riceve i processi migrati |
 | **Fiume** | Network bridge `TCP/river` | Infrastruttura | Canale che separa le due VM |
 | **Barca** | Barca | contenitore per trasportare i processi | Trasporta un processo alla volta |
-| **Traghettatore** | Admin / orchestratore | Supervisore | Sempre presente con la barca; la sua presenza neutralizza qualsiasi conflitto |
+| **Traghettatore** | root / orchestratore | Supervisore | Sempre presente con la barca; la sua presenza neutralizza qualsiasi conflitto |
 
 ### Vincoli di runtime
 
@@ -50,13 +50,10 @@ OK:      lupo  +  cavolo   (nessun conflitto, possono coesistere)
 ```
 
 ├── Vagrantfile                        # Vagrantfile per la modalità interattiva (usa file_prov_capra_cavoli.sh)
-├── Vagrantfile_automatico             # Vagrantfile per la modalità automatica (usa file_prov_automatico.sh)
 │
 ├── file_capra_cavoli.sh               # Script principale — modalità automatica + interattiva
-├── file_capra_cavoli_automatico.sh    # Script solo automatico (senza modalità --play)
 │
-├── file_prov_capra_cavoli.sh          # Provisioning per lo script completo
-└── file_prov_automatico.sh            # Provisioning per lo script automatico
+└── file_prov_capra_cavoli.sh          # Provisioning per lo script completo
 ```
 ---
 ## Architettura
@@ -147,13 +144,15 @@ vm2: [lupo, cavolo, capra]   ✓ tutti i processi su vm2
 ---
 ## Avvio rapido
 
+#creo cartella per l'esercizio e una sottocartella per gli script
 ```bash
-# Creo la cartella per l'esercizio e due sottocartelle per le 2 modalità
 
 mkdir capra_cavoli
 cd capra_cavoli
-mkdir automatico
-mkdir manuale
+mkdir esercizio
+cd esercizio
+# Rendo lo script eseguibile
+chmod +x file_capra_cavoli.sh file_prov_capra_cavoli.sh
 ```
 **Modalità automatica**
 
@@ -161,18 +160,12 @@ Lo script esegue in autonomia la sequenza ottimale di 7 passi.
 Viene stampato ad ogni step lo stato delle due VM, la posizione della barca e il processo in transito.
 
 ```bash
-# Passo nella cartella automatico
-cd automatico
-
-# Rendo lo script eseguibile
-chmod +x file_capra_cavoli_automatico.sh
 
 # Avvia le VM con provisioning automatico
 vagrant up
 
-# Entra nella vm1 e lancia lo script
-vagrant ssh vm1
-bash /vagrant/file_capra_cavoli_automatico.sh
+# Lancia lo script
+bash file_capra_cavoli_automatico.sh
 
 ```
 **OUTPUT**
@@ -181,25 +174,19 @@ bash /vagrant/file_capra_cavoli_automatico.sh
 
 **Modalità interattiva**
 
-Disponibile **solo** in `file_capra_cavoli.sh` tramite il flag `--play` (o `-p`).  
+Disponibile **solo**  tramite il flag `--play` (o `-p`).  
 L'utente sceglie a ogni turno quale processo caricare sulla barca. Se la mossa genera un conflitto, lo script stampa un errore e chiede di correggere.
 
 ```bash
 
-#Passo in modalità manuale
-cd manuale
 
 # Avvia le VM
 vagrant up
 
-# Entra nella vm1
-vagrant ssh vm1
 
-# Avvia lo script in modalità automatica
-bash /vagrant/file_capra_cavoli.sh
+# Avvia lo script in modalità interattiva
+bash file_capra_cavoli.sh --play
 
-# Oppure in modalità interattiva
-bash /vagrant/file_capra_cavoli.sh --play
 ```
 
 **OUTPUT**
@@ -237,7 +224,7 @@ In caso di mossa errata lo script segnala il conflitto con `[ERR]` e blocca l'es
 
 ## Provisioning
 
-Entrambi i file di provisioning (`file_prov_capra_cavoli.sh` e `file_prov_automatico.sh`) eseguono le stesse operazioni su ogni VM al primo avvio:
+Sul file di provisioning (`file_prov_capra_cavoli.sh`) eseguo le operazioni su ogni VM al primo avvio:
 
 1. **Aggiornamento pacchetti** — installa `procps`, `curl`, `vim`, `bash`
 2. **Creazione utenti di sistema** — `lupo`, `capra`, `cavolo` (nologin) e `traghettatore` (shell bash)
@@ -273,4 +260,4 @@ Nella modalità interattiva, ogni mossa viene validata da `check_conflicts()` pr
 | vm1 | vm1 | 192.168.56.10 |
 | vm2 | vm2 | 192.168.56.11 |
 
-Le due VM comunicano tramite rete privata host-only (VirtualBox). Il network bridge `TCP/river` rappresenta il canale di trasporto del ferry container tra i due nodi.
+Le due VM comunicano tramite rete privata host-only (VirtualBox). 
