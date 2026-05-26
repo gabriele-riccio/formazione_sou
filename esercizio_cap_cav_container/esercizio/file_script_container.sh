@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# file_capra_cavoli_docker.sh — ESERCIZIO: lupo, capra e cavolo
-# VERSIONE DOCKER — gli attori sono container, le sponde sono reti Docker
+# file_script_container.sh — ESERCIZIO: lupo, capra e cavolo
+# VERSIONE MULTI-VM — migrazione reale tra vm1 (192.168.56.10) e vm2 (192.168.56.11)
 # ==============================================================================
-# Gli attori (lupo, capra, cavolo) sono container Ubuntu in sleep infinity.
-# Le sponde del fiume sono due Docker bridge network:
-#   - sponda_vm1  →  riva di partenza
-#   - sponda_vm2  →  riva di destinazione
-# La migrazione avviene tramite docker network disconnect + connect.
-# Il conflitto viene rilevato ispezionando le reti reali con docker inspect.
+# La migrazione avviene così:
+#   1. docker commit  → salva lo stato del container in un'immagine
+#   2. docker save    → esporta l'immagine in un file .tar
+#   3. scp            → copia il .tar su vm2 via rete privata
+#   4. docker load    → carica l'immagine su vm2
+#   5. docker run     → avvia il container su vm2
+#   6. docker rm      → rimuove il container da vm1
 #
 # Uso:
-#   bash file_capra_cavoli_docker.sh          → soluzione automatica
-#   bash file_capra_cavoli_docker.sh --play   → modalità interattiva
-#   bash file_capra_cavoli_docker.sh --clean  → rimuove container e reti
+#   bash file_script_container.sh          → soluzione automatica
+#   bash file_script_container.sh --play   → modalità interattiva
+#   bash file_script_container.sh --clean  → rimuove tutto
 # ==============================================================================
 set -e
 
@@ -30,13 +31,20 @@ BOLD='\033[1m'
 RESET='\033[0m'
 
 # ─────────────────────────────────────────────────────────────────────────────
-# COSTANTI — nomi delle reti e dei container
-# Non uso più variabili di stato bash: lo stato reale è nei container Docker
+# CONFIGURAZIONE RETE
 # ─────────────────────────────────────────────────────────────────────────────
-NET_VM1="sponda_vm1"
-NET_VM2="sponda_vm2"
+VM1_IP="192.168.56.10"
+VM2_IP="192.168.56.11"
+SSH_USER="vagrant"
+SSH_KEY="/vagrant/.vagrant/machines/vm2/virtualbox/private_key"
+SSH_OPTS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ${SSH_KEY}"
+TMP_DIR="/tmp/migrazione"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# COSTANTI
+# ─────────────────────────────────────────────────────────────────────────────
 ATTORI=("lupo" "capra" "cavolo")
-BARCA_POS="vm1"   # Unica variabile di stato bash rimasta: posizione della barca
+BARCA_POS="vm1"
 STEPS=0
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -49,102 +57,98 @@ log_error() { echo -e "${RED}[ERR]${RESET}  $*"; }
 log_step()  { echo -e "\n${BOLD}── step $STEPS ─────────────────────────────${RESET}"; }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# SETUP — crea le reti Docker e avvia i container su sponda_vm1
-# Ogni attore è un container Ubuntu in sleep infinity connesso a sponda_vm1
+# SETUP — avvia i container su vm1 e prepara la cartella temporanea
 # ─────────────────────────────────────────────────────────────────────────────
 setup() {
     echo -e "\n${BOLD}==> Setup ambiente Docker${RESET}"
+    mkdir -p "$TMP_DIR"
 
-    # Crea le due reti (le sponde del fiume)
-    for net in "$NET_VM1" "$NET_VM2"; do
-        if ! docker network inspect "$net" &>/dev/null; then
-            docker network create "$net" > /dev/null
-            log_ok "Rete '$net' creata"
-        else
-            log_warn "Rete '$net' già esistente — la riuso"
+    # Pulisce eventuali container rimasti da esecuzioni precedenti
+    for attore in "${ATTORI[@]}"; do
+        # Rimuove da vm1 se esiste
+        if docker inspect "$attore" &>/dev/null; then
+            docker rm -f "$attore" > /dev/null
+            log_warn "Container '$attore' rimosso da vm1 (pulizia)"
         fi
+        # Rimuove da vm2 se esiste
+        ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} \
+            "docker inspect $attore &>/dev/null && docker rm -f $attore > /dev/null || true" 2>/dev/null
     done
 
-    # Avvia i container degli attori su sponda_vm1
+    # Avvia i container su vm1
     for attore in "${ATTORI[@]}"; do
-        if docker inspect "$attore" &>/dev/null; then
-            log_warn "Container '$attore' già esistente — lo rimuovo e lo ricreo"
-            docker rm -f "$attore" > /dev/null
-        fi
-        # Container Ubuntu minimale in sleep infinity = processo sempre attivo
         docker run -d \
             --name "$attore" \
-            --network "$NET_VM1" \
             --label "esercizio=capra_cavoli" \
             ubuntu sleep infinity > /dev/null
-        log_ok "Container '${attore}' avviato su ${NET_VM1}"
+        log_ok "Container '${attore}' avviato su vm1"
     done
 
     echo ""
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CLEANUP — rimuove container e reti create dall'esercizio
+# CLEANUP — rimuove tutti i container da entrambe le VM
 # ─────────────────────────────────────────────────────────────────────────────
 cleanup() {
-    echo -e "\n${BOLD}==> Cleanup ambiente Docker${RESET}"
+    echo -e "\n${BOLD}==> Cleanup${RESET}"
     for attore in "${ATTORI[@]}"; do
-        if docker inspect "$attore" &>/dev/null; then
-            docker rm -f "$attore" > /dev/null
-            log_ok "Container '$attore' rimosso"
-        fi
+        docker rm -f "$attore" 2>/dev/null && log_ok "Rimosso '$attore' da vm1" || true
+        ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} \
+            "docker rm -f $attore 2>/dev/null" 2>/dev/null \
+            && log_ok "Rimosso '$attore' da vm2" || true
     done
-    for net in "$NET_VM1" "$NET_VM2"; do
-        if docker network inspect "$net" &>/dev/null; then
-            docker network rm "$net" > /dev/null
-            log_ok "Rete '$net' rimossa"
-        fi
-    done
+    rm -rf "$TMP_DIR"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# GET_ACTORS_ON_NET — legge lo stato REALE da Docker (non da variabili bash)
-# Usa docker network inspect per ottenere i container connessi a una rete
+# GET_ACTORS — legge i container attivi su una VM tramite docker ps
 # ─────────────────────────────────────────────────────────────────────────────
-get_actors_on_net() {
-    local network="$1"
-    # Estrae i nomi dei container connessi alla rete, filtrando solo i nostri attori
-    docker network inspect "$network" \
-        --format '{{range .Containers}}{{.Name}} {{end}}' 2>/dev/null \
-        | tr ' ' '\n' \
-        | grep -E "^(lupo|capra|cavolo)$" \
-        | tr '\n' ' ' \
-        | xargs || true
+get_actors_on_vm() {
+    local vm="$1"   # "vm1" o "vm2"
+    local result=""
+
+    for attore in "${ATTORI[@]}"; do
+        if [[ "$vm" == "vm1" ]]; then
+            if docker inspect "$attore" &>/dev/null; then
+                result+="$attore "
+            fi
+        else
+            if ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} \
+                "docker inspect $attore &>/dev/null" 2>/dev/null; then
+                result+="$attore "
+            fi
+        fi
+    done
+    echo "$result" | xargs || true
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# CHECK_CONFLICTS — rileva conflitti ispezionando la rete Docker reale
-# Un conflitto è: lupo + capra sulla stessa rete, oppure capra + cavolo
-# Se c'è conflitto, Docker stop simula il SIGTERM tra i processi
+# CHECK_CONFLICTS — rileva conflitti su una VM
 # ─────────────────────────────────────────────────────────────────────────────
 check_conflicts() {
-    local network="$1"
+    local vm="$1"
     local actors
-    actors=$(get_actors_on_net "$network")
+    actors=$(get_actors_on_vm "$vm")
 
     if echo "$actors" | grep -q "lupo" && echo "$actors" | grep -q "capra"; then
-        echo "lupo consuma capra → docker stop capra (SIGTERM capra)"
+        echo "lupo consuma capra → docker stop capra (SIGTERM)"
         return 1
     fi
     if echo "$actors" | grep -q "capra" && echo "$actors" | grep -q "cavolo"; then
-        echo "capra consuma cavolo → docker stop cavolo (SIGTERM cavolo)"
+        echo "capra consuma cavolo → docker stop cavolo (SIGTERM)"
         return 1
     fi
     return 0
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# VM_DISPLAY — formatta la lista dei container su una rete per l'output visivo
+# VM_DISPLAY — mostra i container presenti su una VM
 # ─────────────────────────────────────────────────────────────────────────────
 vm_display() {
-    local network="$1"
+    local vm="$1"
     local actors
-    actors=$(get_actors_on_net "$network")
+    actors=$(get_actors_on_vm "$vm")
     if [[ -z "$actors" ]]; then
         echo -e "${GRAY}(vuota)${RESET}"
     else
@@ -153,103 +157,154 @@ vm_display() {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PRINT_STATE — visualizza lo stato reale letto da Docker
-# Mostra vm1 (sponda_vm1), il network bridge, e vm2 (sponda_vm2)
+# PRINT_STATE — mostra lo stato reale di entrambe le VM
 # ─────────────────────────────────────────────────────────────────────────────
 print_state() {
     echo ""
-    echo -e "  ${BOLD}vm1${RESET}  $(vm_display "$NET_VM1")"
+    echo -e "  ${BOLD}vm1${RESET} [${VM1_IP}]  $(vm_display "vm1")"
     if [[ "$BARCA_POS" == "vm1" ]]; then
         echo -e "       ${CYAN}barca${RESET}  ${GRAY}@ vm1${RESET}"
-        echo -e "       ${GRAY}────── network bridge ──────${RESET}"
+        echo -e "       ${GRAY}────── rete privata ──────${RESET}"
     else
-        echo -e "       ${GRAY}────── network bridge ──────${RESET}"
+        echo -e "       ${GRAY}────── rete privata ──────${RESET}"
         echo -e "       ${CYAN}barca${RESET}  ${GRAY}@ vm2${RESET}"
     fi
-    echo -e "  ${BOLD}vm2${RESET}  $(vm_display "$NET_VM2")"
+    echo -e "  ${BOLD}vm2${RESET} [${VM2_IP}]  $(vm_display "vm2")"
     echo ""
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# MIGRATE — sposta un container da una rete Docker all'altra
+# TRANSFER — migra fisicamente un container da una VM all'altra
 #
-# La migrazione reale avviene con:
-#   docker network disconnect <rete_origine> <container>
-#   docker network connect    <rete_dest>    <container>
-#
-# Se il container viene lasciato senza nessuna rete (viaggio vuoto),
-# solo la barca si sposta — nessun docker network command sui container.
+# Passaggi reali:
+#   1. docker commit  → crea immagine dal container
+#   2. docker save    → esporta immagine in .tar
+#   3. scp            → copia .tar sulla VM di destinazione
+#   4. docker load    → carica immagine sulla VM di destinazione
+#   5. docker run     → avvia il container sulla VM di destinazione
+#   6. docker rm      → rimuove il container dalla VM di origine
+# ─────────────────────────────────────────────────────────────────────────────
+transfer() {
+    local process="$1"
+    local origin="$2"   # "vm1" o "vm2"
+    local dest="$3"     # "vm1" o "vm2"
+    local tar_file="${TMP_DIR}/${process}.tar"
+
+    log_info "Trasferimento reale: ${process}  ${origin} → ${dest}"
+
+    if [[ "$origin" == "vm1" ]]; then
+        # Commit + save su vm1
+        log_info "docker commit ${process} ${process}_img"
+        docker commit "$process" "${process}_img" > /dev/null
+        log_info "docker save ${process}_img → ${process}.tar"
+        docker save "${process}_img" -o "$tar_file"
+
+        # Copia su vm2
+        log_info "scp ${process}.tar → vm2"
+        scp $SSH_OPTS "$tar_file" ${SSH_USER}@${VM2_IP}:${TMP_DIR}/${process}.tar 2>/dev/null
+
+        # Load e run su vm2
+        log_info "docker load + docker run su vm2"
+        ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} "
+            mkdir -p ${TMP_DIR}
+            docker load -i ${TMP_DIR}/${process}.tar > /dev/null
+            docker run -d --name ${process} --label esercizio=capra_cavoli \
+                ${process}_img sleep infinity > /dev/null
+        " 2>/dev/null
+
+        # Rimuove da vm1
+        log_info "docker rm ${process} da vm1"
+        docker rm -f "$process" > /dev/null
+        docker rmi "${process}_img" > /dev/null 2>&1 || true
+
+    else
+        # Commit + save su vm2
+        log_info "docker commit ${process} su vm2"
+        ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} "
+            docker commit ${process} ${process}_img > /dev/null
+            docker save ${process}_img -o ${TMP_DIR}/${process}.tar
+        " 2>/dev/null
+
+        # Copia su vm1
+        log_info "scp ${process}.tar → vm1"
+        scp $SSH_OPTS ${SSH_USER}@${VM2_IP}:${TMP_DIR}/${process}.tar "$tar_file" 2>/dev/null
+
+        # Load e run su vm1
+        log_info "docker load + docker run su vm1"
+        docker load -i "$tar_file" > /dev/null
+        docker run -d --name "$process" --label esercizio=capra_cavoli \
+            "${process}_img" sleep infinity > /dev/null
+        docker rmi "${process}_img" > /dev/null 2>&1 || true
+
+        # Rimuove da vm2
+        log_info "docker rm ${process} da vm2"
+        ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} \
+            "docker rm -f ${process} > /dev/null && \
+             docker rmi ${process}_img > /dev/null 2>&1 || true" 2>/dev/null
+    fi
+
+    # Pulizia tar
+    rm -f "$tar_file" 2>/dev/null || true
+}
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MIGRATE — orchestra la migrazione di un container tra le due VM reali
 # ─────────────────────────────────────────────────────────────────────────────
 migrate() {
     local process="${1:-}"
-    local origin_net dest_net
+    local origin="$BARCA_POS"
+    local destination
+    [[ "$origin" == "vm1" ]] && destination="vm2" || destination="vm1"
 
-    # Determina origine e destinazione in base alla posizione della barca
-    if [[ "$BARCA_POS" == "vm1" ]]; then
-        origin_net="$NET_VM1"
-        dest_net="$NET_VM2"
-    else
-        origin_net="$NET_VM2"
-        dest_net="$NET_VM1"
-    fi
-
-    # Se c'è un processo da migrare, esegui il movimento reale Docker
+    # Migrazione reale del container
     if [[ -n "$process" ]]; then
-        # Verifica che il container esista sulla rete di origine
-        if ! get_actors_on_net "$origin_net" | grep -qw "$process"; then
-            log_error "Container '$process' non trovato su $origin_net"
+        # Verifica che il container esista sulla VM di origine
+        if [[ -z "$(get_actors_on_vm "$origin" | grep -w "$process" || true)" ]]; then
+            log_error "Container '$process' non trovato su $origin"
             exit 1
         fi
-
-        # Migrazione reale: disconnetti dalla rete origine, connetti alla rete dest
-        docker network disconnect "$origin_net" "$process"
-        docker network connect    "$dest_net"   "$process"
-        log_info "docker network disconnect ${origin_net} ${process}"
-        log_info "docker network connect    ${dest_net}   ${process}"
+        transfer "$process" "$origin" "$destination"
     fi
 
-    # Sposta la barca (solo variabile bash — la barca non è un container)
-    [[ "$BARCA_POS" == "vm1" ]] && BARCA_POS="vm2" || BARCA_POS="vm1"
-
+    # Sposta la barca
+    BARCA_POS="$destination"
     STEPS=$((STEPS + 1))
     log_step
 
     local cargo_label="${process:-vuoto}"
-    log_info "Migrazione  ${cargo_label}  ${origin_net} → ${dest_net}"
+    log_info "Migrazione  ${cargo_label}  ${origin} → ${destination}"
 
-    # Controlla conflitti sulla rete di origine dopo la migrazione
+    # Controlla conflitti sulla VM di origine
     local conflict
-    if ! conflict=$(check_conflicts "$origin_net" 2>&1); then
-        log_error "CONFLITTO su ${origin_net}: ${conflict}"
-        log_error "Sistema instabile — eseguire rollback"
+    if ! conflict=$(check_conflicts "$origin" 2>&1); then
+        log_error "CONFLITTO su ${origin}: ${conflict}"
+        log_error "Sistema instabile — fare rollback"
         print_state
         exit 1
     fi
 
     [[ -n "$process" ]] \
-        && log_ok "${process} migrato su ${dest_net}" \
+        && log_ok "${process} migrato su ${destination}" \
         || log_warn "Viaggio vuoto — solo admin (barca)"
 
     print_state
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# PLAY_INTERACTIVE — modalità interattiva per risolvere l'indovinello
+# PLAY_INTERACTIVE
 # ─────────────────────────────────────────────────────────────────────────────
 play_interactive() {
     echo -e "\n${BOLD}Modalità Interattiva — Risolvi l'indovinello!${RESET}"
-    echo -e "Digita il nome del container da caricare sulla barca."
-    echo -e "Comandi: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} (viaggio vuoto) | ${CYAN}q${RESET} (esci)\n"
+    echo -e "Comandi: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} (vuoto) | ${CYAN}q${RESET} (esci)\n"
     print_state
 
     while true; do
-        # Condizione di vittoria: sponda_vm1 vuota
         local vm1_actors
-        vm1_actors=$(get_actors_on_net "$NET_VM1")
+        vm1_actors=$(get_actors_on_vm "vm1")
         if [[ -z "$vm1_actors" ]]; then
             echo -e "${GREEN}${BOLD}[SUCCESS] Migrazione completata in ${STEPS} step!${RESET}\n"
-            log_ok "Tutti i container attivi su sponda_vm2"
-            log_ok "sponda_vm1 offline — nessun container residuo"
+            log_ok "Tutti i container attivi su vm2 (${VM2_IP})"
+            log_ok "vm1 offline — nessun container residuo"
             exit 0
         fi
 
@@ -264,44 +319,35 @@ play_interactive() {
 # RUN_AUTO — soluzione automatica in 7 passi
 # ─────────────────────────────────────────────────────────────────────────────
 run_auto() {
-    echo -e "\n${BOLD}Indovinello Capra Cavolo Lupo — Versione Docker${RESET}"
-    log_ok "Container lupo, capra, cavolo attivi su sponda_vm1"
-    log_ok "sponda_vm2 offline — nessun container attivo"
-    echo -e "${GREEN}${BOLD}[Inizio Migrazione]${RESET}\n"
-
-    log_info "Container su sponda_vm1: [lupo, capra, cavolo]"
-    log_info "Obiettivo: migrare tutti su sponda_vm2"
-    log_warn "CONSTRAINT: lupo e capra non possono stare sulla stessa rete"
-    log_warn "CONSTRAINT: capra e cavolo non possono stare sulla stessa rete"
-    log_warn "CONFLITTO  → docker stop <container>  (equivale a SIGTERM)"
+    echo -e "\n${BOLD}Indovinello Capra Cavolo Lupo — Migrazione Multi-VM${RESET}"
+    log_ok "Container lupo, capra, cavolo su vm1 (${VM1_IP})"
+    log_ok "vm2 (${VM2_IP}) vuota"
+    log_warn "CONSTRAINT: lupo e capra non possono coesistere"
+    log_warn "CONSTRAINT: capra e cavolo non possono coesistere"
     print_state
 
-    migrate "capra"   # Step 1: isola capra su vm2
-    migrate ""        # Step 2: barca torna vuota su vm1
-    migrate "cavolo"  # Step 3: porta cavolo su vm2 (traghettatore presente = no conflitto)
-    migrate "capra"   # Step 4: riporta capra su vm1 per non lasciarla col cavolo
-    migrate "lupo"    # Step 5: porta lupo su vm2 (capra resta sola su vm1)
-    migrate ""        # Step 6: barca torna vuota su vm1
-    migrate "capra"   # Step 7: ultima migrazione — capra su vm2
+    migrate "capra"
+    migrate ""
+    migrate "cavolo"
+    migrate "capra"
+    migrate "lupo"
+    migrate ""
+    migrate "capra"
 
     echo -e "${GREEN}${BOLD}[SUCCESS] Migrazione completata in ${STEPS} step!${RESET}\n"
-    log_ok "Tutti i container attivi su sponda_vm2"
-    log_ok "sponda_vm1 offline — nessun container residuo"
+    log_ok "Tutti i container attivi su vm2 (${VM2_IP})"
+    log_ok "vm1 offline — nessun container residuo"
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
 # ENTRYPOINT
 # ─────────────────────────────────────────────────────────────────────────────
+
+# Crea la cartella tmp su vm2 all'avvio
+ssh $SSH_OPTS ${SSH_USER}@${VM2_IP} "mkdir -p ${TMP_DIR}" 2>/dev/null || true
+
 case "${1:-}" in
-    --clean|-c)
-        cleanup
-        ;;
-    --play|-p)
-        setup
-        play_interactive
-        ;;
-    *)
-        setup
-        run_auto
-        ;;
+    --clean|-c)  cleanup ;;
+    --play|-p)   setup && play_interactive ;;
+    *)           setup && run_auto ;;
 esac
