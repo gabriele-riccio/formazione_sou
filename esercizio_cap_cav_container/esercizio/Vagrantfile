@@ -1,8 +1,8 @@
 # =============================================================================================================================================
-=
+
 # Vagrantfile — Esercizio capra e cavoli
 # =============================================================================================================================================
-=
+
 #Attraverso questo script fornisco a Vagrant le istruzioni esatte per costruire
 #e configurare le due  macchine virtuali che mi servono per l'esercizio.
 #Ho creato due macchine virtuali (che mi rappresentano le due sponde del fiume) che comunicano tra loro
