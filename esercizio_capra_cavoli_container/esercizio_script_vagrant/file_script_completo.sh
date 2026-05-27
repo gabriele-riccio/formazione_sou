@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # file_script_completo.sh — Indovinello Lupo, Capra e Cavolo
-# VERSIONE DOCKER MULTI-VM — modalità interattiva
+# VERSIONE DOCKER INDOVINELLO
 # ==============================================================================
 #
 # ATTORI (container Docker):
@@ -21,14 +21,11 @@
 #   - Chiave SSH: /home/vagrant/.ssh/vm1_to_vm2 (generata dal provisioning)
 #   - Il provisioning si occupa di distribuire la chiave pubblica su vm2
 #
-# Uso:
-#   bash file_script_completo.sh         → avvia il gioco
-#   bash file_script_completo.sh --clean → rimuove tutti i container
 # ==============================================================================
-set -e
+set -e # per chiudere lo script in caso di errore
 
 # ─────────────────────────────────────────────────────────────
-# COLORI
+# COLORI: me li genero come ogni esercizio
 # ─────────────────────────────────────────────────────────────
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -143,7 +140,8 @@ setup() {
 }
 
 # ─────────────────────────────────────────────────────────────
-# CLEANUP — rimuove tutti i container da entrambe le VM
+# CLEANUP — rimuove tutti i container da entrambe le VM, serve 
+# per la pulizia finale.
 # ─────────────────────────────────────────────────────────────
 cleanup() {
     echo -e "\n${BOLD}==> Cleanup container${RESET}"
@@ -213,7 +211,7 @@ check_conflicts() {
 # ─────────────────────────────────────────────────────────────
 # TRANSFER_CONTAINER — migra fisicamente UN container tra VM
 #
-# Sequenza reale:
+# Sequenza reale comandi docker:
 #   1. docker commit  → snapshot in immagine
 #   2. docker save    → esporta in .tar
 #   3. scp            → copia sulla VM di destinazione
@@ -277,11 +275,11 @@ print_state() {
     echo ""
     echo -e "  ${BOLD}vm1${RESET} [192.168.56.10]  $(display_vm "vm1")"
     if [[ "$BARCA_POS" == "vm1" ]]; then
-        echo -e "        ${CYAN}⛵ barca${RESET}  ${GRAY}@ vm1${RESET}"
-        echo -e "        ${GRAY}═══════ fiume (rete privata) ═══════${RESET}"
+        echo -e "        ${CYAN}  barca${RESET}  ${GRAY}@ vm1${RESET}"
+        echo -e "        ${GRAY}═══════ fiume (rete VisualStudioCode) ═══════${RESET}"
     else
-        echo -e "        ${GRAY}═══════ fiume (rete privata) ═══════${RESET}"
-        echo -e "        ${CYAN}⛵ barca${RESET}  ${GRAY}@ vm2${RESET}"
+        echo -e "        ${GRAY}═══════ fiume (rete VisualStudioCode) ═══════${RESET}"
+        echo -e "        ${CYAN}  barca${RESET}  ${GRAY}@ vm2${RESET}"
     fi
     echo -e "  ${BOLD}vm2${RESET} [192.168.56.11]  $(display_vm "vm2")"
     echo ""
@@ -327,13 +325,13 @@ migrate() {
     STEPS=$((STEPS + 1))
     log_step
 
-    # Controlla conflitti sulla VM appena lasciata dal traghettatore
+    # Controllo conflitti sulla VM appena lasciata dal traghettatore
     local conflict
     if ! conflict=$(check_conflicts "$origin" 2>&1); then
         log_conflict "DISASTRO su ${origin}: ${conflict}"
-        log_error "Il viaggio non era sicuro — ritorna indietro!"
+        log_error "Il viaggio è da rifare, ritorna indietro!"
         print_state
-        # Offri il rollback
+        # Offro il riavvio
         echo -ne "${YELLOW}Vuoi annullare questa mossa? [s/N]: ${RESET}"
         read -r ans
         if [[ "${ans,,}" == "s" ]]; then
@@ -352,7 +350,7 @@ migrate() {
         fi
     else
         if [[ -n "$process" ]]; then
-            log_ok "${CYAN}${process}${RESET} migrato su ${destination}"
+            log_ok "${CYAN}${process}${RESET} è migrato su ${destination}"
         else
             log_warn "Traghettatore tornato su ${destination} (viaggio vuoto)"
         fi
@@ -366,25 +364,24 @@ migrate() {
 # ─────────────────────────────────────────────────────────────
 play_interactive() {
     clear
-    echo -e "\n${BOLD}${CYAN}╔══════════════════════════════════════════════════╗${RESET}"
-    echo -e "${BOLD}${CYAN}║    Indovinello: Lupo, Capra e Cavolo             ║${RESET}"
-    echo -e "${BOLD}${CYAN}║    Versione Docker Multi-VM                       ║${RESET}"
-    echo -e "${BOLD}${CYAN}╚══════════════════════════════════════════════════╝${RESET}\n"
+    echo -e "\n${BOLD}${CYAN} ════════════════════════════════════════════════ ${RESET}"
+    echo -e "${BOLD}${CYAN}           Indovinello: Lupo, Capra e Cavolo        ${RESET}"
+    echo -e "${BOLD}${CYAN}               Versione Docker Multi-VM             ${RESET}"
+    echo -e "${BOLD}${CYAN}   ════════════════════════════════════════════════ ${RESET}\n"
 
     echo -e "${BOLD}Regole:${RESET}"
-    echo -e "  • Sposta tutti i container da vm1 a vm2"
-    echo -e "  • ${RED}Lupo + Capra${RESET} non possono stare sulla stessa VM senza il traghettatore"
-    echo -e "  • ${RED}Capra + Cavolo${RESET} non possono stare sulla stessa VM senza il traghettatore"
-    echo -e "  • Il traghettatore si sposta SEMPRE con te (in ogni mossa)"
-    echo -e "  • Puoi tornare indietro con '${YELLOW}annulla${RESET}' se commetti un errore\n"
+    echo -e "    Sposta tutti i container da vm1 a vm2"
+    echo -e "    ${RED}Lupo + Capra${RESET} non possono stare sulla stessa VM senza il traghettatore"
+    echo -e "    ${RED}Capra + Cavolo${RESET} non possono stare sulla stessa VM senza il traghettatore"
+    echo -e "    Il traghettatore si sposta SEMPRE con te (in ogni mossa)"
+    echo -e "    Puoi tornare indietro con '${YELLOW}annulla${RESET}' se commetti un errore\n"
 
     echo -e "${BOLD}Comandi disponibili:${RESET}"
-    echo -e "  ${CYAN}lupo${RESET}      → porta il lupo sulla sponda opposta"
-    echo -e "  ${CYAN}capra${RESET}     → porta la capra sulla sponda opposta"
-    echo -e "  ${CYAN}cavolo${RESET}    → porta il cavolo sulla sponda opposta"
-    echo -e "  ${CYAN}invio${RESET}     → viaggio vuoto (torna indietro da solo)"
-    echo -e "  ${CYAN}stato${RESET}     → mostra lo stato attuale senza fare mosse"
-    echo -e "  ${CYAN}q${RESET}         → esci\n"
+    echo -e "  ${CYAN}lupo${RESET}      # porta il lupo sulla sponda opposta"
+    echo -e "  ${CYAN}capra${RESET}     # porta la capra sulla sponda opposta"
+    echo -e "  ${CYAN}cavolo${RESET}    # porta il cavolo sulla sponda opposta"
+    echo -e "  ${CYAN}invio${RESET}     # viaggio vuoto (torna indietro da solo)"
+    echo -e "  ${CYAN}q${RESET}         # esci\n"
 
     print_state
 
@@ -395,27 +392,24 @@ play_interactive() {
         # Vittoria: vm1 vuota E traghettatore su vm2
         if [[ -z "$vm1_procs" && "$BARCA_POS" == "vm2" ]]; then
             echo -e "${GREEN}${BOLD}"
-            echo -e "╔══════════════════════════════════════════════════╗"
-            echo -e "║  🎉 VITTORIA! Migrazione completata in ${STEPS} mosse!  ║"
-            echo -e "║  Tutti i container sono su vm2 in sicurezza!     ║"
-            echo -e "╚══════════════════════════════════════════════════╝"
+            echo -e " ══════════════════════════════════════════════════ "
+            echo -e " VITTORIA! Migrazione completata in ${STEPS} mosse!"
+            echo -e "   Tutti i container sono su vm2 in sicurezza!"
+            echo -e " ══════════════════════════════════════════════════ "
             echo -e "${RESET}"
             log_ok "lupo, capra, cavolo e traghettatore → tutti su vm2"
             print_state
             exit 0
         fi
 
-        # ── INPUT UTENTE ────────────────────────────────────────
-        echo -ne "${CYAN}→ Mossa [barca su ${BARCA_POS}]: ${RESET}"
+        # ── INPUT UTENTE ────────────────────────────────────────────────
+        echo -ne "${CYAN}→ Mossa fatta [barca su ${BARCA_POS}]: ${RESET}"
         read -r input
 
         case "${input,,}" in
             q|quit|esci)
                 echo "Uscita dal gioco."
                 exit 0
-                ;;
-            stato|status|s)
-                print_state
                 ;;
             ""|invio|vuoto)
                 migrate ""
@@ -425,15 +419,17 @@ play_interactive() {
                 ;;
             *)
                 log_warn "Comando non riconosciuto: '${input}'"
-                echo -e "  Usa: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} | ${CYAN}stato${RESET} | ${CYAN}q${RESET}"
+                echo -e "  Usa: ${CYAN}lupo${RESET} | ${CYAN}capra${RESET} | ${CYAN}cavolo${RESET} | ${CYAN}invio${RESET} | ${CYAN}q${RESET}"
                 ;;
         esac
     done
 }
 
-# ─────────────────────────────────────────────────────────────
-# ENTRYPOINT
-# ─────────────────────────────────────────────────────────────
+# ─────────────────────────────────────────────────────────────────
+# ENTRYPOINT: ho cercato su internet un modo per pulire il tutto 
+# dopo aver giocato e lo fa con questo entrypoint mettendo 
+# dopo aver giocato il richiamo dello script seguito da --clean.
+# ─────────────────────────────────────────────────────────────────
 case "${1:-}" in
     --clean|-c)
         echo -e "\n${BOLD}==> Pulizia completa${RESET}"
