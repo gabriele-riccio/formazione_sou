@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# ==============================================================================
+# ==========================================================================================================================================
 # file_prov_container.sh
-# Provisioning: installa Docker, configura SSH chiave vm1→vm2
+# Provisioning: installa Docker e configura la chiave SSH per far comunicare e far migrare i container tra vm1 e vm2.
 # Viene eseguito su entrambe le VM (vm1 e vm2) durante il provisioning
 # Requisiti:
 # - Vagrantfile configurato per condividere la cartella /vagrant tra le VM
@@ -10,8 +10,40 @@
 # Note:
 # - Assicurarsi che il provisioning sia idempotente (può essere eseguito più volte senza errori)
 # - Il provisioning deve essere eseguito con privilegi di root (sudo) per installare pacchetti e configurare SSH
-# ==============================================================================
-set -e
+
+# Dichiarazione variabili per i percorsi della chiave ssh e l'archivio per salvare la chiave.
+# poi c'è il classico aggiotnamento dei pacchetti(ca-certificates,curl,gnupg,lsb-release e openssh)
+# Poi rimuovo(dopo tante prove)il file che bloccava la comunicazione tra le 2 vm,
+# che blocca PasswordAuthentication e PubkeyAuth (presente sulle immagini Ubuntu cloud) con rm -f etc
+# Mi riscrivo la configutazione SSH pulita e riavvio la configurazione.
+
+# Dopo ciò installo Docker e tutti i suoi pacchetti che servoni per la creazione e la migrazione dei pacchetti, impostando che
+# venga eseguito con i privilegi da root(per scaricarli) con usermod -aG docker vagrant per consentire a un utente 
+# di gestire Docker senza dover digitare ogni volta sudo.
+
+# Poi ho gestito la configurazione della comunicazione SSH tra le due macchine virtuali.
+# Il provisioning viene eseguito su entrambe le VM con lo stesso script, quindi la prima cosa che facco è preparare 
+# la cartella .ssh nella home dell'utente vagrant, assegnandole i permessi corretti con chmod 700 "$SSH_DIR" sa root.
+
+# Su vm1 genero una coppia di chiavi crittografiche di tipo ED25519 (un algoritmo moderno basato su curve ellittiche che ho trovato
+# su internet, più sicuro e compatto rispetto al classico RSA(che usa la fattorizzazione in dei numeri primi).
+# La chiave viene generata senza passphrase perché deve funzionare in modo automatico all'interno degli script, senza intervento umano.
+# La chiave privata rimane su vm1, mentre la chiave pubblica viene copiata nella cartella /vagrant che è condivisa tra l'host Mac e le VM,
+# creata automaticamente da Vagrant tramite VirtualBox.
+# Essa è visibile sia da vm1 che da vm2 come se fosse un disco comune, il che mi permette di usarla come canale sicuro per trasferire 
+# la chiave pubblica senza dover aprire connessioni di rete prima che SSH sia configurato.
+
+# Inserisco su vm2 un piccolo loop di attesa: aspettiamo fino a 30 secondi che la chiave pubblica appaia nella cartella condivisa.
+# Questo serve a gestire eventuali casi in cui il provisioning delle due VM avvenga quasi in parallelo. 
+
+# Una volta che il file è disponibile, lo aggiunge al file authorized_keys di vagrant che è la lista delle chiavi pubbliche che SSH su vm2 considera fidate. 
+# Da quel momento in poi, ogni volta che vm1 si connette a vm2 presentando la propria chiave privata, vm2 la confronta con la pubblica che ha in authorized_keys
+# e se corrispondono la connessione viene accettata senza nessuna password.
+# Il tutto si chiude con un riavvio di sshd per caricare la nuova configurazione.
+# Il risultato finale è una comunicazione completamente automatica e sicura tra le due VM, basata su crittografia asimmetrica, 
+# che è esattamente quello che serve per far migrare i container Docker da una sponda all'altra del fiume.
+# ==========================================================================================================================================
+set -e #Per fare in modo che se ci sono errori lo script si interrompa.
 
 HOSTNAME_CURR=$(hostname)
 SSH_DIR="/home/vagrant/.ssh"
