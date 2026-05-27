@@ -1,14 +1,14 @@
-# 🐺🐐🥦 Indovinello: Lupo, Capra e Cavolo — Versione Docker Multi-VM
+# 🐺🐐🥦 Indovinello: Lupo, Capra e Cavolo — Versione Docker, migrazione Container tra le 2 VM.
 
 ## Descrizione
 
-Reinterpretazione in chiave DevOps del classico indovinello medievale.  
+Reinterpretazione in chiave DevOps del classico indovinello medievale: 
 Gli attori dell'indovinello sono **container Docker reali** che migrano fisicamente tra due macchine virtuali Vagrant, che rappresentano le due sponde del fiume.
 
 | Elemento | Versione classica | Versione Docker |
 |---|---|---|
-| Lupo, Capra, Cavolo | Animali/oggetti | Container Docker (`ubuntu sleep infinity`) |
-| Traghettatore | Il contadino con la barca | Container Docker che si sposta sempre |
+| Lupo, Capra, Cavolo | Animali | Container Docker (`ubuntu sleep infinity`) |
+| Traghettatore | Il contadino con la barca | Container Docker migra sempre |
 | Sponde del fiume | Due rive | vm1 (`192.168.56.10`) e vm2 (`192.168.56.11`) |
 | Fiume | L'acqua | Rete privata VirtualBox |
 | Migrazione | Attraversare il fiume | `docker commit → save → scp → load → run → rm` |
@@ -18,10 +18,11 @@ Gli attori dell'indovinello sono **container Docker reali** che migrano fisicame
 ## Regole
 
 - Sposta tutti i container da **vm1** a **vm2**
-- **Lupo + Capra** non possono stare sulla stessa VM senza il traghettatore
-- **Capra + Cavolo** non possono stare sulla stessa VM senza il traghettatore
+- **Lupo e Capra** non possono stare sulla stessa VM senza il traghettatore(lupo mangia la capra)
+- **Capra e Cavolo** non possono stare sulla stessa VM senza il traghettatore(capra mangia cavolo)
 - Il **traghettatore si sposta sempre** con ogni mossa (rappresenta la barca)
 - Se si viaggia vuoti, si sposta solo il traghettatore
+- Far migrare tutti i container, da Vm1 a Vm2( senza che il **lupo mangi la capra** e/o che **il cavolo venga mangiato dalla capra** ).
 
 ---
 
@@ -41,7 +42,6 @@ esercizio_script_vagrant/
 
 - [Vagrant](https://www.vagrantup.com/) >= 2.x
 - [VirtualBox](https://www.virtualbox.org/) >= 6.x
-- Connessione internet (per scaricare la box e Docker)
 
 ---
 
@@ -114,37 +114,40 @@ All'avvio lo script mostra lo stato iniziale: tutti i container su vm1.
 
 Se si tenta una mossa che crea un conflitto, lo script lo segnala e offre la possibilità di **annullare la mossa** (rollback automatico).
 
+> Questa cosa l'ho aggiunta in un secondo momento ed è assente nella prima versione dove gli attori sono processi
+
 ---
 
-## Come Funziona la Migrazione
+## Come Funziona la Migrazione(comandi Docker che vengono eseguiti nello script)
 
 Ogni volta che un container viene spostato, avviene questa sequenza reale tra le due VM:
 
 ```
-1. docker commit <container> <img>     → snapshot del container in un'immagine
-2. docker save <img> -o <file>.tar     → esporta l'immagine in un archivio
-3. scp <file>.tar → vm2                → copia l'archivio via SSH sulla VM di destinazione
-4. docker load -i <file>.tar           → carica l'immagine sulla VM di destinazione
-5. docker run -d --name <container>... → avvia il container sulla VM di destinazione
-6. docker rm -f <container>            → rimuove il container dalla VM di origine
+1. docker commit <container> <img>     # viene effettuto lo snapshot del container in un'immagine
+2. docker save <img> -o <file>.tar     # viene esportata l'immagine in un archivio
+3. scp <file>.tar → vm2                # viene copiato l'archivio via SSH sulla VM di destinazione(da Vm1 a Vm2 o viceversa)
+4. docker load -i <file>.tar           # viene caricata l'immagine sulla VM di destinazione
+5. docker run -d --name <container>...  # viene avviato il container sulla VM di destinazione
+6. docker rm -f <container>            # viene rimosso il container dalla VM di origine
 ```
 
 ---
 
 ## Come Funziona la Comunicazione SSH
 
-Il provisioning risolve automaticamente il problema della comunicazione tra VM:
+Ho avuto dei problemi per far comunicare le due VM per cui ho modificato il provisioning per risolvere automaticamente il 
+problema della comunicazione tra le 2 VM:
 
-1. **vm1** genera una coppia di chiavi SSH (`ed25519`) durante il provisioning
-2. La chiave pubblica viene salvata in `/vagrant/vm1_pub_key` (cartella condivisa)
-3. **vm2**, provisionata dopo vm1, legge la chiave pubblica e la aggiunge ai propri `authorized_keys`
-4. Lo script usa `/home/vagrant/.ssh/vm1_to_vm2` per autenticarsi su vm2
+1. **Vm1** genera una coppia di chiavi SSH (`ed25519`) durante il provisioning
+2. La chiave pubblica viene salvata in *`/vagrant/vm1_pub_key`* (cartella condivisa)
+3. **Vm2**, provisionata dopo vm1, legge la chiave pubblica e la aggiunge ai propri *`authorized_keys`*
+4. Infine lo script usa *`/home/vagrant/.ssh/vm1_to_vm2`* per autenticarsi su vm2
 
-> **Nota**: viene rimosso il file `/etc/ssh/sshd_config.d/60-cloudimg-settings.conf` presente nelle immagini Ubuntu Cloud, che per default blocca l'autenticazione con chiave pubblica.
+> **Nota**: Ho rimosso il file `/etc/ssh/sshd_config.d/60-cloudimg-settings.conf` presente nelle immagini Ubuntu Cloud, che per default blocca l'autenticazione con chiave pubblica.
 
 ---
 
-## Soluzione dell'Indovinello (Spoiler)
+## Soluzione dell'Indovinello (Soluzione che dovrebbe uscire)
 
 <details>
 <summary>Clicca per vedere la soluzione in 7 mosse</summary>
@@ -152,13 +155,13 @@ Il provisioning risolve automaticamente il problema della comunicazione tra VM:
 | Mossa | Azione | vm1 | vm2 |
 |---|---|---|---|
 | Inizio | — | lupo, capra, cavolo, traghettatore | — |
-| 1 | Porta **capra** | lupo, cavolo | capra, traghettatore |
-| 2 | Torna **vuoto** | lupo, cavolo, traghettatore | capra |
-| 3 | Porta **cavolo** | lupo | cavolo, capra, traghettatore |
-| 4 | Riporta **capra** | lupo, capra, traghettatore | cavolo |
-| 5 | Porta **lupo** | capra | lupo, cavolo, traghettatore |
-| 6 | Torna **vuoto** | capra, traghettatore | lupo, cavolo |
-| 7 | Porta **capra** | — | tutti ✅ |
+| 1 | Porta **capra** su vm2 | lupo, cavolo | capra, traghettatore |
+| 2 | Torna **vuoto** su vm1| lupo, cavolo, traghettatore | capra |
+| 3 | Porta **cavolo** su vm2 | lupo | cavolo, capra, traghettatore |
+| 4 | Riporta **capra** su vm1 | lupo, capra, traghettatore | cavolo |
+| 5 | Porta **lupo** su vm2 | capra | lupo, cavolo, traghettatore |
+| 6 | Torna **vuoto** su vm1 | capra, traghettatore | lupo, cavolo |
+| 7 | Porta **capra** su vm2 | — | lupo, capra, cavolo, traghettatore |
 
 </details>
 
@@ -181,7 +184,3 @@ vagrant destroy -f
 
 ---
 
-## Autore
-
-Esercizio realizzato come progetto pratico per il corso di formazione DevOps. 
-Stack: **Vagrant** · **VirtualBox** · **Docker** · **Bash** · **Ubuntu 20.04 LTS**
