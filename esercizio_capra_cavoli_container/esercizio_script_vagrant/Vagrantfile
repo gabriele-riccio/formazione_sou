@@ -1,0 +1,24 @@
+# ==============================================================================
+# Vagrantfile — Esercizio lupo, capra e cavolo (container)
+# Questo Vagrantfile definisce due macchine virtuali (vm1 e vm2) che eseguono
+# il sistema operativo Ubuntu 20.04 (focal64).
+# Ogni macchina virtuale è configurata con un indirizzo IP privato
+# ed utilizzano uno script di provisioning (file_provision_container.sh) per installare
+# i container necessari per l'esercizio del lupo, capra e cavolo.
+# ==============================================================================
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/focal64"
+  config.vm.provider "virtualbox"
+
+  config.vm.define "vm1" do |node|
+    node.vm.hostname = "vm1"
+    node.vm.network "private_network", ip: "192.168.56.10"
+    node.vm.provision "shell", path: "file_provision_container.sh"
+  end
+
+  config.vm.define "vm2" do |node|
+    node.vm.hostname = "vm2"
+    node.vm.network "private_network", ip: "192.168.56.11"
+    node.vm.provision "shell", path: "file_provision_container.sh"
+  end
+end
