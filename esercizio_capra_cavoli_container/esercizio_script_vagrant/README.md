@@ -47,58 +47,61 @@ esercizio_script_vagrant/
 
 ## Installazione e Avvio
 
-### 1. Clona il repository e posizionati nella cartella
+### 1. Clono il repository e posizionati nella cartella
 
 ```bash
 cd esercizio_script_vagrant
 ```
 
-### 2. Dai i permessi agli script
+### 2. Do i permessi agli script
 
 ```bash
 chmod +x file_script_completo.sh
 chmod +x file_provision_container.sh
 ```
 
-### 3. Avvia le VM (installa Docker e configura SSH automaticamente)
+### 3. Avvio le VM (installa Docker e configura SSH automaticamente)
 
 ```bash
 vagrant up
 ```
-
+![prima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.20.06.png)
+![seconda parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.20.17.png)
 
 > Il provisioning installa Docker su entrambe le VM e configura la comunicazione SSH tramite chiave pubblica/privata tra vm1 e vm2. Richiede qualche minuto.
 
-### 4. Entra in vm1 ed esegui lo script
+### 4. Entro in vm1 ed esegui lo script
 
 ```bash
 vagrant ssh vm1
 bash /vagrant/file_script_completo.sh
 ```
+![terza parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.21.09.png)
+![quarta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.50.37.png)
+![quinta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.16.56.png)
+![sesta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.24.37.png)
+![settima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.24.49.png)
+![ottava parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.08.png)
+![nona parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.16.png)
+![decima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.25.png)
+![undicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.32.png)
 
-### 5. (Opzionale) Monitora vm2 in tempo reale
+### 5. (Opzionale) Monitora vm2 e vm1:
 
-Apri un secondo terminale nella stessa cartella:
+Apro un secondo e un terzo terminale nella stessa cartella:
 
 ```bash
-vagrant ssh vm2
-watch -n 1 docker ps
+vagrant ssh vm1      #due terminali differenti
+vagrant ssh vm2      #due terminali differenti
+docker ps            #su entrambi ogni volta, per vedere man mano la creazione dei container sulle due vm.
 ```
 
-Vedrai i container apparire e sparire su vm2 ad ogni migrazione.
+Vedremo i container apparire e sparire su vm1 e vm2 ad ogni migrazione.
+
+![dodicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2015.22.35.png)
+![tredicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2015.23.00.png)
 
 ---
-
-## Come si Gioca
-
-All'avvio lo script mostra lo stato iniziale: tutti i container su vm1.
-
-```
-  vm1 [192.168.56.10]  lupo capra cavolo [traghettatore]
-        ⛵ barca  @ vm1
-        ═══════ fiume (rete privata) ═══════
-  vm2 [192.168.56.11]  (vuota)
-```
 
 ### Comandi disponibili
 
@@ -108,7 +111,6 @@ All'avvio lo script mostra lo stato iniziale: tutti i container su vm1.
 | `capra` | Porta la capra sulla sponda opposta (+ traghettatore) |
 | `cavolo` | Porta il cavolo sulla sponda opposta (+ traghettatore) |
 | `invio` (tasto Invio vuoto) | Viaggio vuoto — sposta solo il traghettatore |
-| `stato` | Mostra lo stato attuale senza fare mosse |
 | `q` | Esci dal gioco |
 
 ### Gestione degli errori
@@ -116,6 +118,9 @@ All'avvio lo script mostra lo stato iniziale: tutti i container su vm1.
 Se si tenta una mossa che crea un conflitto, lo script lo segnala e offre la possibilità di **annullare la mossa** (rollback automatico).
 
 > Questa cosa l'ho aggiunta in un secondo momento ed è assente nella prima versione dove gli attori sono processi
+
+![quattordicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.28.53.png)
+![quindicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.32.55.png)
 
 ---
 
