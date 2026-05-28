@@ -40,8 +40,8 @@ esercizio_script_vagrant/
 
 ## Requisiti
 
-- [Vagrant](https://www.vagrantup.com/) >= 2.x
-- [VirtualBox](https://www.virtualbox.org/) >= 6.x
+- Vagrant >= 2.x
+- VirtualBox >= 6.x
 
 ---
 
@@ -65,6 +65,7 @@ chmod +x file_provision_container.sh
 ```bash
 vagrant up
 ```
+
 
 > Il provisioning installa Docker su entrambe le VM e configura la comunicazione SSH tramite chiave pubblica/privata tra vm1 e vm2. Richiede qualche minuto.
 
