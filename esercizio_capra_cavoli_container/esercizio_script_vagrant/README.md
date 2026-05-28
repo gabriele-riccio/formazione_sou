@@ -65,8 +65,8 @@ chmod +x file_provision_container.sh
 ```bash
 vagrant up
 ```
-![prima parte terminale](container_capra_cavoli/Screenshot%202026-05-27%20alle%2017.20.06.png)
-![seconda parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.20.17.png)
+![prima parte terminale](../container_capra_cavoli/Screenshot%202026-05-27%20alle%2017.20.06.png)
+![seconda parte terminale](../container_capra_cavoli/Screenshot%202026-05-27%20alle%2017.20.17.png)
 
 > Il provisioning installa Docker su entrambe le VM e configura la comunicazione SSH tramite chiave pubblica/privata tra vm1 e vm2. Richiede qualche minuto.
 
@@ -76,15 +76,15 @@ vagrant up
 vagrant ssh vm1
 bash /vagrant/file_script_completo.sh
 ```
-![terza parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.21.09.png)
-![quarta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.50.37.png)
-![quinta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.16.56.png)
-![sesta parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.24.37.png)
-![settima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.24.49.png)
-![ottava parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.08.png)
-![nona parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.16.png)
-![decima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.25.png)
-![undicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.25.32.png)
+![terza parte terminale](../container_capra_cavoli/Screenshot%202026-05-27%20alle%2017.21.09.png)
+![quarta parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.50.37.png)
+![quinta parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.16.56.png)
+![sesta parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.24.37.png)
+![settima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.24.49.png)
+![ottava parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.25.08.png)
+![nona parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.25.16.png)
+![decima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.25.25.png)
+![undicesima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.25.32.png)
 
 ### 5. (Opzionale) Monitora vm2 e vm1:
 
@@ -98,8 +98,8 @@ docker ps            #su entrambi ogni volta, per vedere man mano la creazione d
 
 Vedremo i container apparire e sparire su vm1 e vm2 ad ogni migrazione.
 
-![dodicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2015.22.35.png)
-![tredicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2015.23.00.png)
+![dodicesima parte terminale](../container_capra_cavoli/Screenshot%202026-05-27%20alle%2015.22.35.png)
+![tredicesima parte terminale](../container_capra_cavoli/Screenshot%202026-05-27%20alle%2015.23.00.png)
 
 ---
 
@@ -119,8 +119,8 @@ Se si tenta una mossa che crea un conflitto, lo script lo segnala e offre la pos
 
 > Questa cosa l'ho aggiunta in un secondo momento ed è assente nella prima versione dove gli attori sono processi
 
-![quattordicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.28.53.png)
-![quindicesima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-28%20alle%2010.32.55.png)
+![quattordicesima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.28.53.png)
+![quindicesima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2010.32.55.png)
 
 ---
 
