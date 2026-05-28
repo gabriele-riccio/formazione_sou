@@ -445,10 +445,10 @@ migrate() {
 # ─────────────────────────────────────────────────────────────
 play_interactive() {
     clear
-    echo -e "\n${BOLD}${CYAN} ════════════════════════════════════════════════ ${RESET}"
-    echo -e "${BOLD}${CYAN}           Indovinello: Lupo, Capra e Cavolo        ${RESET}"
-    echo -e "${BOLD}${CYAN}               Versione Docker Multi-VM             ${RESET}"
-    echo -e "${BOLD}${CYAN}   ════════════════════════════════════════════════ ${RESET}\n"
+    echo -e "\n${BOLD}${CYAN} ════════════════════════════════════════════════════  ${RESET}"
+    echo -e "${BOLD}${CYAN}            Indovinello: Lupo, Capra e Cavolo            ${RESET}"
+    echo -e "${BOLD}${CYAN}                Versione Docker Multi-VM                 ${RESET}"
+    echo -e "${BOLD}${CYAN}   ════════════════════════════════════════════════════  ${RESET}\n"
 
     echo -e "${BOLD}Regole:${RESET}"
     echo -e "    Sposta tutti i container da vm1 a vm2"
@@ -474,10 +474,10 @@ play_interactive() {
         vm1_procs=$(get_procs_on_vm "vm1")
         if [[ -z "$vm1_procs" && "$BARCA_POS" == "vm2" ]]; then
             echo -e "${GREEN}${BOLD}"
-            echo -e " ══════════════════════════════════════════════════ "
-            echo -e " VITTORIA! Migrazione completata in ${STEPS} mosse!"
-            echo -e "   Tutti i container sono su vm2 in sicurezza!"
-            echo -e " ══════════════════════════════════════════════════ "
+            echo -e " ══════════════════════════════════════════════════════  "
+            echo -e "  VITTORIA! Migrazione completata in ${STEPS} mosse!"
+            echo -e "    Tutti i container sono su vm2 in sicurezza!"
+            echo -e " ══════════════════════════════════════════════════════  "
             echo -e "${RESET}"
             log_ok "lupo, capra, cavolo e traghettatore → tutti su vm2"
             print_state
