@@ -182,7 +182,7 @@ vagrant ssh vm1
 bash /vagrant/file_script_completo.sh --clean
 ```
 
-![ultima parte terminale](../container_capra_cavoli/Screenshot%202026-05-28%20alle%2011.53.37.png)
+![ultima parte terminale](../container_capra_cavoli/container_capra_cavoli/Screenshot%202026-05-28%20alle%2011.53.37.png)
 
 Per distruggere completamente le VM:
 
