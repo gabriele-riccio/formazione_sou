@@ -65,7 +65,7 @@ chmod +x file_provision_container.sh
 ```bash
 vagrant up
 ```
-![prima parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.20.06.png)
+![prima parte terminale](container_capra_cavoli/Screenshot%202026-05-27%20alle%2017.20.06.png)
 ![seconda parte terminale](container_capra_cavoli_img/Screenshot%202026-05-27%20alle%2017.20.17.png)
 
 > Il provisioning installa Docker su entrambe le VM e configura la comunicazione SSH tramite chiave pubblica/privata tra vm1 e vm2. Richiede qualche minuto.
