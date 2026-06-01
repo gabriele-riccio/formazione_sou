@@ -33,7 +33,6 @@ GREEN='\033[0;32m'   # successi e conferme
 YELLOW='\033[1;33m'  # avvisi
 BLUE='\033[0;34m'    # informazioni generali
 CYAN='\033[0;36m'    # nomi dei container e comandi
-MAGENTA='\033[0;35m' # non usato, disponibile per estensioni future
 GRAY='\033[0;90m'    # testo secondario (es. VM vuota)
 BOLD='\033[1m'       # testo in grassetto per titoli e step
 RESET='\033[0m'      # resetta tutti i colori al default del terminale
