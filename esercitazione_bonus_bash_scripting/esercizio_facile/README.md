@@ -11,7 +11,7 @@ Un server aziendale ha subito un picco anomalo di traffico. Il file `accessi.txt
 
 ### File di input — `accessi.txt`
 
-![Contenuto del file accessi.txt aperto in vim](screenshots/01_accessi_vim.png)
+![prima parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2014.48.45.png)
 
 ---
 
