@@ -87,7 +87,7 @@ if [[ ! -f "$FILE" ]]; then
 fi
 
 #  Gestisco le STRUTTURE DATI 
-# Ho generato degli Array associativi per accumulare somma e conteggio per ogni server:
+# Ho generato degli Array associativi per accumulare somma e conteggio per ogni server e i server unici:
 declare -A somma_cpu     # somma_cpu["srv-web01"] = somma totale CPU
 declare -A conteggio     # conteggio["srv-web01"] = numero di misurazioni
 declare -a server_unici  # array ordinato dei server (per ordine di apparizione)
@@ -123,7 +123,7 @@ done
 
 ### Strutture dati utilizzate
 
-Lo script usa tre array distinti:
+Ho usato nello script tre array (2 associativi e uno indicizzato (normale)) distinti:
 
 | Array | Tipo | Contenuto |
 |---|---|---|
@@ -131,7 +131,7 @@ Lo script usa tre array distinti:
 | `conteggio` | Associativo (`-A`) | Numero di misurazioni per ogni server |
 | `server_unici` | Indicizzato (`-a`) | Elenco dei server nell'ordine in cui compaiono |
 
-Gli array associativi usano il **nome del server come chiave**, permettendo di accumulare i valori senza dover cercare manualmente l'indice corretto.
+Gli array associativi usano il **nome del server come chiave**, permettendo di accumulare i valori senza dover cercare manualmente l'indice corretto(aggiungendo cicli for o while allo script).
 
 ### Ciclo `while` + `read` — Lettura del file
 
@@ -141,10 +141,22 @@ while IFS=' ' read -r server cpu; do
     ...
 done < "$FILE"
 ```
-
-- `IFS=' '` imposta lo spazio come separatore: `read` popola automaticamente `$server` e `$cpu`
+- `while read -r ` legge il file riga per riga dall'inizio alla fine.
+- ` IFS=' ' ` imposta lo spazio come separatore  campo (Internal Field Separator).
+  Significa che Bash prenderà ogni riga, la "taglierà" dove c'è uno spazio e assegnerà i pezzi alle variabili
+  successive.
+- `server cpu`,attraverso `read -r`, fa in modo che il primo blocco di testo (il nome del server) finisce nella variabile $server,
+  il secondo blocco (il valore della CPU) finisce in $cpu.
 - `< "$FILE"` redirige il file come input del `while`, senza usare `cat` (più efficiente)
-- `${somma_cpu["$server"]:-0}` è un'**espansione con valore di default**: se la chiave non esiste ancora nell'array, restituisce `0` invece di dare errore
+- `${somma_cpu["$server"]:-0}` è un'**espansione con valore di default**: prende il valore attualmente salvato per questo server; se l'array è ancora
+  vuoto (perché è la prima volta che incontriamo questo server), usa 0 come valore di partenza".
+  Senza questo controllo, Bash darebbe un errore matematico al primo giro.
+  Inoltre `+ cpu` somma il valore corrente di CPU a quello vecchio e aggiorna l'array.
+- `conteggio["$server"]=$(( ${conteggio["$server"]:-0} + 1 ))` invece fa come sopra, ma invece di sommare il valore della CPU,
+  lo script incrementa il contatore di 1.
+- Poi c'è un if che controlla il contatore appena incrementato.
+  Se il valore è esattamente uguale a 1 (-eq 1), significa che questo server è stato appena   scoperto. In questo caso, lo aggiunge in coda a un array
+  indicizzato chiamato server_unici.
 
 ### Ciclo `for` — Calcolo e stampa
 
@@ -155,17 +167,12 @@ for server in "${server_unici[@]}"; do
 done
 ```
 
-- `"${server_unici[@]}"` espande tutti gli elementi dell'array mantenendo l'ordine di apparizione
-- La divisione `$((...))` è **divisione intera** nativa di Bash — come richiesto dalla consegna
+- `for server in "${server_unici[@]}"; do` scorriamo tutti gli elementi dell'array che ho appena riempito.
+- Con `media=$(( somma_cpu["$server"] / conteggio["$server"] ))` faccio l'operazione matematica della media
+  prendendo il totale della CPU per ogni server dal dizionario `somma_cpu` e lo divido (/) per il numero di rilevazioni pescate da `conteggio`.
+  > La divisione `$((...))` è **divisione intera** nativa di Bash,come richiesto dalla consegna, infatti bash non riesce a
+    gestire nativamente numeri non interi.
+- Infine stampo il risultato tramite l'unione del server e la sua media tra virgolette doppie.
 
-### Output atteso
-
-```
-=== REPORT UTILIZZO MEDIO CPU ===
-srv-web01: 54%
-srv-db02: 48%
-srv-auth01: 61%
-srv-cache03: 50%
-```
-
-I valori numerici variano ad ogni esecuzione perché il file `metriche.txt` viene generato con dati casuali.
+### Output terminale
+![sesta parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.05.39.png)
