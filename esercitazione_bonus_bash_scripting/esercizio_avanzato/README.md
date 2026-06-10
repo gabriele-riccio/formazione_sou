@@ -1,7 +1,6 @@
-# Esercizio AVANZATO — Analisi Metriche CPU Server
+# Esercizio AVANZATO 
 
 **Modulo:** Scripting Bash, Strutture Dati (Array) e Controllo di Flusso  
-**Academy:** #6-#7 — Prova Pratica
 
 ---
 
@@ -19,7 +18,7 @@ Prima di poter analizzare i dati, è necessario generare il file `metriche.txt` 
 
 ### Errore Individuato nel Generatore Originale
 
-Analizzando il codice dello script fornito, è stato individuato un **bug critico** prima ancora di eseguirlo.
+Analizzando il codice dello script fornito, ho individuato un **bug critico** prima ancora di eseguirlo.
 
 La riga incriminata è la seguente:
 
@@ -29,10 +28,12 @@ done ; > "$FILE_OUTPUT"
 
 In Bash, il `;` è un separatore di comandi: i due comandi vengono eseguiti in sequenza. Questo significa che:
 
-1. `done` — chiude regolarmente il ciclo `for`, scrivendo 100 righe nel file
-2. `> "$FILE_OUTPUT"` — **svuota immediatamente il file** con un redirect vuoto
+1. `done` — chiude regolarmente il ciclo `for`, scrivendo 100 righe nel file(infatti nel terminale da che lo script da 100 righe è stato eseguito con successo)
+2. `> "$FILE_OUTPUT"` — **svuota immediatamente il file** con un redirect vuoto.
 
-Il risultato è che `metriche.txt` viene sempre creato vuoto, rendendo lo script inutilizzabile.
+Il risultato è che `metriche.txt` viene sempre creato ma vuoto, rendendo lo script inutilizzabile.
+
+
 
 ### Correzione Applicata
 
