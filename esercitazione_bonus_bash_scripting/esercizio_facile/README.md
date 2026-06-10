@@ -109,18 +109,18 @@ done | sort -rn | head -3
 #### Spiegazione
 
 Questo script fa esattamente lo stesso lavoro di quello precedente (trovare i 3 IP più frequenti), ma adotta un approccio algoritmico diverso.
-Invece di usare un array associativo (un dizionario), usa due array paralleli e indicizzati: uno per memorizzare gli IP (ip_list)
-e uno per le occorrenze (count_list).
-- Per prima cosa mi dichiaro due array **paralleli** vuoti: ip_list conterrà le stringhe degli indirizzi IP,
+Invece di usare un array associativo (un dizionario), usa due array paralleli e indicizzati: uno per memorizzare gli IP (`ip_list`)
+e uno per le occorrenze (`count_list`).
+- Per prima cosa mi dichiaro due array **paralleli** vuoti: `ip_list` conterrà le stringhe degli indirizzi IP,
   mentre count_list conterrà numeri interi.
-  L'indice $i collegherà l'IP al suo conteggio (es. l'IP in ip_list[0] avrà il suo conteggio in count_list[0]).
+  L'indice $i collegherà l'IP al suo conteggio (es. l'IP in `ip_list[0]` avrà il suo conteggio in `count_list[0]`).
 
 - Poi ho di nuovo un ciclo while con un ciclo for al suo interno:
 - Il file accessi.txt viene letto riga per riga.
-  Per ogni IP il ciclo for interno cerca se l'IP appena letto è già presente dentro ip_list, scorrendo tutto l'array:
-    - Se l'IP è già presente (trovato=1): Incrementa di 1 il valore corrispondente in count_list[$i] e interrompe la ricerca con break.
+  Per ogni IP il ciclo for interno cerca se l'IP appena letto è già presente dentro `ip_list`, scorrendo tutto l'array:
+    - Se l'IP è già presente (trovato=1): Incrementa di 1 il valore corrispondente in `count_list[$i]` e interrompe la ricerca con `break`.
     - Se l'IP non è presente (trovato=0): Significa che è la prima volta che lo vediamo.
-      Lo aggiunge in coda a ip_list con l'operatore += e aggiunge il numero 1 in coda a count_list.
+      Lo aggiunge in coda a `ip_list` con l'operatore += e aggiunge il numero 1 in coda a count_list.
       
 - Infine ho un ciclo for finale che scorre gli indici dei due array e stampa per ogni riga il conteggio seguito dall'indirizzo IP, con alla fine come
   per gli altri due approcci, il risultato finale viene ordinato e troncato con lo stesso `sort -rn | head -3`.
@@ -144,5 +144,5 @@ e uno per le occorrenze (count_list).
 | Portabilità | Alta (POSIX) | Media (bash 4+ array associativi) | Alta |
 | Didattico | Flusso Unix | Strutture dati | Algoritmi |
 
-**Scelta consigliata:** l'Approccio 1 perchè in una sola riga ho fatto tutto quello che fanno i due lunghi script;
-**NB**L'Approccio 2 va benissimo come esercizio per imparare a scrivere gli script in Bash.
+**Scelta consigliata:** L'Approccio 1 perchè in una sola riga ho fatto tutto quello che fanno i due lunghi script;
+**NB** L'Approccio 2 va benissimo come esercizio per imparare a scrivere gli script in Bash.
