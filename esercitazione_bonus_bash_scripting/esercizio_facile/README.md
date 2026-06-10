@@ -1,4 +1,4 @@
-# Esercizio SEMPLICE — Analisi Accessi Server
+# Esercizio SEMPLICE 
 
 ---
 
