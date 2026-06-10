@@ -1,8 +1,5 @@
 # Esercizio SEMPLICE — Analisi Accessi Server
 
-**Modulo:** Manipolazione del Testo e Automazione in Bash  
-**Academy:** #6-#7 — Prova Pratica
-
 ---
 
 ## Descrizione del Problema
@@ -49,7 +46,7 @@ sort accessi.txt | uniq -c | sort -rn | head -3
 ### Approccio 2 — Array Associativi (Logica da Programmazione)
 
 ```bash
-#!/usr/bin/env/ bash
+#!/usr/bin/env bash
 declare -A contatore
 
 while IFS= read -r ip; do
@@ -69,8 +66,7 @@ done | sort -rn | head -3
   variabile $ip.
 - `IFS` e `r` servono a fare in modo che Bash legga il testo esattamente com'è, ed evitano che gli spazi vengano trattati come separatori.
 - `((contatore[$ip]++))`: Cosa fa? Prende l'IP appena letto, va a cercare quell'IP nel nostro "dizionario" contatore e incrementa il suo valore di 1 con
-  (++). Se è la prima volta che vede quell'IP, lo crea partendo da zero e lo porta a 1.incrementa il contatore per quell'IP (lo inizializza a 0 se non
-  esiste ancora).
+  (++). Se è la prima volta che vede quell'IP, lo crea partendo da zero e lo porta a 1, se invece esiste già incrementa il contatore per quell'IP.
 - Poi c'è un ciclo for:
   - Una volta che il ciclo while è terminato il mio dizionario contatore è pieno, con `${!contatore[@]}` prendo tutti gli ip che ci sono dentro
   - Il ciclo poi passa in rassegna ogni singolo IP e con il comando `echo` stampa a schermo una riga formattata così:
@@ -86,7 +82,7 @@ done | sort -rn | head -3
 ### Approccio 3 — Array Paralleli (Ciclo Iterativo)
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 ip_list=()
 count_list=()
 
@@ -112,38 +108,41 @@ done | sort -rn | head -3
 
 #### Spiegazione
 
-- Due array **paralleli**: `ip_list[i]` e `count_list[i]` sono sempre allineati (stesso indice `i`)
-- Per ogni IP letto, scorre `ip_list` cercando una corrispondenza:
-  - Se trovata → incrementa `count_list[i]` e imposta `trovato=1`
-  - Se non trovata → aggiunge il nuovo IP e inizializza il contatore a `1`
-- `break` interrompe il ciclo non appena trova la corrispondenza (ottimizzazione)
+Questo script fa esattamente lo stesso lavoro di quello precedente (trovare i 3 IP più frequenti), ma adotta un approccio algoritmico diverso.
+Invece di usare un array associativo (un dizionario), usa due array paralleli e indicizzati: uno per memorizzare gli IP (ip_list)
+e uno per le occorrenze (count_list).
+- Per prima cosa mi dichiaro due array **paralleli** vuoti: ip_list conterrà le stringhe degli indirizzi IP,
+  mentre count_list conterrà numeri interi.
+  L'indice $i collegherà l'IP al suo conteggio (es. l'IP in ip_list[0] avrà il suo conteggio in count_list[0]).
 
-#### Output a terminale
+- Poi ho di nuovo un ciclo while con un ciclo for al suo interno:
+- Il file accessi.txt viene letto riga per riga.
+  Per ogni IP il ciclo for interno cerca se l'IP appena letto è già presente dentro ip_list, scorrendo tutto l'array:
+    - Se l'IP è già presente (trovato=1): Incrementa di 1 il valore corrispondente in count_list[$i] e interrompe la ricerca con break.
+    - Se l'IP non è presente (trovato=0): Significa che è la prima volta che lo vediamo.
+      Lo aggiunge in coda a ip_list con l'operatore += e aggiunge il numero 1 in coda a count_list.
+      
+- Infine ho un ciclo for finale che scorre gli indici dei due array e stampa per ogni riga il conteggio seguito dall'indirizzo IP, con alla fine come
+  per gli altri due approcci, il risultato finale viene ordinato e troncato con lo stesso `sort -rn | head -3`.
+  
 
-![Esecuzione dello script con array paralleli](screenshots/03_approccio3_array.png)
+
+#### Output  terminale
+
+![quarta parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2014.48.20.png)
 
 ---
 
-## Output Atteso
-
-Tutti e tre gli approcci producono lo stesso risultato:
-
-```
-3 192.168.1.10
-2 10.0.0.5
-2 1.2.3.4
-```
-
----
 
 ## Confronto tra gli Approcci
 
 | Criterio | Unix One-liner | Array Associativi | Array Paralleli |
 |---|---|---|---|
-| Leggibilità | ⭐⭐⭐ Alta | ⭐⭐ Media | ⭐ Bassa |
+| Leggibilità | Alta | Media | Bassa |
 | Righe di codice | 1 | ~10 | ~20 |
 | Efficienza | Alta | Alta | Bassa (O(n²)) |
-| Portabilità | Alta (POSIX) | Media (bash 4+) | Alta |
+| Portabilità | Alta (POSIX) | Media (bash 4+ array associativi) | Alta |
 | Didattico | Flusso Unix | Strutture dati | Algoritmi |
 
-> **Scelta consigliata:** l'Approccio 1 per uso pratico; l'Approccio 2 per dimostrare padronanza delle strutture dati Bash.
+**Scelta consigliata:** l'Approccio 1 perchè in una sola riga ho fatto tutto quello che fanno i due lunghi script;
+**NB**L'Approccio 2 va benissimo come esercizio per imparare a scrivere gli script in Bash.
