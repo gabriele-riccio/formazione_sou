@@ -20,6 +20,8 @@ Prima di poter analizzare i dati, è necessario generare il file `metriche.txt` 
 
 Analizzando il codice dello script fornito, ho individuato un **bug critico** prima ancora di eseguirlo.
 
+![prima parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.11.42.png)
+
 La riga incriminata è la seguente:
 
 ```bash
@@ -33,7 +35,7 @@ In Bash, il `;` è un separatore di comandi: i due comandi vengono eseguiti in s
 
 Il risultato è che `metriche.txt` viene sempre creato ma vuoto, rendendo lo script inutilizzabile.
 
-
+![seconda parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.25.28.png)
 
 ### Correzione Applicata
 
@@ -47,33 +49,13 @@ done ; > "$FILE_OUTPUT"
 done
 ```
 
-### Script Generatore Corretto — `generatore_log.sh`
+### Script Generatore Corretto — `generatore_log_giusto.sh`
 
-```bash
-#!/bin/bash
-# Esegui questo script per generare il file metriche.txt di 100 righe
-SERVER_LIST=("srv-web01" "srv-db02" "srv-auth01" "srv-cache03")
-FILE_OUTPUT="metriche.txt"
-# Svuota il file se esiste già
-> "$FILE_OUTPUT"
-echo "Generazione di 100 righe in corso..."
-for i in {1..100}; do
-    # Seleziona un server casuale dall'array
-    rand_server=${SERVER_LIST[$((RANDOM % 4))]}
-    # Genera un valore di CPU casuale tra 10 e 99
-    rand_cpu=$((RANDOM % 90 + 10))
-    # Scrive nel file
-    echo "$rand_server $rand_cpu" >> "$FILE_OUTPUT"
-done
-echo "File '$FILE_OUTPUT' generato con successo!"
-```
+![terza parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.14.03.png)
 
-Una volta corretta la riga, lo script è stato reso eseguibile e lanciato:
+Una volta corretta la riga, lo script l'ho reso eseguibile e lanciato:
 
-```bash
-chmod +x generatore_log.sh
-bash generatore_log.sh
-```
+![quarta parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.03.35.png)
 
 ---
 
@@ -81,64 +63,55 @@ bash generatore_log.sh
 
 ### Struttura del file `metriche.txt`
 
-Il file generato contiene 100 righe nel formato:
+Il file generato contiene 100 righe:
 
-```
-srv-web01 54
-srv-db02 78
-srv-auth01 23
-...
-```
+![quinta parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.27.12.png)
 
 Ogni riga rappresenta una singola misurazione: nome del server e percentuale CPU.
 
 ### Script di Analisi — `analizza_metriche.sh`
 
 ```bash
-#!/bin/bash
-# =============================================================
+#!/usr/bin/env bash
+# =================================================================================
 # analizza_metriche.sh
-# Calcola la media di utilizzo CPU per ogni server in metriche.txt
-# =============================================================
+# Lo script calcola la media di utilizzo delle CPU per ogni server in metriche.txt
+# =================================================================================
 
 FILE="metriche.txt"
 
-# Controlla che il file esista
+# Controllo prima che il file esista:
 if [[ ! -f "$FILE" ]]; then
     echo "Errore: file '$FILE' non trovato."
     exit 1
 fi
 
-# --- STRUTTURE DATI ---
-# Array associativi per accumulare somma e conteggio per ogni server
-declare -A somma_cpu    # somma_cpu["srv-web01"] = somma totale CPU
-declare -A conteggio    # conteggio["srv-web01"] = numero di misurazioni
-declare -a server_unici # array ordinato dei server (per ordine di apparizione)
+#  Gestisco le STRUTTURE DATI 
+# Ho generato degli Array associativi per accumulare somma e conteggio per ogni server:
+declare -A somma_cpu     # somma_cpu["srv-web01"] = somma totale CPU
+declare -A conteggio     # conteggio["srv-web01"] = numero di misurazioni
+declare -a server_unici  # array ordinato dei server (per ordine di apparizione)
 
-# --- FASE 1: LETTURA RIGA PER RIGA ---
+#  FASE 1: LETTURA RIGA PER RIGA 
 # 'while read' consuma il file riga per riga
-# IFS=' ' separa ogni riga nei campi: server e valore cpu
+# IFS=' ' separa ogni riga nei campi: server e valore CPU
 while IFS=' ' read -r server cpu; do
-
-    # Accumula la CPU per questo server
+    # Accumulo la CPU per questo server
     somma_cpu["$server"]=$(( ${somma_cpu["$server"]:-0} + cpu ))
-
-    # Incrementa il contatore delle occorrenze
+    # Incremento il contatore delle occorrenze
     conteggio["$server"]=$(( ${conteggio["$server"]:-0} + 1 ))
-
-    # Aggiunge il server alla lista degli unici (solo la prima volta)
+    # Aggiungo il server alla lista degli unici (solo la prima volta)
     if [[ ${conteggio["$server"]} -eq 1 ]]; then
         server_unici+=("$server")
     fi
-
 done < "$FILE"
 
-# --- FASE 2: CALCOLO E STAMPA ---
+# FASE 2: CALCOLO E STAMPA 
 echo "=== REPORT UTILIZZO MEDIO CPU ==="
 
 # Ciclo for sull'array dei server unici individuati
 for server in "${server_unici[@]}"; do
-    # Divisione intera (comportamento standard di Bash)
+    # Faccio fare la divisione intera (comportamento standard di Bash)
     media=$(( somma_cpu["$server"] / conteggio["$server"] ))
     echo "$server: $media%"
 done
