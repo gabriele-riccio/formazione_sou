@@ -174,5 +174,13 @@ done
     gestire nativamente numeri non interi.
 - Infine stampo il risultato tramite l'unione del server e la sua media tra virgolette doppie.
 
+
+# In breve:
+Lo script si basa su tre strutture dati principali: due array associativi e un array indicizzato. Il primo array associativo è dedicato alla somma progressiva dei valori di utilizzo CPU per ciascun server, il secondo tiene traccia del numero di misurazioni registrate per ogni server, mentre l'array indicizzato raccoglie i nomi dei server unici incontrati durante la lettura del file.
+
+La lettura dei dati avviene tramite un ciclo while, che elabora il file riga per riga: per ogni riga, il valore di utilizzo CPU viene accumulato nel rispettivo array delle somme, e il contatore delle misurazioni per quel server viene incrementato. Se il server non era ancora stato incontrato, viene aggiunto all'array dei server unici.
+
+Al termine della lettura, un ciclo for scorre tutti i server unici e calcola la media effettiva dividendo la somma totale dei valori CPU per il numero di misurazioni corrispondenti, ottenendo così la media di utilizzo per ciascun server.
+
 ### Output terminale
 ![sesta parte terminale](immagini_esercizio_facile/Screenshot%202026-06-10%20alle%2017.05.39.png)
