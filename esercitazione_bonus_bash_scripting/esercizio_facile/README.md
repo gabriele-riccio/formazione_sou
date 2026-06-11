@@ -1,5 +1,6 @@
 # Esercizio SEMPLICE 
 
+# Modulo: Manipolazione del Testo e Automazione in Bash.
 ---
 
 ## Descrizione del Problema
