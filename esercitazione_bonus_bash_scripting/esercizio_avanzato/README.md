@@ -1,6 +1,6 @@
 # Esercizio AVANZATO 
 
-**Modulo:** Scripting Bash, Strutture Dati (Array) e Controllo di Flusso  
+# Modulo: Scripting Bash, Strutture Dati (Array) e Controllo di Flusso. 
 
 ---
 
