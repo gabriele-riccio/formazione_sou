@@ -1,38 +1,26 @@
-# Esercizio — Installazione Kubernetes Locale
+# Esercizio — Step 0 - Installazione locale Kubernetes
 
-Questo README documenta l'installazione e la verifica di tre distribuzioni locali di Kubernetes:
-**MiniKube**, **Kind** e **K3s**, eseguita su MacBook Pro 2017 (Intel Core i5, macOS Ventura 13.7.8).
+Il seguente modulo richiede l'interazione con Kubernetes in una distribuzione minimale e locale. Esistono svariate soluzioni, viene proposto allo studente di provare uno dei seguenti tool e scegliere quello che più si adatta alla propria workstation di lavoro.
+- **MiniKube** (consigliato)
+- **K3s**
+- **Kind**
 
-> ⚠️ **Nota:** Homebrew è stato scartato perché sulla macchina in uso compilava tutto da sorgente
+> Homebrew l'ho scartato perché sulla macchina in uso compilava tutto da sorgente
 > (visibile dal processo `./make.bash` nel terminale), rendendo l'installazione estremamente lenta.
-> Si è scelto di scaricare i **binari precompilati direttamente**, risultando molto più veloce.
-
----
-
-## Indice
-
-- [Prerequisiti](#prerequisiti)
-- [1. MiniKube](#1-minikube)
-- [2. Kind](#2-kind)
-- [3. K3s su Ubuntu (VirtualBox)](#3-k3s-su-ubuntu-virtualbox)
-- [Verifica finale comune](#verifica-finale-comune)
-- [Fermare e riavviare i cluster](#fermare-e-riavviare-i-cluster)
+> Ho scelto di scaricare i **binari precompilati direttamente**, che risultano molto più veloci.
 
 ---
 
 ## Prerequisiti
 
-- **MacBook Pro 2017** — Intel Core i5 dual-core, 16 GB RAM, macOS Ventura 13.7.8
-- **Docker Desktop** installato e in esecuzione (necessario per MiniKube e Kind)
-- **VM Ubuntu** su VirtualBox già configurata (dal modulo Ansible) per K3s
-- Architettura Intel → tutti i binari scaricati sono `amd64`
+- **Docker Desktop** installato e in esecuzione (necessario per MiniKube e Kind).
+- **VM Ubuntu** su VirtualBox già configurata (esercizi passati) per K3s.
 
 ---
 
 ## 1. MiniKube
 
-MiniKube è la soluzione consigliata dal corso. Crea un cluster Kubernetes a nodo singolo
-usando Docker come driver, senza bisogno di una VM separata.
+MiniKube è la soluzione consigliata. Crea un cluster Kubernetes a nodo singolo usando Docker come driver, senza bisogno di una VM separata.
 
 ### Installazione kubectl (client CLI)
 
@@ -74,7 +62,20 @@ kubectl get nodes
 kubectl get pods -A
 kubectl get namespaces
 ```
+### Creazione del namespace richiesto
+kubectl create namespaces formazione-sou
 
+**Verifica**
+kubectl get namespaces --> comparirà anche formazione-sou
+
+---
+## TERMINALE
+![prima parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.19.21.png)
+![seconda parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.36.15.png)
+![terza parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.38.42.png)
+
+
+---
 ### Comandi utili
 
 | Comando | Descrizione |
@@ -87,8 +88,8 @@ kubectl get namespaces
 | `minikube dashboard` | Apre la dashboard nel browser |
 | `minikube status` | Stato del cluster |
 
----
 
+---
 ## 2. Kind
 
 Kind (Kubernetes IN Docker) crea un cluster Kubernetes usando container Docker come nodi.
@@ -120,6 +121,19 @@ kubectl get pods -A
 kubectl get namespaces
 ```
 
+### Creazione del namespace richiesto
+kubectl create namespaces formazione-sou
+
+**Verifica**
+kubectl get namespaces --> comparirà anche formazione-sou
+
+---
+## TERMINALE
+![quarta parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.27.48.png)
+![quinta parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.51.00.png)
+![sesta parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2012.51.13.png)
+
+---
 ### Note su Kind
 
 - Ogni nodo del cluster è un container Docker: visibili con `docker ps`
@@ -132,7 +146,7 @@ kubectl get namespaces
 
 K3s è una distribuzione Kubernetes ultra-leggera pensata per ambienti con risorse limitate
 (edge, IoT, CI/CD). Non gira nativamente su macOS, quindi è stato installato nella VM Ubuntu
-già configurata durante il modulo Ansible su VirtualBox.
+già configurata in precedenti esercizi.
 
 ### Installazione
 
@@ -156,10 +170,9 @@ K3s include il proprio kubectl richiamabile tramite `k3s kubectl`:
 sudo k3s kubectl get nodes
 sudo k3s kubectl get pods -A
 ```
-
 ### Configurazione kubectl standard
-
-Per usare il comando `kubectl` senza il prefisso `k3s` e senza `sudo`:
+E' possibile però configurlo con il metodo standard che ho usato anche per kind e Minikube:
+Posso usare il comando `kubectl` senza il prefisso `k3s` e senza `sudo`:
 
 ```bash
 mkdir -p ~/.kube
@@ -174,38 +187,13 @@ kubectl get nodes
 kubectl create namespace formazione-sou
 kubectl get namespaces
 ```
-
-Output atteso:
-
-```
-NAME              STATUS   AGE
-default           Active   8m
-formazione-sou    Active   2s
-kube-node-lease   Active   8m
-kube-public       Active   8m
-kube-system       Active   8m
-```
-
----
-
-## Verifica finale comune
-
-I seguenti comandi funzionano allo stesso modo su tutte e tre le soluzioni,
-una volta che kubectl è configurato correttamente.
-
-```bash
-# Lista tutti i pod in tutti i namespace
-kubectl get pods -A
-
-# Lista tutti i namespace
-kubectl get namespaces
-
-# Crea il namespace richiesto dal corso
-kubectl create namespace formazione-sou
-
-# Verifica la creazione
-kubectl get namespaces
-```
+## TERMINALE
+![settima parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.17.57.png)
+![ottava parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.18.57.png)
+![nona parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.19.16.png)
+![decima parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.19.32.png)
+![undicesima parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.20.10.png)
+![dodicesima parte terminale](file_img_step0/Screenshot%202026-06-15%20alle%2014.28.27.png)
 
 ---
 
@@ -273,6 +261,6 @@ sudo systemctl status k3s
 | Piattaforma | Mac, Linux, Win | Mac, Linux, Win | Linux nativo |
 | Driver | Docker, VM, ecc. | Docker (obbligatorio) | Binario nativo |
 | RAM minima | ~2 GB | ~2 GB | ~512 MB |
-| Dashboard | ✅ Inclusa | ❌ No | ❌ No |
+| Dashboard | Inclusa |  No | No |
 | Installazione su Mac | Binario diretto | Binario diretto | Tramite VM |
 | Consigliato per | Studio, lab | Test, CI/CD | Edge, prod leggera |
