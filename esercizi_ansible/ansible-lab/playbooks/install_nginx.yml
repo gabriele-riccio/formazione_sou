@@ -1,0 +1,48 @@
+---
+- name: Installa e configura Nginx su Rocky Linux 9
+  hosts: vagrant_vms
+  become: true
+
+  vars:
+    web_dir: /var/www/html
+  
+  tasks:
+
+
+    - name: Installa Nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+
+    - name: Crea la directory web
+      ansible.builtin.file:
+        path: "{{ web_dir }}"
+        state: directory
+        owner: nginx
+        group: nginx
+        mode: '0755'
+   
+    - name: Crea una pagina index.html
+      ansible.builtin.copy:
+        content: "<h1>Ansible funziona! Host:{{ inventory_hostname }}</h1>"
+        dest: "{{ web_dir }}/index.html"
+        owner: nginx
+        group: nginx
+        mode: '0644'
+
+    - name: Avvia e abilita Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Apri porta 80 nel firewall
+      ansible.posix.firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: true
+
+    - name: Mostra l'IP del server
+      ansible.builtin.debug:
+        msg: "Nginx attivo su http://{{ ansible_host }}"
