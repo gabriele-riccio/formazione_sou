@@ -1,0 +1,75 @@
+---
+- name: Demo loop e template
+  hosts: vagrant_vms
+  become: true
+
+
+  vars:
+    web_port: 80
+    web_root: /var/www/html
+    debug_mode: true
+    pacchetti:
+      - nginx
+      - git
+      - vim
+    locations:
+      - { path: /, descrizione: "Pagina principale" }
+      - { path: /api, descrizione: "Endpoint API" }
+      - { path: /static, descrizione: "File statici" }
+    utenti_demo:
+      - { nome: alice, gruppo: wheel }
+      - { nome: bob, gruppo: users }
+
+
+  tasks: 
+
+    - name: Installa pacchetti con loop
+      ansible.builtin.dnf:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ pacchetti }}"
+      loop_control:
+        label: "{{ item }}"
+
+    - name: Genera configurazione Nginx da template
+      ansible.builtin.template:
+        src: ../templates/nginx_loop.conf.j2
+        dest: /etc/nginx/conf.d/loop_demo.conf
+        mode: '0644'
+      notify: restart nginx 
+
+    - name: Crea utenti con loop su dizionari
+      ansible.builtin.user:
+        name: "{{ item.nome }}"
+        groups: "{{ item.gruppo }}"
+        state: present
+        create_home: true
+      loop: "{{ utenti_demo }}"
+      loop_control:
+        label: "{{ item.nome }}"
+
+    - name: Crea pagina index con loop nei contenuti
+      ansible.builtin.copy:
+        content: |
+          <html><body>
+          <h1>Loop e Template Demo</h1>
+          <ul>
+          {% for loc in locations %}
+          <li>{{ loc.path }} - {{ loc.descrizione }}</li>
+          {% endfor %}
+          </ul>
+          </body></html>
+        dest: "{{ web_root }}/index.html"
+        mode: '0644'
+
+    - name: Assicura Nginx avviato
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

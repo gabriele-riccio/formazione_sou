@@ -1,0 +1,21 @@
+# Configurazione generata da Ansible il {{ ansible_date_time.date }}
+# Host: {{ inventory_hostname }} 
+
+server {
+    listen {{ web_port }};
+    server_name {{ ansible_fqdn | default(inventory_hostname) }};
+    root {{ web_root }};
+    index index.html;
+
+{% for loc in locations %}
+    location {{ loc.path }} {
+        try_files $uri $uri/ =404;
+        # commento: {{ loc. descrizione }}
+    }
+{% endfor %}
+
+{% if debug_mode %}
+    # Modalità debug attiva 
+    error_log /var/log/nginx/debug.log debug;
+{% endif %}
+}
