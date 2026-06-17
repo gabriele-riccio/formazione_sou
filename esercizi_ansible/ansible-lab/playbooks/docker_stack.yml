@@ -1,0 +1,6 @@
+---
+- name: Deploy stack Docker via role
+  hosts: vagrant_vms
+  become: true
+  roles:
+    - docker_stack

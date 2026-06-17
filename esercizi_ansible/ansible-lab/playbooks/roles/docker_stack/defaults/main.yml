@@ -1,0 +1,7 @@
+---
+# defaults file for roles/docker_stack
+network_name: lab_network
+network_subnet: "172.25.0.0/16"
+network_gateway: "172.25.0.1"
+web_container_ip: "172.25.0.10"
+web_container_port: "8080:80"
