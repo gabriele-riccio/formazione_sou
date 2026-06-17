@@ -1,0 +1,9 @@
+---
+- name: Usa il role nginx
+  hosts: vagrant_vms
+  become: true
+  roles:
+    - role: nginx
+      vars:
+        web_port: 80
+        debug_mode: true

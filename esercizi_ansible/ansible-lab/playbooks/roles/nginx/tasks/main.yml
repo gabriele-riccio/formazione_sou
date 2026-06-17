@@ -1,0 +1,19 @@
+---
+# tasks file for roles/nginx
+- name: Installa Nginx
+  ansible.builtin.dnf:
+    name: nginx
+    state: present
+
+- name: Crea pagina index dal role
+  ansible.builtin.copy:
+    content: "Pagina servita dal Role nginx! Host={{ inventory_hostname }} Porta={{ web_port }}"
+    dest: "{{ web_root }}/index.html"
+    mode: '0644'
+
+- name: Avvia e abilita Nginx
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true
+  notify: restart nginx se necessario
