@@ -1,0 +1,5 @@
+web_pacchetto: nginx
+web_porta: 80
+web_root: /var/www/html
+web_messaggio: "Benvenuto su Ansible Lab!"
+

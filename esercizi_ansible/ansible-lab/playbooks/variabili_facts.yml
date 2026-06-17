@@ -1,0 +1,39 @@
+---
+- name: Demo variabili e facts
+  hosts: vagrant_vms
+  become: true
+  vars_files:
+    - ../vars/web.yml
+
+  vars:
+    app_name: ansible-demo
+
+  tasks:
+
+    - name: Mostra informazioni sul sistema
+      ansible.builtin.debug:
+        msg: "HOST={{ inventory_hostname }} OS={{ ansible_distribution }} {{ ansible_distribution_version }} RAM={{ ansible_memtotal_mb }}MB IP={{ ansible_default_ipv4.address }}"
+
+    - name: Verifica se Nginx e in esecuzione
+      ansible.builtin.command:
+        cmd: systemctl is-active nginx
+      register: nginx_status
+      ignore_errors: true
+
+    - name: Mostra stato Nginx
+      ansible.builtin.debug:
+        msg: "Nginx e attivo={{ nginx_status.rc == 0 }}"
+
+    - name: Crea pagina personalizzata
+      ansible.builtin.copy:
+        dest: "{{ web_root }}/index.html"
+        mode: '0644'
+        content: "Benvenuto! Host={{ inventory_hostname }} App={{ app_name }}"
+
+    - name: Calcola fatto dinamico
+      ansible.builtin.set_fact:
+        sistema_info: "{{ ansible_distribution }}-{{ ansible_distribution_version }}-{{ ansible_architecture }}"
+
+    - name: Mostra fatto dinamico
+      ansible.builtin.debug:
+        msg: "Sistema={{ sistema_info }}"

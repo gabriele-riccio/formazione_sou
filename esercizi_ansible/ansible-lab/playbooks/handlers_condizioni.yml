@@ -1,0 +1,58 @@
+---
+- name: Demo handlers e condizioni
+  hosts: vagrant_vms
+  become: true
+
+  vars:
+    nginx_conf_dest: /etc/nginx/conf.d/custom.conf
+    web_root: /var/www/html
+
+  tasks:
+
+    - name: Verifica che Nginx sia installato
+      ansible.builtin.stat:
+        path: /usr/sbin/nginx
+      register: nginx_binary
+
+    - name: Installa Nginx se non presente
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+      when: not nginx_binary.stat.exists
+
+    - name: Copia configurazione custom Nginx
+      ansible.builtin.copy:
+        src: ../files/nginx_custom.conf
+        dest: "{{ nginx_conf_dest }}"
+        mode: '0644'
+      notify: restart nginx
+
+    - name: Verifica configurazione Nginx
+      ansible.builtin.command:
+        cmd: nginx -t
+      register: nginx_test
+      changed_when: false
+
+    - name: Mostra risultato verifica
+      ansible.builtin.debug:
+        msg: "Configurazione Nginx valida!"
+      when: nginx_test.rc == 0
+
+    - name: Crea pagina di test
+      ansible.builtin.copy:
+        content: "Handler e Condizioni funzionano! Host={{ inventory_hostname }}"
+        dest: "{{ web_root }}/index.html"
+        mode: '0644'
+
+    - name: Assicura che Nginx sia avviato
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
