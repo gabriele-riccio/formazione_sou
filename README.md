@@ -27,7 +27,7 @@ La repository è organizzata in cartelle tematiche per facilitare la navigazione
     * Esercizi di livello base: immagini, networking, volumi, stack multi-container.
     * Livello intermedio: stack con Docker Compose (Flask + Nginx + Redis).
     * Livello avanzato (in corso): healthcheck, resource limits, utenti non-root.
-    * **Esercizio "Ping Pong"**: migrazione di un'immagine Docker avanti e indietro tra due VM (`docker commit` → `docker save` → `scp` → `docker load` → `docker run`), usando Vagrant per orchestrare le 2 macchine.
+    * **Esercizio "Ping Pong"**: migrazione di un'immagine Docker avanti e indietro tra due VM, usando Vagrant per orchestrare le 2 macchine.
     * **Esercizio "Capra e Cavoli"**: variante del celebre rompicapo logico, applicata alla migrazione reale di container tra due VM collegate in rete privata, rispettando i vincoli del puzzle originale ad ogni spostamento.
 
 * **`/jenkins`** ⚙️
