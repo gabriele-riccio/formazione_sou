@@ -1,4 +1,4 @@
-# Esercizio Bonus Jenkins — Pipeline con controllo del giorno della settimana
+# Esercizio Bonus Jenkins — Pipeline Jenkins che esegua una build solo dal lunedì al venerdì
 
 ## Obiettivo
 
