@@ -72,4 +72,43 @@ pipeline {
 - Il risultato del controllo viene salvato in una variabile d'ambiente della pipeline (`env.IS_WEEKEND`), così da essere accessibile anche dal secondo stage.
 - Il secondo stage usa la direttiva `when { expression { ... } }` per decidere se eseguirsi oppure essere saltato (skipped), in base al valore di `env.IS_WEEKEND`.
 
+![seconda_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.19.png)
 
+## Script di prova  (`Jenkinsfile2`)
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Check del giorno della settimana') {
+            steps {
+                script {
+                    def oggi = new Date()
+                    int giornoSettimana = oggi[Calendar.DAY_OF_WEEK]
+
+                    if (giornoSettimana == Calendar.THURSDAY) {
+                        echo "WARNING: oggi si va da CICCIO's, non verrà eseguita la build."
+                        env.IS_WEEKEND = "true"
+                    } else {
+                        echo "Oggi ho il pranzo, dato che non andiamo da CICCIO's  procedo con la build."
+                        env.IS_WEEKEND = "false"
+                    }
+                }
+            }
+        }
+
+        stage('Build') {
+            when {
+                expression { env.IS_WEEKEND == "false" }
+            }
+            steps {
+                echo "Eseguo la build ..."
+            }
+        }
+    }
+}
+```
+### Come funziona
+Esattamente come quello sopra, soltanto che dato che oggi è giovedì per non farlo buildare ho inserito come condizione if (giornoSettimana == Calendar.THURSDAY)
