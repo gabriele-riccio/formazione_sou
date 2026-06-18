@@ -28,7 +28,7 @@ Scrivere una pipeline Jenkins che esegua la build solo dal lunedì al venerdì, 
 ![seconda_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
 ![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.24.png)
 ![quarta_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.44.png)
-![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.51.png)
 
 ## Script principale (`Jenkinsfile`)
 
