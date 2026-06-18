@@ -20,12 +20,15 @@ Scrivere una pipeline Jenkins che esegua la build solo dal lunedì al venerdì, 
 ```bash
    docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
+![prima_parte](jenkins/Screenshot%202026-06-18%20alle%2012.25.24.png)
+
 3. Accesso alla dashboard su `http://localhost:8080`, installazione dei plugin consigliati, creazione del primo utente amministratore.
 4. Creazione di un nuovo "Item" di tipo **Pipeline**, con definizione "Pipeline script" (script incollato direttamente, senza repository SCM collegato).
 
-![prima_parte](jenkins/Screenshot%202026-06-18%20alle%2012.25.24.png)
-![Dashboard Jenkins](./screenshots/01-dashboard-jenkins.png)
-![Creazione job Pipeline](./screenshots/02-creazione-job.png)
+![seconda_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.24.png)
+![quarta_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.44.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
 
 ## Script principale (`Jenkinsfile`)
 
@@ -69,4 +72,4 @@ pipeline {
 - Il risultato del controllo viene salvato in una variabile d'ambiente della pipeline (`env.IS_WEEKEND`), così da essere accessibile anche dal secondo stage.
 - Il secondo stage usa la direttiva `when { expression { ... } }` per decidere se eseguirsi oppure essere saltato (skipped), in base al valore di `env.IS_WEEKEND`.
 
-![Script nell'editor Jenkins](./screenshots/03-script-editor.png)
+
