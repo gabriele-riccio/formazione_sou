@@ -23,6 +23,7 @@ Scrivere una pipeline Jenkins che esegua la build solo dal lunedì al venerdì, 
 3. Accesso alla dashboard su `http://localhost:8080`, installazione dei plugin consigliati, creazione del primo utente amministratore.
 4. Creazione di un nuovo "Item" di tipo **Pipeline**, con definizione "Pipeline script" (script incollato direttamente, senza repository SCM collegato).
 
+![prima_parte](jenkins/Screenshot%202026-06-18%20alle%2012.25.24.png)
 ![Dashboard Jenkins](./screenshots/01-dashboard-jenkins.png)
 ![Creazione job Pipeline](./screenshots/02-creazione-job.png)
 
