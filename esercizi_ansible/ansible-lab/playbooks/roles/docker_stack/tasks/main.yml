@@ -1,4 +1,7 @@
 ---
+- name: Carica variabili cifrate da Vault
+  ansible.builtin.include_vars: vault.yml
+
 - name: Crea rete Docker custom
   community.docker.docker_network:
     name: "{{ network_name }}"
@@ -38,3 +41,7 @@
 - name: Mostra stato dello stack
   ansible.builtin.debug:
     msg: "Container {{ web_info.container.Name }} stato: {{ web_info.container.State.Status }}"
+
+- name: Mostra che la password Vault è stata caricata correttamente
+  ansible.builtin.debug:
+    msg: "Redis password caricata, lunga {{ redis_password | length }} caratteri"
