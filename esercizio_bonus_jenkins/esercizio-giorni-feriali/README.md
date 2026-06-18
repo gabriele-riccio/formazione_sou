@@ -9,7 +9,6 @@ Scrivere una pipeline Jenkins che esegua la build solo dal lunedì al venerdì, 
 - Jenkins (immagine Docker ufficiale `jenkins/jenkins:lts`)
 - Docker Desktop (macOS)
 - Groovy (sintassi Pipeline dichiarativa)
-- Git / GitHub
 
 ## Setup dell'ambiente
 
