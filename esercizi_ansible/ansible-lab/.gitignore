@@ -1,0 +1,22 @@
+# Ansible Vault — MAI committare la password in chiaro
+.vault_pass
+.vault_pass_*
+*.vault_pass
+
+# Vagrant — cartella di stato locale della VM, pesante e specifica della tua macchina
+.vagrant/
+
+# File temporanei macOS
+.DS_Store
+
+# File di backup creati da Ansible quando usi backup: true
+*.retry
+*~
+
+# File temporanei vim
+*.swp
+*.swo
+
+# Eventuali ambienti virtuali Python locali
+venv/
+.venv/
