@@ -66,14 +66,16 @@ pipeline {
 }
 ```
 
-### Come funziona
+## Svolgimento dello script
 
-- Il primo stage usa `new Date()` per ottenere l'istante corrente, e l'operatore `[]` di Groovy (`oggi[Calendar.DAY_OF_WEEK]`) per estrarre il giorno della settimana come numero (1 = domenica ... 7 = sabato), sfruttando le costanti leggibili `Calendar.SATURDAY` e `Calendar.SUNDAY` invece dei numeri grezzi.
-- Il risultato del controllo viene salvato in una variabile d'ambiente della pipeline (`env.IS_WEEKEND`), così da essere accessibile anche dal secondo stage.
-- Il secondo stage usa la direttiva `when { expression { ... } }` per decidere se eseguirsi oppure essere saltato (skipped), in base al valore di `env.IS_WEEKEND`.
+La pipeline è scritta in stile **dichiarativo** (`pipeline { ... }`), più leggibile e strutturato rispetto alla sintassi "scripted" pura. Il blocco `agent any` lascia a Jenkins la libertà di scegliere l'esecutore disponibile, dato che per questo esercizio non serve vincolarsi a una macchina specifica. Tutte le fasi della pipeline sono racchiuse in `stages { ... }`, dove ogni fase è uno `stage('nome')`: il nome assegnato è quello che compare nella Stage View di Jenkins, utile per individuare a colpo d'occhio dove si trova (o dove si è interrotta) l'esecuzione.
 
-![seconda_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
-![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2012.37.19.png)
+**Primo stage — calcolo del giorno della settimana.** Dentro `steps`, il blocco `script { ... }` è necessario ogni volta che serve scrivere Groovy "vero" (variabili, condizioni, logica) invece dei soli comandi predefiniti della Pipeline come `echo` o `sh`. Al suo interno, con `def oggi = new Date()` creo un oggetto che rappresenta l'istante esatto di esecuzione. Con la riga successiva, `int giornoSettimana = oggi[Calendar.DAY_OF_WEEK]`, invece sfrutto l'operatore `[]` che Groovy aggiunge alla classe `Date` (equivalente a creare un `Calendar`, fargli `setTime()` e poi chiamare `get()`) per estrarre direttamente il giorno della settimana come numero, da 1 (domenica) a 7 (sabato).
+
+**Il controllo weekend.** Il valore ottenuto l'ho confrontato con le costanti `Calendar.SATURDAY` e `Calendar.SUNDAY`, molto più leggibili dei numeri grezzi (7 e 1). Se è sabato o domenica, viene stampato un messaggio di warning con `echo` e impostata la variabile ambiente true `env.IS_WEEKEND = "true"`; altrimenti viene stampato un messaggio diverso che dice la build verrà effettuata e impostata la variabile d'ambiente `env.IS_WEEKEND = "false"`.
+
+**Secondo stage — build condizionata.** Lo `stage('Build')` ha, prima di `steps`, una direttiva `when { expression { ... } }` dove Jenkins valuta l'espressione (`env.IS_WEEKEND == "false"`) e, solo se è vera, esegue gli step contenuti altrimenti lo stage compare come "skipped" nella vista grafica, senza generare errori.
+
 
 ## Script di prova  (`Jenkinsfile2`)
 
@@ -111,4 +113,15 @@ pipeline {
 }
 ```
 ### Come funziona
-Esattamente come quello sopra, soltanto che dato che oggi è giovedì per non farlo buildare ho inserito come condizione if (giornoSettimana == Calendar.THURSDAY)
+Esattamente come quello sopra, soltanto che dato che oggi è giovedì per non farlo buildare e far vedere la risposta quando siamo nel weekend ho inserito come condizione if (giornoSettimana == Calendar.THURSDAY) in modo che non buildasse.
+Ho aggiunto che essendo giovedì, la build non viene effettuata dato che mangiamo da CICCIO's e siamo stanchi.
+> Il resto dello script l'ho lasciato identico, dato che è solo una prova.
+
+## OUTPUT Jenkins:
+
+![seconda_parte](jenkins/Screenshot%202026-06-18%20alle%2012.40.25.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2015.00.22.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2015.00.43.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2015.16.11.png)
+![terza_parte](jenkins/Screenshot%202026-06-18%20alle%2015.16.35.png)
+
