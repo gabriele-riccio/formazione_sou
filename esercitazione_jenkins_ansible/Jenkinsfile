@@ -11,15 +11,17 @@ pipeline {
         stage('Test connessione Ansible') {
             steps {
                 withCredentials([
-                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
+                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
+                    file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
                 ]) {
                     dir('esercizi_ansible/ansible-lab') {
                         sh '''
+                            export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
                             ansible rocky9 -m ping \
                               --private-key=$SSH_KEY \
                               -u $SSH_USER
                         '''
-                   }
+                    }
                 }
             }
         }
