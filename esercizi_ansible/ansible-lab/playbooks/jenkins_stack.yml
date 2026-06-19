@@ -1,0 +1,6 @@
+---
+- name: Deploy Jenkins Controller
+  hosts: rocky9
+  become: true
+  roles:
+    - jenkins_stack

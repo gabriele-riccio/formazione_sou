@@ -1,0 +1,40 @@
+---
+- name: Crea rete Docker dedicata per Jenkins
+  community.docker.docker_network:
+    name: jenkins_network
+    state: present
+
+- name: Crea volume Docker per il controller
+  community.docker.docker_volume:
+    name: jenkins_home
+    state: present
+
+- name: Distribuisci il container Jenkins Controller
+  community.docker.docker_container:
+    name: jenkins-controller
+    image: jenkins/jenkins:lts
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: jenkins_network
+    published_ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+
+- name: Distribuisci il container Jenkins Agent (JNLP/inbound)
+  community.docker.docker_container:
+    name: jenkins-agent
+    image: jenkins/inbound-agent:latest
+    state: started
+    restart_policy: unless-stopped
+    networks:
+      - name: jenkins_network
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - >-
+        curl -sO http://jenkins-controller:8080/jnlpJars/agent.jar &&
+        java -jar agent.jar -url http://jenkins-controller:8080/
+        -secret e99f27a23389c6b0c753a68b9ca50b1e88e48e699905bf14803fe29a7ed08bb6
+        -name agent-docker-1 -workDir /home/jenkins/agent
