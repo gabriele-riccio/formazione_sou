@@ -1,11 +1,18 @@
 pipeline {
     agent { label 'docker' }
+
+    parameters {
+        booleanParam(name: 'ESEGUI_DAVVERO', defaultValue: false,
+                     description: 'Se falso, esegue solo in modalità --check (dry-run)')
+    }
+
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/gabriele-riccio/formazione_sou.git'
             }
         }
+
         stage('Test connessione Ansible') {
             steps {
                 withCredentials([
@@ -23,13 +30,36 @@ pipeline {
                 }
             }
         }
+
+        stage('Esegui playbook docker_stack') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
+                    file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
+                ]) {
+                    dir('esercizi_ansible/ansible-lab') {
+                        script {
+                            def checkFlag = params.ESEGUI_DAVVERO ? '' : '--check --diff'
+                            sh """
+                                export ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE
+                                ansible-playbook playbooks/docker_stack.yml \
+                                  -e ansible_ssh_private_key_file=\$SSH_KEY \
+                                  -u \$SSH_USER \
+                                  ${checkFlag}
+                            """
+                        }
+                    }
+                }
+            }
+        }
     }
+
     post {
         success {
-            echo 'Connessione Ansible riuscita dalla pipeline Jenkins!'
+            echo "Pipeline completata. Modalità: ${params.ESEGUI_DAVVERO ? 'esecuzione reale' : 'dry-run (--check)'}"
         }
         failure {
-            echo 'Connessione fallita, controlla i log della console'
+            echo 'Qualcosa è fallito, controlla i log della console'
         }
     }
 }
