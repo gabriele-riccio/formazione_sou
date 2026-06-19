@@ -1,0 +1,51 @@
+pipeline {
+    agent { label 'docker' }
+
+    parameters {
+        booleanParam(name: 'ESEGUI_TEST', defaultValue: true, description: 'Eseguire la fase di test?')
+        choice(name: 'AMBIENTE', choices: ['staging', 'produzione'], description: 'Ambiente di destinazione')
+    }
+
+    environment {
+        APP_VERSION = '1.0.0'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                sh 'echo "Eseguito su : $(hostname)"'
+                echo "Versione applicativo: ${APP_VERSION}"
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Costruisco la versione ${APP_VERSION} per l'ambiente ${param.AMBIENTE}"
+            }
+        }
+        stage('Test') {
+            when {
+                expression { params.ESEGUI_TEST == true }
+            }
+        }
+        stage('Deploy') {
+            when {
+                expression { params.AMBIENTE == 'produzione' }
+            }
+            steps {
+                echo 'Deploy in produzione (simulato)'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo "Pipeline comlpletata con successo per ${params.AMBIENTE}"
+        }
+        failure {
+            echo 'La pipeline è fallita, controlla i log'
+        }
+        always {
+            echo "Eseguito aull'agent: ${env.NODE_NAME}"
+        }
+    }
+}
