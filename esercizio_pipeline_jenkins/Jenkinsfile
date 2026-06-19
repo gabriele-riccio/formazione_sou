@@ -13,18 +13,21 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'echo "Eseguito su : $(hostname)"'
+                sh 'echo "Eseguito su: $(hostname)"'
                 echo "Versione applicativo: ${APP_VERSION}"
             }
         }
         stage('Build') {
             steps {
-                echo "Costruisco la versione ${APP_VERSION} per l'ambiente ${param.AMBIENTE}"
+                echo "Costruisco la versione ${APP_VERSION} per l'ambiente ${params.AMBIENTE}"
             }
         }
         stage('Test') {
             when {
                 expression { params.ESEGUI_TEST == true }
+            }
+            steps {
+                echo 'Eseguo i test automatici...'
             }
         }
         stage('Deploy') {
@@ -39,13 +42,13 @@ pipeline {
 
     post {
         success {
-            echo "Pipeline comlpletata con successo per ${params.AMBIENTE}"
+            echo "Pipeline completata con successo per ${params.AMBIENTE}"
         }
         failure {
             echo 'La pipeline è fallita, controlla i log'
         }
         always {
-            echo "Eseguito aull'agent: ${env.NODE_NAME}"
+            echo "Eseguito sull'agent: ${env.NODE_NAME}"
         }
     }
 }
