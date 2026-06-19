@@ -1,0 +1,36 @@
+pipeline {
+    agent { label 'docker' }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/gabriele-riccio/formazione_sou.git'
+            }
+        }
+
+        stage('Test connessione Ansible') {
+            steps {
+                withCredentials([
+                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
+                ]) {
+                    dir('esercizi_ansible/ansible-lab') {
+                        sh '''
+                            ansible rocky9 -m ping \
+                              --private-key=$SSH_KEY \
+                              -u $SSH_USER
+                        '''
+                   }
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Connessione Ansible riuscita dalla pipeline Jenkins!'
+        }
+        failure {
+            echo 'Connessione fallita, controlla i log della console'
+        }
+    }
+}
