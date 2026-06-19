@@ -1,13 +1,11 @@
 pipeline {
     agent { label 'docker' }
-
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/gabriele-riccio/formazione_sou.git'
             }
         }
-
         stage('Test connessione Ansible') {
             steps {
                 withCredentials([
@@ -18,7 +16,7 @@ pipeline {
                         sh '''
                             export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
                             ansible rocky9 -m ping \
-                              --private-key=$SSH_KEY \
+                              -e ansible_ssh_private_key_file=$SSH_KEY \
                               -u $SSH_USER
                         '''
                     }
@@ -26,7 +24,6 @@ pipeline {
             }
         }
     }
-
     post {
         success {
             echo 'Connessione Ansible riuscita dalla pipeline Jenkins!'
