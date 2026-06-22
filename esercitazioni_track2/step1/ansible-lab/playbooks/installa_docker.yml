@@ -1,0 +1,55 @@
+---
+- name: Installa Docker sulla Rocky9
+  hosts: rocky9
+  become: true
+
+  tasks:
+    - name: Installa pacchetti
+      ansible.builtin.dnf:
+        name:
+          - dnf-utils
+          - device-mapper-persistent-data
+          - lvm2
+        state: present
+
+    - name: Aggiunto Repository Docker
+      ansible.builtin.yum_repository:
+        name: docker-ce
+        description: Docker CE Stable - $basearch
+        baseurl: https://download.docker.com/linux/centos/$releasever/$basearch/stable
+        gpgcheck: true
+        gpgkey: https://download.docker.com/linux/centos/gpg
+        enabled: true
+
+    - name: Installa Docker Engine
+      ansible.builtin.dnf:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+
+    - name: Avvia e abilita il servizio Docker
+      ansible.builtin.systemd:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Aggiungi l'utente vagrant al gruppo docker
+      ansible.builtin.user:
+        name: vagrant
+        groups: docker
+        append: true
+
+    - name: Installa python3-setuptools e python3-pip
+      ansible.builtin.dnf:
+        name:
+          - python3-setuptools
+          - python3-pip
+        state: present
+
+    - name: Installa la libreria python requests
+      ansible.builtin.pip:
+        name: requests
+        state: present
+        executable: pip3

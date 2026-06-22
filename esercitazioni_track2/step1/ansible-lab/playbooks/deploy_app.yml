@@ -1,0 +1,8 @@
+---
+- name: Deploy stack applicativo via Docker
+  hosts: rocky9
+  become: true
+
+  roles:
+    - app_stack
+
