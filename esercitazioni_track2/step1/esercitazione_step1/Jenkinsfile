@@ -19,16 +19,17 @@ pipeline {
                     file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
-                        sh '''
-                            export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
-                            ansible-playbook playbooks/deploy_app.yml --syntax-check
-                        '''
+                        sh """
+                            ansible-playbook playbooks/deploy_app.yml \
+                              --vault-password-file \$VAULT_PASS_FILE \
+                              --syntax-check
+                        """
                     }
                 }
             }
         }
 
-        stage('Dray-run') {
+        stage('Dry-run') {
             steps {
                 withCredentials([
                     sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
@@ -36,8 +37,8 @@ pipeline {
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
                         sh """
-                            export ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE
                             ansible-playbook playbooks/deploy_app.yml \
+                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
                               -u vagrant \
                               --check --diff
@@ -48,99 +49,55 @@ pipeline {
         }
 
         stage('Deploy reale') {
-
             when {
-
                 expression { params.ESEGUI_DAVVERO == true }
-
             }
-
             steps {
-
                 withCredentials([
-
                     sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
-
                     file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
-
                 ]) {
-
                     dir('esercitazioni_track2/step1/ansible-lab') {
-
                         sh """
-
-                            export ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE
-
                             ansible-playbook playbooks/deploy_app.yml \
-
+                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
-
                               -u vagrant
-
                         """
-
                     }
-
                 }
-
             }
-
         }
 
         stage('Verifica post-deploy') {
-
             when {
-
                 expression { params.ESEGUI_DAVVERO == true }
-
             }
-
             steps {
-
                 withCredentials([
-
-                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
-
+                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
+                    file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
                 ]) {
-
                     dir('esercitazioni_track2/step1/ansible-lab') {
-
                         sh """
-
                             ansible rocky9 -m uri \
-
+                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
-
                               -u vagrant \
-
                               -a "url=http://192.168.56.20:8081 status_code=200"
-
                         """
-
                     }
-
                 }
-
             }
-
         }
-
     }
 
     post {
-
         success {
-
             echo "Pipeline completata. Modalita: ${params.ESEGUI_DAVVERO ? 'deploy reale' : 'dry-run'}"
-
         }
-
         failure {
-
             echo 'Pipeline fallita, controlla i log della console'
-
         }
-
     }
-
 }
