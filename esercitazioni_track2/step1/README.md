@@ -1,6 +1,6 @@
 # Step 1 — Workstation Mac
 
-Progetto finale del percorso formazione_sou (Track 2).  
+Seconda esercitazione TRACK2.  
 Automazione completa dell'infrastruttura: una VM Rocky Linux 9 gestita da Vagrant viene configurata interamente tramite Ansible, che installa Docker, configura le reti e deploya Jenkins Master e Agent come container.
 
 ---
@@ -116,6 +116,8 @@ ansible-playbook playbooks/install_docker.yml
 ```
 
 Il playbook installa Docker Engine, abilita il servizio, e aggiunge l'utente `vagrant` al gruppo `docker`. Installa anche le librerie Python necessarie (`requests`, `setuptools`) per i moduli Ansible della collection `community.docker`.
+
+
 
 ### 4. Deploya Jenkins Master e Agent
 
