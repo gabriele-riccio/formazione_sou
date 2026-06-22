@@ -35,13 +35,13 @@ pipeline {
                     file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
-                        sh '''
-                            export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
+                        sh """
+                            export ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE
                             ansible-playbook playbooks/deploy_app.yml \
-                              -e ansible_ssh_private_key_file=$SSH_KEY \
+                              -e ansible_ssh_private_key_file=\$SSH_KEY \
                               -u vagrant \
                               --check --diff
-                        '''
+                        """
                     }
                 }
             }
@@ -67,17 +67,17 @@ pipeline {
 
                     dir('esercitazioni_track2/step1/ansible-lab') {
 
-                        sh '''
+                        sh """
 
-                            export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
+                            export ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE
 
                             ansible-playbook playbooks/deploy_app.yml \
 
-                              -e ansible_ssh_private_key_file=$SSH_KEY \
+                              -e ansible_ssh_private_key_file=\$SSH_KEY \
 
                               -u vagrant
 
-                        '''
+                        """
 
                     }
 
@@ -105,17 +105,17 @@ pipeline {
 
                     dir('esercitazioni_track2/step1/ansible-lab') {
 
-                        sh '''
+                        sh """
 
                             ansible rocky9 -m uri \
 
-                              -e ansible_ssh_private_key_file=$SSH_KEY \
+                              -e ansible_ssh_private_key_file=\$SSH_KEY \
 
                               -u vagrant \
 
                               -a "url=http://192.168.56.20:8081 status_code=200"
 
-                        '''
+                        """
 
                     }
 
