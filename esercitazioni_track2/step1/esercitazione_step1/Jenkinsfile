@@ -31,10 +31,10 @@ pipeline {
         stage('Dray-run') {
             steps {
                 withCredentials([
-                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariabile: 'SSH_USER'),
+                    sshUserPrivateKey(credentialsId: 'rocky9-ssh-key', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER'),
                     file(credentialsId: 'ansible-vault-pass', variable: 'VAULT_PASS_FILE')
                 ]) {
-                    dir('esercitazioni_track2_/step1/ansible-lab') {
+                    dir('esercitazioni_track2/step1/ansible-lab') {
                         sh '''
                             export ANSIBLE_VAULT_PASSWORD_FILE=$VAULT_PASS_FILE
                             ansible-playbook playbooks/deploy_app.yml \
