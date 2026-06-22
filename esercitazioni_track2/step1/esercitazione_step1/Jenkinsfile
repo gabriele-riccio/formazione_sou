@@ -20,8 +20,8 @@ pipeline {
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
                         sh """
+                            ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE \
                             ansible-playbook playbooks/deploy_app.yml \
-                              --vault-password-file \$VAULT_PASS_FILE \
                               --syntax-check
                         """
                     }
@@ -37,8 +37,8 @@ pipeline {
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
                         sh """
+                            ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE \
                             ansible-playbook playbooks/deploy_app.yml \
-                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
                               -u vagrant \
                               --check --diff
@@ -59,8 +59,8 @@ pipeline {
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
                         sh """
+                            ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE \
                             ansible-playbook playbooks/deploy_app.yml \
-                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
                               -u vagrant
                         """
@@ -80,8 +80,8 @@ pipeline {
                 ]) {
                     dir('esercitazioni_track2/step1/ansible-lab') {
                         sh """
+                            ANSIBLE_VAULT_PASSWORD_FILE=\$VAULT_PASS_FILE \
                             ansible rocky9 -m uri \
-                              --vault-password-file \$VAULT_PASS_FILE \
                               -e ansible_ssh_private_key_file=\$SSH_KEY \
                               -u vagrant \
                               -a "url=http://192.168.56.20:8081 status_code=200"
