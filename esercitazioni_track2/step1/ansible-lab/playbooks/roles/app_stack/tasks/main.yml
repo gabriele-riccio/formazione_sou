@@ -1,6 +1,6 @@
 ---
 - name: Carica variabili cifrate da Vault
-  ansible.builtin.include_vars: ../../../vars/vault.yml
+  ansible.builtin.include_vars: "{{ playbook_dir }}/../vars/vault.yml"
 
 - name: Crea rete Docker custom
   community.docker.docker_network:
@@ -31,7 +31,7 @@
     restart_policy: always
     networks:
       - name: "{{ network_name }}"
-        ipv4_address: "{{ cache_container_ip}}"
+        ipv4_address: "{{ cache_container_ip }}"
 
 - name: Recupera info container web
   community.docker.docker_container_info:
