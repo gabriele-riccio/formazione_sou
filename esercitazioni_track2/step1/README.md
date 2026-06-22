@@ -301,7 +301,7 @@ ansible rocky9 -b -m command -a "docker logs jenkins-agent --tail 5"
 
 ---
 
-## Credenziali Jenkins (per la pipeline extra)
+## Credenziali Jenkins (per la pipeline extra):
 
 Se si vuole utilizzare la pipeline Jenkinsfile inclusa nel progetto, configurare queste credenziali su Jenkins prima del primo run:
 
